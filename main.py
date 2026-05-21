@@ -18,6 +18,7 @@ SPORT = "soccer"
 REGIONS = "eu"
 
 MARKETS = "totals"
+ALLOWED_BOOKMAKERS = []
 
 previous_odds = {}
 previous_times = {}
@@ -77,12 +78,17 @@ def analyze():
         away = match.get("away_team")
         match_name = f"{home} vs {away}"
         for bookmaker in match.get("bookmakers", []):
-            allowed_bookmakers = ["Pinnacle", "Bet365"]
-            if bookmaker.get("title") not in allowed_bookmakers:
+            if ALLOWED_BOOKMAKERS and bookmaker.get("title") not in ALLOWED_BOOKMAKERS:
                 continue
+
             bookie = bookmaker.get("title")
-            print(bookie)
+
+            allowed_markets = ["h2h", "spreads", "totals"]
+
             for market in bookmaker.get("markets", []):
+                if market.get("key") not in allowed_markets:
+                    continue
+
                 for outcome in market.get("outcomes", []):
                     name = outcome.get("name")
                     price = outcome.get("price")
@@ -91,23 +97,18 @@ def analyze():
 
                     if key in previous_odds:
                         old_price = previous_odds[key]
-                        old_time = previous_times.get(key, time.time())
-
                         movement = ((old_price - price) / old_price) * 100
-                        minutes_passed = (time.time() - old_time) / 60
 
-                        # Detect steam move
-                        if abs(movement) >= 5 and minutes_passed <= 15:
+                        if abs(movement) >= 8:
                             message = (
-                                f"🔥 STEAM MOVE DETECTAT\n\n"
-                                f"Partit: {match_name}\n"
-                                f"Casa: {bookie}\n"
-                                f"Mercat: {name}\n"
-                                f"Quota antiga: {old_price}\n"
-                                f"Quota actual: {price}\n"
-                                f"Moviment: {movement:.2f}%\n"
-                                f"Temps: {minutes_passed:.1f} minuts"
+                                f"🔥 STEAM MOVE\n\n"
+                                f"⚽ {match_name}\n"
+                                f"🏦 {bookie}\n"
+                                f"📈 {name}\n"
+                                f"💰 {old_price} → {price}\n"
+                                f"📊 {movement:.2f}%"
                             )
+
                             print(message)
                             send_telegram(message)
 
