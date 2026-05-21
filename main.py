@@ -6,6 +6,7 @@ import os
 # ===== CONFIGURACIÓ =====
 
 API_KEY = os.getenv("API_KEY")
+print(API_KEY)
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
