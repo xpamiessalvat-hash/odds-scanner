@@ -22,6 +22,7 @@ ALLOWED_BOOKMAKERS = []
 
 previous_odds = {}
 previous_times = {}
+market_prices = {}
 
 def send_telegram(message):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
@@ -49,14 +50,13 @@ def fetch_odds():
     return response.json()
 
 def analyze():
-    global previous_odds
+    global previous_odds, market_prices, previous_times
     data = fetch_odds()
     print(data)
 
     for match in data:
         commence_time = match.get("commence_time")
 
-        # Parse match time and skip live matches
         if not commence_time:
             continue
 
@@ -66,23 +66,20 @@ def analyze():
         if match_time <= now:
             continue
 
-        hours_until_kickoff = (
-            match_time - now
-        ).total_seconds() / 3600
+        hours_until_kickoff = (match_time - now).total_seconds() / 3600
 
-        # Ignorar partits massa llunyans
         if hours_until_kickoff > 6:
             continue
 
         home = match.get("home_team")
         away = match.get("away_team")
         match_name = f"{home} vs {away}"
+
         for bookmaker in match.get("bookmakers", []):
             if ALLOWED_BOOKMAKERS and bookmaker.get("title") not in ALLOWED_BOOKMAKERS:
                 continue
 
             bookie = bookmaker.get("title")
-
             allowed_markets = ["h2h", "spreads", "totals"]
 
             for market in bookmaker.get("markets", []):
@@ -92,8 +89,8 @@ def analyze():
                 for outcome in market.get("outcomes", []):
                     name = outcome.get("name")
                     price = outcome.get("price")
-
                     key = f"{match_name}-{bookie}-{name}"
+                    market_prices[key] = {"bookie": bookie, "price": price}
 
                     if key in previous_odds:
                         old_price = previous_odds[key]
@@ -105,7 +102,6 @@ def analyze():
                             and old_price >= 1.70
                             and price <= 1.60
                         ):
-
                             message = (
                                 f"📉 STEAM MOVE\n"
                                 f"Partit: {match_name}\n"
@@ -115,9 +111,28 @@ def analyze():
                                 f"{old_price} → {price}\n"
                                 f"Move: {movement:.2f}%"
                             )
-
                             print(message)
                             send_telegram(message)
+
+                    if bookie == "Pinnacle":
+                        for other_key, other_data in market_prices.items():
+                            if (
+                                name in other_key
+                                and match_name in other_key
+                                and other_data["bookie"] != "Pinnacle"
+                            ):
+                                soft_price = other_data["price"]
+                                if soft_price > price * 1.05:
+                                    value_message = (
+                                        f"💰 VALUE BET DETECTED\n"
+                                        f"Partit: {match_name}\n"
+                                        f"Selecció: {name}\n"
+                                        f"Pinnacle: {price}\n"
+                                        f"{other_data['bookie']}: {soft_price}\n"
+                                        f"Edge: {((soft_price / price) - 1) * 100:.2f}%"
+                                    )
+                                    print(value_message)
+                                    send_telegram(value_message)
 
                     previous_odds[key] = price
                     previous_times[key] = time.time()
