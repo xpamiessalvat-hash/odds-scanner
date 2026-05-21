@@ -99,14 +99,21 @@ def analyze():
                         old_price = previous_odds[key]
                         movement = ((old_price - price) / old_price) * 100
 
-                        if abs(movement) >= 8:
+                        if (
+                            movement >= 5
+                            and bookie == "Pinnacle"
+                            and old_price >= 1.70
+                            and price <= 1.60
+                        ):
+
                             message = (
-                                f"🔥 STEAM MOVE\n\n"
-                                f"⚽ {match_name}\n"
-                                f"🏦 {bookie}\n"
-                                f"📈 {name}\n"
-                                f"💰 {old_price} → {price}\n"
-                                f"📊 {movement:.2f}%"
+                                f"📉 STEAM MOVE\n"
+                                f"Partit: {match_name}\n"
+                                f"Mercat: {market.get('key')}\n"
+                                f"Selecció: {name}\n"
+                                f"Bookie: {bookie}\n"
+                                f"{old_price} → {price}\n"
+                                f"Move: {movement:.2f}%"
                             )
 
                             print(message)
