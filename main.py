@@ -68,7 +68,7 @@ def analyze():
 
         hours_until_kickoff = (match_time - now).total_seconds() / 3600
 
-        if hours_until_kickoff > 6:
+        if hours_until_kickoff > 4:
             continue
 
         home = match.get("home_team")
@@ -98,8 +98,15 @@ def analyze():
                         old_price = previous_odds[key]
                         movement = ((old_price - price) / old_price) * 100
 
+                        # compute minutes passed since last seen for this key
+                        if key in previous_times:
+                            minutes_passed = (time.time() - previous_times[key]) / 60
+                        else:
+                            minutes_passed = float('inf')
+
                         if (
-                            movement >= 5
+                            movement >= 8
+                            and minutes_passed <= 15
                             and bookie == "Pinnacle"
                             and old_price >= 1.70
                             and price <= 1.60
