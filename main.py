@@ -75,12 +75,14 @@ def analyze():
         away = match.get("away_team")
         match_name = f"{home} vs {away}"
 
+        allowed_bookmakers = ["Pinnacle", "Bet365"]
+        allowed_markets = ["totals"]
+
         for bookmaker in match.get("bookmakers", []):
-            if ALLOWED_BOOKMAKERS and bookmaker.get("title") not in ALLOWED_BOOKMAKERS:
+            if bookmaker.get("title") not in allowed_bookmakers:
                 continue
 
             bookie = bookmaker.get("title")
-            allowed_markets = ["h2h", "spreads", "totals"]
 
             for market in bookmaker.get("markets", []):
                 if market.get("key") not in allowed_markets:
