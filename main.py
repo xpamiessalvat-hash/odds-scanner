@@ -7,8 +7,10 @@ import requests
 previous_odds = {}
 markets = {}
 last_alerts = {}
-BOT_TOKEN = "EL_TEU_BOT_TOKEN"
-CHAT_ID = "EL_TEU_CHAT_ID"
+import os
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 def send_telegram(message):
 
     url = (
