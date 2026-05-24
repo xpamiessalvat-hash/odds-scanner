@@ -38,15 +38,11 @@ with sync_playwright() as p:
 
         page.goto("https://www.pinnacle.com/en/soccer")
 
-        print("Pàgina carregada")
-
         page.wait_for_timeout(3000)
 
         page.wait_for_load_state("domcontentloaded")
 
         text = page.content()
-
-        print("Text capturat")
 
         lines = text.splitlines()
 
@@ -108,13 +104,7 @@ with sync_playwright() as p:
                 if key in previous_odds and previous_odds[key] != 0:
                     old_odd = previous_odds[key]
                     movement = ((old_odd - odd) / old_odd) * 100
-                    print(
-    f"{current_match} | "
-    f"{current_side} {current_market} | "
-    f"{old_odd} -> {odd} | "
-    f"{movement:.2f}%"
-)
-
+        
                     if (
                         abs(movement) >= 2
                         and hours_until_kickoff <= 4
@@ -147,4 +137,4 @@ with sync_playwright() as p:
 
         print("Escaneig completat...\n")
 
-    time.sleep(300)
+    time.sleep(600)
