@@ -40,10 +40,12 @@ with sync_playwright() as p:
 
     while True:
 
+        print("Loop iniciat")
+
         page = browser.new_page()
 
         try:
-            
+
             page.goto(
                 "https://www.pinnacle.com/en/soccer",
                 timeout=60000
@@ -51,8 +53,10 @@ with sync_playwright() as p:
 
             page.wait_for_timeout(3000)
 
-            page.wait_for_load_state("domcontentloaded")
-            
+            page.wait_for_load_state(
+                "domcontentloaded"
+            )
+
             text = page.content()
 
             lines = text.splitlines()
@@ -123,7 +127,10 @@ with sync_playwright() as p:
                     current_side = "UNDER"
 
                 # ODDS
-                if re.match(r"^\d+(\.\d+)?$", line):
+                if re.match(
+                    r"^\d+(\.\d+)?$",
+                    line
+                ):
 
                     if (
                         current_market == "UNKNOWN"
@@ -183,7 +190,8 @@ with sync_playwright() as p:
 
                             print(
                                 f"\n🔥 STEAM MOVE DETECTAT 🔥\n"
-                                f"⚽ Partit: {current_match}\n"
+                                f"⚽ Partit: "
+                                f"{current_match}\n"
                                 f"📈 Mercat: "
                                 f"{current_side} "
                                 f"{current_market}\n"
@@ -208,7 +216,7 @@ with sync_playwright() as p:
 
                     previous_odds[key] = odd
 
-                    print("Escaneig completat...")
+            print("Escaneig completat...")
 
         except Exception as e:
 
