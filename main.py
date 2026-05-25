@@ -30,8 +30,9 @@ def send_telegram(message):
 
     requests.post(url, data=data)
 
-
+print("Script iniciat", flush=True)
 with sync_playwright() as p:
+    print("Playwright iniciat", flush=True)
 
     browser = p.chromium.launch(
         headless=True,
@@ -40,7 +41,7 @@ with sync_playwright() as p:
 
     while True:
 
-        print("Loop iniciat")
+        print("Loop iniciat", flush=True)
 
         page = browser.new_page()
 
@@ -216,7 +217,7 @@ with sync_playwright() as p:
 
                     previous_odds[key] = odd
 
-            print("Escaneig completat...")
+            print("Escaneig completat...", flush=True)
 
         except Exception as e:
 
