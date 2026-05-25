@@ -30,8 +30,11 @@ def send_telegram(message):
 
     requests.post(url, data=data)
 
+
 print("Script iniciat", flush=True)
+
 with sync_playwright() as p:
+
     print("Playwright iniciat", flush=True)
 
     browser = p.chromium.launch(
@@ -54,15 +57,14 @@ with sync_playwright() as p:
 
             page.wait_for_timeout(10000)
 
-            page.wait_for_load_state(
-                "domcontentloaded"
-            )
+            page.wait_for_selector("body")
 
-            text = page.content()
+            text = page.inner_text("body")
 
             lines = text.splitlines()
-            for l in lines[:200]:
-              print(l, flush=True)
+
+            for l in lines[:50]:
+                print(l, flush=True)
 
             current_match = "UNKNOWN"
             current_time = "UNKNOWN"
@@ -77,10 +79,16 @@ with sync_playwright() as p:
                 if not line:
                     continue
 
-                print(line, flush=True)# MATCH
+                # MATCH
                 if " (Match)" in line:
+
                     current_match = line
-                    print(f"PARTIT DETECTAT: {current_match}", flush=True)
+
+                    print(
+                        f"PARTIT DETECTAT: {current_match}",
+                        flush=True
+                    )
+
                     continue
 
                 # DATE / TIME
@@ -143,13 +151,14 @@ with sync_playwright() as p:
                         continue
 
                     odd = float(line)
+
                     print(
-    f"{current_match} | "
-    f"{current_side} | "
-    f"{current_market} | "
-    f"{odd}",
-    flush=True
-)
+                        f"{current_match} | "
+                        f"{current_side} | "
+                        f"{current_market} | "
+                        f"{odd}",
+                        flush=True
+                    )
 
                     market_key = (
                         f"{current_match}-"
@@ -176,20 +185,20 @@ with sync_playwright() as p:
                         old_odd = previous_odds[key]
 
                         movement = (
-                            print(
-    f"MOVIMENT: "
-    f"{old_odd} -> {odd} "
-    f"({movement:.2f}%)",
-    flush=True
-)
                             (
                                 old_odd - odd
                             ) / old_odd
                         ) * 100
 
+                        print(
+                            f"MOVIMENT: "
+                            f"{old_odd} -> {odd} "
+                            f"({movement:.2f}%)",
+                            flush=True
+                        )
+
                         if (
                             movement >= 1
-                            and hours_until_kickoff <= 4
                             and "Over/Under"
                             in current_market
                         ):
@@ -215,7 +224,8 @@ with sync_playwright() as p:
                                 f"💰 Quota: "
                                 f"{old_odd} → {odd}\n"
                                 f"📊 Moviment: "
-                                f"{movement:.2f}%\n"
+                                f"{movement:.2f}%\n",
+                                flush=True
                             )
 
                             message = (
@@ -232,18 +242,23 @@ with sync_playwright() as p:
                             last_alerts[key] = time.time()
 
                     previous_odds[key] = odd
-                    print(f"KEY: {key}", flush=True)
 
                     print(
-    f"GUARDAT: {key} -> {odd}",
-    flush=True
-)
+                        f"KEY: {key}",
+                        flush=True
+                    )
 
-            print("Escaneig completat...", flush=True)
+            print(
+                "Escaneig completat...",
+                flush=True
+            )
 
         except Exception as e:
 
-            print(f"ERROR: {e}")
+            print(
+                f"ERROR: {e}",
+                flush=True
+            )
 
         finally:
 
