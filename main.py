@@ -52,7 +52,7 @@ with sync_playwright() as p:
                 timeout=60000
             )
 
-            page.wait_for_timeout(3000)
+            page.wait_for_timeout(10000)
 
             page.wait_for_load_state(
                 "domcontentloaded"
@@ -61,6 +61,8 @@ with sync_playwright() as p:
             text = page.content()
 
             lines = text.splitlines()
+            for l in lines[:200]:
+              print(l, flush=True)
 
             current_match = "UNKNOWN"
             current_time = "UNKNOWN"
@@ -75,9 +77,10 @@ with sync_playwright() as p:
                 if not line:
                     continue
 
-                # MATCH
+                print(line, flush=True)# MATCH
                 if " (Match)" in line:
                     current_match = line
+                    print(f"PARTIT DETECTAT: {current_match}", flush=True)
                     continue
 
                 # DATE / TIME
@@ -140,6 +143,13 @@ with sync_playwright() as p:
                         continue
 
                     odd = float(line)
+                    print(
+    f"{current_match} | "
+    f"{current_side} | "
+    f"{current_market} | "
+    f"{odd}",
+    flush=True
+)
 
                     market_key = (
                         f"{current_match}-"
@@ -166,13 +176,19 @@ with sync_playwright() as p:
                         old_odd = previous_odds[key]
 
                         movement = (
+                            print(
+    f"MOVIMENT: "
+    f"{old_odd} -> {odd} "
+    f"({movement:.2f}%)",
+    flush=True
+)
                             (
                                 old_odd - odd
                             ) / old_odd
                         ) * 100
 
                         if (
-                            movement >= 8
+                            movement >= 1
                             and hours_until_kickoff <= 4
                             and "Over/Under"
                             in current_market
@@ -216,6 +232,12 @@ with sync_playwright() as p:
                             last_alerts[key] = time.time()
 
                     previous_odds[key] = odd
+                    print(f"KEY: {key}", flush=True)
+
+                    print(
+    f"GUARDAT: {key} -> {odd}",
+    flush=True
+)
 
             print("Escaneig completat...", flush=True)
 
