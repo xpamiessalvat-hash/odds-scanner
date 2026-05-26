@@ -16,7 +16,10 @@ print(CHAT_ID, flush=True)
 def send_telegram(message):
 
     if not BOT_TOKEN or not CHAT_ID:
-        return
+
+         print("TELEGRAM VARIABLES NO TROBADES", flush=True)
+
+    return
 
     url = (
         f"https://api.telegram.org/bot"
