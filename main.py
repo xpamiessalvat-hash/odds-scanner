@@ -142,12 +142,16 @@ with sync_playwright() as p:
 
                 # DETECTAR PARTITS REALS
                 if (
-                    " - " in line
-                    and len(line) < 60
-                    and "Soccer" not in line
-                    and "Odds" not in line
-                    and "Winner" not in line
-                ):
+    " - " in line
+    and len(line) < 60
+    and "Soccer" not in line
+    and "Odds" not in line
+    and "Winner" not in line
+    and "LEAGUE" not in line
+    and "WORLD CUP" not in line
+    and "CHAMPIONS LEAGUE" not in line
+    and "CONFERENCE LEAGUE" not in line
+):
 
                     current_match = line
 
@@ -157,10 +161,7 @@ with sync_playwright() as p:
                 if "/" in line and ":" in line:
 
                     current_time = line
-                    print(
-    f"MATCH ACTUAL: {current_match}",
-    flush=True
-)
+                    
                     try:
 
                         match_time = datetime.strptime(
