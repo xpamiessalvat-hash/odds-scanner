@@ -10,7 +10,8 @@ last_alerts = {}
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
-
+print(BOT_TOKEN, flush=True)
+print(CHAT_ID, flush=True)
 
 def send_telegram(message):
 
@@ -31,6 +32,7 @@ def send_telegram(message):
 
 
 print("Script iniciat", flush=True)
+send_telegram("TEST TELEGRAM")
 
 with sync_playwright() as p:
 
@@ -152,7 +154,10 @@ with sync_playwright() as p:
                 if "/" in line and ":" in line:
 
                     current_time = line
-
+                    print(
+    f"MATCH ACTUAL: {current_match}",
+    flush=True
+)
                     try:
 
                         match_time = datetime.strptime(
