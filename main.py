@@ -44,7 +44,7 @@ with sync_playwright() as p:
     while True:
 
         print("Loop iniciat", flush=True)
-
+        print("VERSIO NOVA CLEAN", flush=True)
         page = browser.new_page()
 
         try:
