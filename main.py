@@ -6,7 +6,6 @@ import requests
 import os
 
 previous_odds = {}
-markets = {}
 last_alerts = {}
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -63,14 +62,13 @@ with sync_playwright() as p:
 
             lines = text.splitlines()
 
-            for l in lines[:50]:
-                print(l, flush=True)
-
             current_match = "UNKNOWN"
             current_time = "UNKNOWN"
             current_market = "UNKNOWN"
             current_side = "UNKNOWN"
             hours_until_kickoff = 999
+
+            blocked_section = False
 
             for line in lines:
 
@@ -79,19 +77,78 @@ with sync_playwright() as p:
                 if not line:
                     continue
 
-                # MATCH
-                if " (Match)" in line:
+                # BLOQUEJAR FUTURES / OUTRIGHTS
+                blocked_words = [
+                    "Winner",
+                    "Outright",
+                    "Futures",
+                    "Specials",
+                    "To Qualify",
+                    "Relegation",
+                    "Top Goalscorer"
+                ]
+
+                if any(
+                    word in line
+                    for word in blocked_words
+                ):
+                    blocked_section = True
+                    continue
+
+                # RESETEJAR BLOCKED SECTION
+                if "Money Line" in line:
+                    blocked_section = False
+
+                if blocked_section:
+                    continue
+
+                # FILTRE JUVENILS / RESERVES
+                youth_words = [
+                    "U17",
+                    "U18",
+                    "U19",
+                    "U20",
+                    "U21",
+                    "U23",
+                    "Youth",
+                    "Reserve",
+                    "Reserves",
+                    "B Team"
+                ]
+
+                if any(
+                    word in line
+                    for word in youth_words
+                ):
+                    continue
+
+                # FILTRE AMISTOSOS
+                friendly_words = [
+                    "Friendly",
+                    "Club Friendly",
+                    "Exhibition"
+                ]
+
+                if any(
+                    word in line
+                    for word in friendly_words
+                ):
+                    continue
+
+                # DETECTAR PARTITS REALS
+                if (
+                    " - " in line
+                    and len(line) < 60
+                    and "Soccer" not in line
+                    and "Odds" not in line
+                    and "Winner" not in line
+                ):
 
                     current_match = line
 
-                    print(
-                        f"PARTIT DETECTAT: {current_match}",
-                        flush=True
-                    )
-
                     continue
 
-                # DATE / TIME
+                # DETECTAR HORA
                 if "/" in line and ":" in line:
 
                     current_time = line
@@ -115,30 +172,28 @@ with sync_playwright() as p:
 
                     continue
 
-                # TOTALS MARKET
-                if line in [
-                    "2",
-                    "2.25",
-                    "2.5",
-                    "2.75",
-                    "3",
-                    "3.5"
-                ]:
+                # MERCAT MONEYLINE
+                if "Money Line" in line:
 
-                    current_market = (
-                        f"Over/Under {line}"
-                    )
+                    current_market = "Money Line"
 
                     continue
 
-                # SIDE
-                if "Over" in line:
-                    current_side = "OVER"
+                # DRAW
+                if line == "Draw":
 
-                elif "Under" in line:
-                    current_side = "UNDER"
+                    current_side = "DRAW"
 
-                # ODDS
+                # EQUIPS
+                elif current_match != "UNKNOWN":
+
+                    teams = current_match.split(" - ")
+
+                    if line in teams:
+
+                        current_side = line
+
+                # DETECTAR QUOTES
                 if re.match(
                     r"^\d+(\.\d+)?$",
                     line
@@ -152,31 +207,13 @@ with sync_playwright() as p:
 
                     odd = float(line)
 
-                    print(
-                        f"{current_match} | "
-                        f"{current_side} | "
-                        f"{current_market} | "
-                        f"{odd}",
-                        flush=True
-                    )
-
-                    market_key = (
-                        f"{current_match}-"
-                        f"{current_market}"
-                    )
-
-                    if market_key not in markets:
-                        markets[market_key] = {}
-
-                    markets[market_key][current_side] = odd
-
                     key = (
                         f"{current_match}-"
                         f"{current_market}-"
                         f"{current_side}"
                     )
 
-                    # STEAM DETECTION
+                    # DETECTAR MOVIMENT
                     if (
                         key in previous_odds
                         and previous_odds[key] != 0
@@ -190,20 +227,13 @@ with sync_playwright() as p:
                             ) / old_odd
                         ) * 100
 
-                        print(
-                            f"MOVIMENT: "
-                            f"{old_odd} -> {odd} "
-                            f"({movement:.2f}%)",
-                            flush=True
-                        )
-
+                        # FILTRE STEAM
                         if (
-                            movement >= 1
-                            and "Over/Under"
-                            in current_market
+                            abs(movement) >= 1
+                            and hours_until_kickoff <= 12
                         ):
 
-                            # COOLDOWN
+                            # COOLDOWN ALERTES
                             if key in last_alerts:
 
                                 cooldown = (
@@ -242,11 +272,6 @@ with sync_playwright() as p:
                             last_alerts[key] = time.time()
 
                     previous_odds[key] = odd
-
-                    print(
-                        f"KEY: {key}",
-                        flush=True
-                    )
 
             print(
                 "Escaneig completat...",
