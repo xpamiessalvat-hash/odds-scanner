@@ -1,5 +1,4 @@
 from playwright.sync_api import sync_playwright
-import re
 import time
 from datetime import datetime
 import requests
@@ -10,16 +9,21 @@ last_alerts = {}
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
+
 print(BOT_TOKEN, flush=True)
 print(CHAT_ID, flush=True)
+
 
 def send_telegram(message):
 
     if not BOT_TOKEN or not CHAT_ID:
 
-         print("TELEGRAM VARIABLES NO TROBADES", flush=True)
+        print(
+            "TELEGRAM VARIABLES NO TROBADES",
+            flush=True
+        )
 
-    return
+        return
 
     url = (
         f"https://api.telegram.org/bot"
@@ -33,8 +37,14 @@ def send_telegram(message):
 
     requests.post(url, data=data)
 
+    print(
+        "MISSATGE TELEGRAM ENVIAT",
+        flush=True
+    )
+
 
 print("Script iniciat", flush=True)
+
 send_telegram("TEST TELEGRAM")
 
 with sync_playwright() as p:
@@ -50,6 +60,7 @@ with sync_playwright() as p:
 
         print("Loop iniciat", flush=True)
         print("VERSIO NOVA CLEAN", flush=True)
+
         page = browser.new_page()
 
         try:
@@ -71,6 +82,7 @@ with sync_playwright() as p:
             current_time = "UNKNOWN"
             current_market = "UNKNOWN"
             current_side = "UNKNOWN"
+
             hours_until_kickoff = 999
 
             blocked_section = False
@@ -142,18 +154,23 @@ with sync_playwright() as p:
 
                 # DETECTAR PARTITS REALS
                 if (
-    " - " in line
-    and len(line) < 60
-    and "Soccer" not in line
-    and "Odds" not in line
-    and "Winner" not in line
-    and "LEAGUE" not in line
-    and "WORLD CUP" not in line
-    and "CHAMPIONS LEAGUE" not in line
-    and "CONFERENCE LEAGUE" not in line
-):
+                    " - " in line
+                    and len(line) < 60
+                    and "Soccer" not in line
+                    and "Odds" not in line
+                    and "Winner" not in line
+                    and "LEAGUE" not in line
+                    and "WORLD CUP" not in line
+                    and "CHAMPIONS LEAGUE" not in line
+                    and "CONFERENCE LEAGUE" not in line
+                ):
 
                     current_match = line
+
+                    print(
+                        f"MATCH ACTUAL: {current_match}",
+                        flush=True
+                    )
 
                     continue
 
@@ -161,7 +178,7 @@ with sync_playwright() as p:
                 if "/" in line and ":" in line:
 
                     current_time = line
-                    
+
                     try:
 
                         match_time = datetime.strptime(
@@ -175,13 +192,13 @@ with sync_playwright() as p:
                             match_time - now
                         ).total_seconds() / 3600
 
-                    except ValueError:
+                    except:
 
                         hours_until_kickoff = 999
 
                     continue
 
-                # MERCAT MONEYLINE
+                # MONEY LINE
                 if "Money Line" in line:
 
                     current_market = "Money Line"
@@ -203,84 +220,92 @@ with sync_playwright() as p:
                         current_side = line
 
                 # DETECTAR QUOTES
-                if re.match(
-                    r"^\d+(\.\d+)?$",
-                    line
-                ):
-
-                    if (
-                        current_market == "UNKNOWN"
-                        or current_side == "UNKNOWN"
-                    ):
-                        continue
+                try:
 
                     odd = float(line)
 
-                    key = (
-                        f"{current_match}-"
-                        f"{current_market}-"
-                        f"{current_side}"
-                    )
+                except:
 
-                    # DETECTAR MOVIMENT
+                    continue
+
+                print(
+                    f"{current_match} | "
+                    f"{current_side} | "
+                    f"{odd}",
+                    flush=True
+                )
+
+                if (
+                    current_market == "UNKNOWN"
+                    or current_side == "UNKNOWN"
+                ):
+                    continue
+
+                key = (
+                    f"{current_match}-"
+                    f"{current_market}-"
+                    f"{current_side}"
+                )
+
+                # DETECTAR MOVIMENT
+                if (
+                    key in previous_odds
+                    and previous_odds[key] != 0
+                ):
+
+                    old_odd = previous_odds[key]
+
+                    movement = (
+                        (
+                            old_odd - odd
+                        ) / old_odd
+                    ) * 100
+
+                    # FILTRE STEAM
                     if (
-                        key in previous_odds
-                        and previous_odds[key] != 0
+                        abs(movement) >= 1
+                        and hours_until_kickoff <= 12
                     ):
 
-                        old_odd = previous_odds[key]
+                        # COOLDOWN ALERTES
+                        if key in last_alerts:
 
-                        movement = (
-                            (
-                                old_odd - odd
-                            ) / old_odd
-                        ) * 100
-
-                        # FILTRE STEAM
-                        if (
-                            abs(movement) >= 1
-                            and hours_until_kickoff <= 12
-                        ):
-
-                            # COOLDOWN ALERTES
-                            if key in last_alerts:
-
-                                cooldown = (
-                                    time.time()
-                                    - last_alerts[key]
-                                )
-
-                                if cooldown < 1800:
-                                    continue
-
-                            print(
-                                f"\n🔥 STEAM MOVE DETECTAT 🔥\n"
-                                f"⚽ Partit: "
-                                f"{current_match}\n"
-                                f"📈 Mercat: "
-                                f"{current_side} "
-                                f"{current_market}\n"
-                                f"💰 Quota: "
-                                f"{old_odd} → {odd}\n"
-                                f"📊 Moviment: "
-                                f"{movement:.2f}%\n",
-                                flush=True
+                            cooldown = (
+                                time.time()
+                                - last_alerts[key]
                             )
 
-                            message = (
-                                f"🔥 STEAM MOVE DETECTAT 🔥\n\n"
-                                f"⚽ {current_match}\n"
-                                f"📈 {current_side} "
-                                f"{current_market}\n"
-                                f"💰 {old_odd} → {odd}\n"
-                                f"📊 {movement:.2f}%"
-                            )
+                            if cooldown < 1800:
+                                continue
 
-                            send_telegram(message)
+                        print(
+                            f"\n🔥 STEAM MOVE DETECTAT 🔥\n"
+                            f"⚽ Partit: "
+                            f"{current_match}\n"
+                            f"📈 Mercat: "
+                            f"{current_side} "
+                            f"{current_market}\n"
+                            f"💰 Quota: "
+                            f"{old_odd} → {odd}\n"
+                            f"📊 Moviment: "
+                            f"{movement:.2f}%\n",
+                            flush=True
+                        )
 
-                            last_alerts[key] = time.time()
+                        message = (
+                            f"🔥 STEAM MOVE DETECTAT 🔥\n\n"
+                            f"⚽ {current_match}\n"
+                            f"📈 {current_side} "
+                            f"{current_market}\n"
+                            f"💰 {old_odd} → {odd}\n"
+                            f"📊 {movement:.2f}%"
+                        )
 
-                    previous_odds[key] = odd
+                        send_telegram(message)
+
+                        last_alerts[key] = time.time()
+
+                previous_odds[key] = odd
 
             print(
                 "Escaneig completat...",
