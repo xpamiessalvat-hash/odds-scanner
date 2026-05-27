@@ -156,7 +156,15 @@ with sync_playwright() as p:
 
             page.wait_for_selector("body")
 
+            # SCROLL COMPLET
+            for i in range(15):
+
+                 page.mouse.wheel(0, 10000)
+
+                 page.wait_for_timeout(1500)
+
             text = page.inner_text("body")
+            
 
             lines = text.splitlines()
 
