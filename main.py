@@ -371,7 +371,7 @@ with sync_playwright() as p:
 
                     # FILTRE STEAM
                     if (
-                        abs(movement) >= 1
+                        steam_score >= 50
                         and hours_until_kickoff <= 12
                     ):
 
