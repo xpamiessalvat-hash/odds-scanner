@@ -80,6 +80,52 @@ def update_clv(
             json.dump(history, f, indent=4)
 
 
+def update_results():
+
+    with open(HISTORY_FILE, "r") as f:
+
+        history = json.load(f)
+
+    updated = False
+
+    for entry in history:
+
+        # SI JA TÉ RESULTAT
+        if entry["result"] is not None:
+            continue
+
+        # SI ENCARA NO TÉ CLOSING LINE
+        if entry["closing_odd"] is None:
+            continue
+
+        # PLACEHOLDER RESULTAT
+        # després connectarem SofaScore
+
+        # EXEMPLE TEMPORAL
+        if entry["clv_percent"] > 0:
+
+            entry["result"] = "WIN"
+
+            entry["profit"] = round(
+                entry["new_odd"] - 1,
+                2
+            )
+
+        else:
+
+            entry["result"] = "LOSS"
+
+            entry["profit"] = -1
+
+        updated = True
+
+    if updated:
+
+        with open(HISTORY_FILE, "w") as f:
+
+            json.dump(history, f, indent=4)
+
+
 print("Script iniciat", flush=True)
 
 with sync_playwright() as p:
@@ -94,6 +140,8 @@ with sync_playwright() as p:
     while True:
 
         print("Loop iniciat", flush=True)
+
+        update_results()
 
         page = browser.new_page()
 
@@ -370,6 +418,10 @@ with sync_playwright() as p:
                         steam_entry = {
                             "timestamp": str(datetime.now()),
                             "match": current_match,
+
+                            "home_team": current_match.split(" - ")[0],
+                            "away_team": current_match.split(" - ")[1],
+
                             "market": current_market,
                             "side": current_side,
                             "old_odd": old_odd,
@@ -381,7 +433,9 @@ with sync_playwright() as p:
                                 2
                             ),
                             "closing_odd": None,
-                            "clv_percent": None
+                            "clv_percent": None,
+                            "result": None,
+                            "profit": None
                         }
 
                         with open(HISTORY_FILE, "r") as f:
