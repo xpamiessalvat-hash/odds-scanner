@@ -10,19 +10,10 @@ last_alerts = {}
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
-print(BOT_TOKEN, flush=True)
-print(CHAT_ID, flush=True)
-
 
 def send_telegram(message):
 
     if not BOT_TOKEN or not CHAT_ID:
-
-        print(
-            "TELEGRAM VARIABLES NO TROBADES",
-            flush=True
-        )
-
         return
 
     url = (
@@ -37,15 +28,8 @@ def send_telegram(message):
 
     requests.post(url, data=data)
 
-    print(
-        "MISSATGE TELEGRAM ENVIAT",
-        flush=True
-    )
-
 
 print("Script iniciat", flush=True)
-
-send_telegram("TEST TELEGRAM")
 
 with sync_playwright() as p:
 
@@ -59,7 +43,6 @@ with sync_playwright() as p:
     while True:
 
         print("Loop iniciat", flush=True)
-        print("VERSIO NOVA CLEAN", flush=True)
 
         page = browser.new_page()
 
@@ -167,11 +150,6 @@ with sync_playwright() as p:
 
                     current_match = line
 
-                    print(
-                        f"MATCH ACTUAL: {current_match}",
-                        flush=True
-                    )
-
                     continue
 
                 # DETECTAR HORA
@@ -203,8 +181,11 @@ with sync_playwright() as p:
 
                     current_market = "Money Line"
 
-                    continue
+                    moneyline_counter = 0
 
+                    continue
+                moneyline_mode = True
+                moneyline_counter = 0
                 # DRAW
                 if line == "Draw":
 
@@ -224,16 +205,13 @@ with sync_playwright() as p:
 
                     odd = float(line)
 
+                    # FILTRAR QUOTES REALS
+                    if odd < 1.01 or odd > 20:
+                        continue
+
                 except:
 
                     continue
-
-                print(
-                    f"{current_match} | "
-                    f"{current_side} | "
-                    f"{odd}",
-                    flush=True
-                )
 
                 if (
                     current_market == "UNKNOWN"
@@ -306,6 +284,13 @@ with sync_playwright() as p:
                         last_alerts[key] = time.time()
 
                 previous_odds[key] = odd
+                if current_market == "Money Line":
+
+                     moneyline_counter += 1
+
+                     if moneyline_counter >= 3:
+
+                      current_market = "UNKNOWN"
 
             print(
                 "Escaneig completat...",
