@@ -3,9 +3,18 @@ import time
 from datetime import datetime
 import requests
 import os
+import json
 
 previous_odds = {}
 last_alerts = {}
+
+HISTORY_FILE = "steam_history.json"
+
+if not os.path.exists(HISTORY_FILE):
+
+    with open(HISTORY_FILE, "w") as f:
+
+        json.dump([], f)
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
@@ -27,6 +36,48 @@ def send_telegram(message):
     }
 
     requests.post(url, data=data)
+
+
+def update_clv(
+    current_match,
+    current_market,
+    current_side,
+    current_odd
+):
+
+    with open(HISTORY_FILE, "r") as f:
+
+        history = json.load(f)
+
+    updated = False
+
+    for entry in history:
+
+        if (
+            entry["match"] == current_match
+            and entry["market"] == current_market
+            and entry["side"] == current_side
+            and entry["closing_odd"] is None
+        ):
+
+            entry["closing_odd"] = current_odd
+
+            clv = (
+                (
+                    entry["new_odd"]
+                    - current_odd
+                ) / entry["new_odd"]
+            ) * 100
+
+            entry["clv_percent"] = round(clv, 2)
+
+            updated = True
+
+    if updated:
+
+        with open(HISTORY_FILE, "w") as f:
+
+            json.dump(history, f, indent=4)
 
 
 print("Script iniciat", flush=True)
@@ -69,6 +120,7 @@ with sync_playwright() as p:
             hours_until_kickoff = 999
 
             blocked_section = False
+            moneyline_counter = 0
 
             for line in lines:
 
@@ -95,9 +147,16 @@ with sync_playwright() as p:
                     blocked_section = True
                     continue
 
-                # RESETEJAR BLOCKED SECTION
+                # MONEY LINE
                 if "Money Line" in line:
+
                     blocked_section = False
+
+                    current_market = "Money Line"
+
+                    moneyline_counter = 0
+
+                    continue
 
                 if blocked_section:
                     continue
@@ -176,16 +235,6 @@ with sync_playwright() as p:
 
                     continue
 
-                # MONEY LINE
-                if "Money Line" in line:
-
-                    current_market = "Money Line"
-
-                    moneyline_counter = 0
-
-                    continue
-                moneyline_mode = True
-                moneyline_counter = 0
                 # DRAW
                 if line == "Draw":
 
@@ -225,6 +274,16 @@ with sync_playwright() as p:
                     f"{current_side}"
                 )
 
+                # ACTUALITZAR CLV
+                if hours_until_kickoff <= 0:
+
+                    update_clv(
+                        current_match,
+                        current_market,
+                        current_side,
+                        odd
+                    )
+
                 # DETECTAR MOVIMENT
                 if (
                     key in previous_odds
@@ -238,6 +297,29 @@ with sync_playwright() as p:
                             old_odd - odd
                         ) / old_odd
                     ) * 100
+
+                    steam_score = 0
+
+                    # SCORE MOVIMENT
+                    steam_score += min(
+                        abs(movement) * 10,
+                        50
+                    )
+
+                    # SCORE KICKOFF
+                    if hours_until_kickoff <= 6:
+
+                        steam_score += 30
+
+                    elif hours_until_kickoff <= 12:
+
+                        steam_score += 15
+
+                    # LIMIT FINAL
+                    steam_score = round(
+                        min(steam_score, 100),
+                        2
+                    )
 
                     # FILTRE STEAM
                     if (
@@ -266,7 +348,9 @@ with sync_playwright() as p:
                             f"💰 Quota: "
                             f"{old_odd} → {odd}\n"
                             f"📊 Moviment: "
-                            f"{movement:.2f}%\n",
+                            f"{movement:.2f}%\n"
+                            f"🔥 Score: "
+                            f"{steam_score}/100\n",
                             flush=True
                         )
 
@@ -276,21 +360,52 @@ with sync_playwright() as p:
                             f"📈 {current_side} "
                             f"{current_market}\n"
                             f"💰 {old_odd} → {odd}\n"
-                            f"📊 {movement:.2f}%"
+                            f"📊 {movement:.2f}%\n"
+                            f"🔥 Score: "
+                            f"{steam_score}/100"
                         )
 
                         send_telegram(message)
 
+                        steam_entry = {
+                            "timestamp": str(datetime.now()),
+                            "match": current_match,
+                            "market": current_market,
+                            "side": current_side,
+                            "old_odd": old_odd,
+                            "new_odd": odd,
+                            "movement": round(movement, 2),
+                            "steam_score": steam_score,
+                            "hours_until_kickoff": round(
+                                hours_until_kickoff,
+                                2
+                            ),
+                            "closing_odd": None,
+                            "clv_percent": None
+                        }
+
+                        with open(HISTORY_FILE, "r") as f:
+
+                            history = json.load(f)
+
+                        history.append(steam_entry)
+
+                        with open(HISTORY_FILE, "w") as f:
+
+                            json.dump(history, f, indent=4)
+
                         last_alerts[key] = time.time()
 
                 previous_odds[key] = odd
+
+                # LIMITAR A 3 QUOTES MONEYLINE
                 if current_market == "Money Line":
 
-                     moneyline_counter += 1
+                    moneyline_counter += 1
 
-                     if moneyline_counter >= 3:
+                    if moneyline_counter >= 3:
 
-                      current_market = "UNKNOWN"
+                        current_market = "UNKNOWN"
 
             print(
                 "Escaneig completat...",
