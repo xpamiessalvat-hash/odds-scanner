@@ -358,7 +358,7 @@ with sync_playwright() as p:
 
                     # SCORE MOVIMENT
                     steam_score += min(
-                        abs(movement) * 10,
+                        abs(movement) * 20,
                         50
                     )
 
