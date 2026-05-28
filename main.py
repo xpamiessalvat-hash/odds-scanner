@@ -286,6 +286,9 @@ with sync_playwright() as p:
                     and "Odds" not in line
                     and "Winner" not in line
                     and "LEAGUE" not in line
+                    and "SOCCER" not in line
+                    and "FIFA" not in line
+                    and "UEFA" not in line
                 ):
 
                     current_match = line
@@ -429,7 +432,7 @@ with sync_playwright() as p:
                         ) / old_odd
                     ) * 100
 
-                    # DEBUG MOVIMENT
+                    # DEBUG
                     print(
                         f"{key} | "
                         f"{old_odd} -> {odd} | "
@@ -498,6 +501,7 @@ with sync_playwright() as p:
                     if (
                         steam_score >= 5
                         and hours_until_kickoff <= 12
+                        and abs(movement) >= 1
                     ):
 
                         if key in last_alerts:
@@ -584,7 +588,16 @@ with sync_playwright() as p:
                 previous_odds[key] = odd
                 last_move_times[key] = time.time()
 
-                # LIMITAR LÍNIES
+                # RESET DESPRÉS QUOTA
+                if current_market == "Money Line":
+
+                    current_side = "UNKNOWN"
+
+                elif current_market in ["Total", "Handicap"]:
+
+                    current_line = "UNKNOWN"
+
+                # LIMITAR MONEYLINE
                 if current_market == "Money Line":
 
                     moneyline_counter += 1
