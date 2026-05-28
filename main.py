@@ -379,7 +379,7 @@ with sync_playwright() as p:
 
                     # FILTRE STEAM
                     if (
-                        steam_score >= 50
+                        steam_score >= 20
                         and hours_until_kickoff <= 12
                     ):
 
@@ -459,7 +459,10 @@ with sync_playwright() as p:
                         last_alerts[key] = time.time()
 
                 previous_odds[key] = odd
-
+                print(
+                     f"KEY: {key} | ODD: {odd}",
+                     flush=True
+)
                 # LIMITAR A 3 QUOTES MONEYLINE
                 if current_market == "Money Line":
 
