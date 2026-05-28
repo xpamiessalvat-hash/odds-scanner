@@ -456,7 +456,25 @@ with sync_playwright() as p:
                     steam_score = round(
                         min(steam_score, 100),
                         2
-                    )
+)
+
+                    steam_tier = "Weak"
+
+                    if steam_score >= 90:
+
+                        steam_tier = "Nuclear"
+
+                    elif steam_score >= 75:
+
+                        steam_tier = "Gold"
+
+                    elif steam_score >= 60:
+
+                        steam_tier = "Silver"
+
+                    elif steam_score >= 40:
+
+                        steam_tier = "Bronze"
 
                     # FILTRE STEAM
                     if (
@@ -487,7 +505,9 @@ with sync_playwright() as p:
                             f"📊 Moviment: "
                             f"{movement:.2f}%\n"
                             f"🔥 Score: "
-                            f"{steam_score}/100\n",
+                            f"{steam_score}/100\n"
+                            f"🏆 Tier: "
+                            f"{steam_tier}\n",
                             flush=True
                         )
 
@@ -499,7 +519,9 @@ with sync_playwright() as p:
                             f"💰 {old_odd} → {odd}\n"
                             f"📊 {movement:.2f}%\n"
                             f"🔥 Score: "
-                            f"{steam_score}/100"
+                            f"{steam_score}/100\n"
+                            f"🏆 Tier: "
+                            f"{steam_tier}\n"
                         )
 
                         send_telegram(message)
@@ -541,6 +563,7 @@ with sync_playwright() as p:
 
                 previous_odds[key] = odd
                 last_move_times[key] = time.time()
+
                 # LIMITAR A 3 QUOTES MONEYLINE
                 if current_market == "Money Line":
 
