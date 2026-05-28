@@ -7,7 +7,7 @@ import json
 
 previous_odds = {}
 last_alerts = {}
-
+last_move_times = {}
 HISTORY_FILE = "steam_history.json"
 
 if not os.path.exists(HISTORY_FILE):
@@ -203,7 +203,6 @@ with sync_playwright() as p:
                     blocked_section = True
                     continue
 
-                # MONEY LINE
                 # MONEY LINE
                 if "Money Line" in line:
 
@@ -417,7 +416,24 @@ with sync_playwright() as p:
                             old_odd - odd
                         ) / old_odd
                     ) * 100
+                    velocity_score = 0
 
+                    if key in last_move_times:
+
+                        seconds_since_move = (
+                           time.time()
+                           - last_move_times[key]
+    )
+
+                    # MOVIMENT MOLT RÀPID
+                    if seconds_since_move <= 60:
+
+                        velocity_score = 30
+
+                    # MOVIMENT RÀPID
+                    elif seconds_since_move <= 300:
+
+                        velocity_score = 15
                     steam_score = 0
 
                     # SCORE MOVIMENT
@@ -434,6 +450,7 @@ with sync_playwright() as p:
                     elif hours_until_kickoff <= 12:
 
                         steam_score += 15
+                    steam_score += velocity_score
 
                     # LIMIT FINAL
                     steam_score = round(
@@ -523,7 +540,7 @@ with sync_playwright() as p:
                         last_alerts[key] = time.time()
 
                 previous_odds[key] = odd
-                
+                last_move_times[key] = time.time()
                 # LIMITAR A 3 QUOTES MONEYLINE
                 if current_market == "Money Line":
 
