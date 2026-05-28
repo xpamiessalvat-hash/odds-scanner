@@ -319,7 +319,8 @@ with sync_playwright() as p:
                     continue
 
                 if (
-                    current_market == "UNKNOWN"
+                    current_match == "UNKNOWN"
+                    or current_market == "UNKNOWN"
                     or current_side == "UNKNOWN"
                 ):
                     continue
@@ -491,4 +492,4 @@ with sync_playwright() as p:
             except:
                 pass
 
-        time.sleep(600)
+        time.sleep(30)
