@@ -144,10 +144,11 @@ with sync_playwright() as p:
 
             page.goto(
                 "https://www.pinnacle.com/en/soccer",
-                timeout=60000
+                timeout=60000,
+                wait_until="networkidle"
             )
 
-            page.wait_for_timeout(10000)
+            page.wait_for_timeout(5000)
 
             page.wait_for_selector("body")
 
@@ -244,7 +245,7 @@ with sync_playwright() as p:
                 if blocked_section:
                     continue
 
-                # FILTRES
+                # FILTRE JUVENILS
                 youth_words = [
                     "U17",
                     "U18",
@@ -264,6 +265,7 @@ with sync_playwright() as p:
                 ):
                     continue
 
+                # FILTRE AMISTOSOS
                 friendly_words = [
                     "Friendly",
                     "Club Friendly",
@@ -426,6 +428,14 @@ with sync_playwright() as p:
                             old_odd - odd
                         ) / old_odd
                     ) * 100
+
+                    # DEBUG MOVIMENT
+                    print(
+                        f"{key} | "
+                        f"{old_odd} -> {odd} | "
+                        f"{movement:.2f}%",
+                        flush=True
+                    )
 
                     velocity_score = 0
 
