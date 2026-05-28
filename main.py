@@ -379,7 +379,8 @@ with sync_playwright() as p:
 
                     odd = float(line)
 
-                    if odd < 1.01 or odd > 20:
+                    # FILTRE LIQUIDITAT
+                    if odd < 1.20 or odd > 10:
                         continue
 
                 except:
@@ -432,7 +433,6 @@ with sync_playwright() as p:
                         ) / old_odd
                     ) * 100
 
-                    # DEBUG
                     print(
                         f"{key} | "
                         f"{old_odd} -> {odd} | "
@@ -464,11 +464,16 @@ with sync_playwright() as p:
                         50
                     )
 
-                    if hours_until_kickoff <= 6:
+                    # KICKOFF PROPER
+                    if hours_until_kickoff <= 1:
+
+                        steam_score += 40
+
+                    elif hours_until_kickoff <= 3:
 
                         steam_score += 30
 
-                    elif hours_until_kickoff <= 12:
+                    elif hours_until_kickoff <= 6:
 
                         steam_score += 15
 
@@ -500,10 +505,12 @@ with sync_playwright() as p:
                     # FILTRE STEAM
                     if (
                         steam_score >= 5
-                        and hours_until_kickoff <= 12
-                        and abs(movement) >= 1
+                        and hours_until_kickoff <= 3
+                        and hours_until_kickoff >= 0
+                        and abs(movement) >= 0.5
                     ):
 
+                        # COOLDOWN
                         if key in last_alerts:
 
                             cooldown = (
