@@ -204,6 +204,7 @@ with sync_playwright() as p:
                     continue
 
                 # MONEY LINE
+                # MONEY LINE
                 if "Money Line" in line:
 
                     blocked_section = False
@@ -213,6 +214,35 @@ with sync_playwright() as p:
                     moneyline_counter = 0
 
                     continue
+
+                # ASIAN HANDICAP
+                if (
+                    "Spread" in line
+                    or "Handicap" in line
+                ):
+
+                    blocked_section = False
+
+                    current_market = "Handicap"
+
+                    moneyline_counter = 0
+
+                    continue
+
+                # TOTALS
+                if (
+                    "Total" in line
+                    or "Over/Under" in line
+          ):
+
+                    blocked_section = False
+
+                    current_market = "Total"
+
+                    moneyline_counter = 0
+
+                    continue
+
 
                 if blocked_section:
                     continue
@@ -466,7 +496,7 @@ with sync_playwright() as p:
 
                     moneyline_counter += 1
 
-                    if moneyline_counter >= 3:
+                    if moneyline_counter >= 10:
 
                         current_market = "UNKNOWN"
 
