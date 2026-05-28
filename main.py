@@ -172,7 +172,7 @@ with sync_playwright() as p:
             current_time = "UNKNOWN"
             current_market = "UNKNOWN"
             current_side = "UNKNOWN"
-
+            current_line = "UNKNOWN"
             hours_until_kickoff = 999
 
             blocked_section = False
@@ -334,7 +334,24 @@ with sync_playwright() as p:
                     if line in teams:
 
                         current_side = line
+                # DETECTAR LÍNIES TOTALS/HANDICAP
+                if (
+                    current_market in ["Total", "Handicap"]
+):
 
+                    try:
+
+                        test_line = float(
+                            line.replace("+", "")
+        )
+
+                        current_line = line
+
+                        continue
+
+                    except:
+
+                        pass
                 # DETECTAR QUOTES
                 try:
 
@@ -352,7 +369,8 @@ with sync_playwright() as p:
                     current_match == "UNKNOWN"
                     or current_market == "UNKNOWN"
                     or current_side == "UNKNOWN"
-                ):
+                    or current_line == "UNKNOWN"
+            ):
                     continue
 
                 key = (
