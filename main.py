@@ -352,20 +352,23 @@ with sync_playwright() as p:
 
                         pass
 
+                 
                  # FILTRAR LÍNIES EXÒTIQUES
-                allowed_suffixes = [
-                     ".0",
-                     ".25",
-                     ".5",
-                     ".75"
-]
+                    if current_market in ["Total", "Handicap"]:
 
-                if not any(
-                    suffix in current_line
-                    for suffix in allowed_suffixes
-):
+                        allowed_suffixes = [
+                            ".0",
+                            ".25",
+                            ".5",
+                            ".75"
+             ]
 
-                    continue   
+                    if not any(
+                        suffix in current_line
+                        for suffix in allowed_suffixes
+    ):
+
+                        continue    
                 # DETECTAR QUOTES
                 try:
 
@@ -380,18 +383,25 @@ with sync_playwright() as p:
                     continue
 
                 if (
-                    current_match == "UNKNOWN"
-                    or current_market == "UNKNOWN"
-                    or current_side == "UNKNOWN"
-                    or current_line == "UNKNOWN"
-            ):
-                    continue
+                   current_match == "UNKNOWN"
+                   or current_market == "UNKNOWN"
+                   or current_side == "UNKNOWN"
+):
+                   continue
+
+                # Handicap/Totals necessiten línia
+                if (
+                   current_market in ["Handicap", "Total"]
+                   and current_line == "UNKNOWN"
+):
+                   continue
 
                 key = (
                     f"{current_match}-"
                     f"{current_market}-"
-                    f"{current_side}"
-                )
+                    f"{current_side}-"
+                    f"{current_line}"
+)
 
                 # ACTUALITZAR CLV
                 if hours_until_kickoff <= 0:
@@ -438,7 +448,7 @@ with sync_playwright() as p:
 
                     # SCORE MOVIMENT
                     steam_score += min(
-                        abs(movement) * 20,
+                        abs(movement) * 40,
                         50
                     )
 
@@ -478,7 +488,7 @@ with sync_playwright() as p:
 
                     # FILTRE STEAM
                     if (
-                        steam_score >= 20
+                        steam_score >= 5
                         and hours_until_kickoff <= 12
                     ):
 
