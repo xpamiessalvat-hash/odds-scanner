@@ -140,6 +140,11 @@ with sync_playwright() as p:
 
         page = browser.new_page()
 
+        # EVITAR CACHE
+        page.set_extra_http_headers({
+            "Cache-Control": "no-cache"
+        })
+
         try:
 
             page.goto(
@@ -147,6 +152,9 @@ with sync_playwright() as p:
                 timeout=60000,
                 wait_until="networkidle"
             )
+
+            # REFRESH REAL
+            page.reload(wait_until="networkidle")
 
             page.wait_for_timeout(5000)
 
@@ -419,16 +427,6 @@ with sync_playwright() as p:
                     f"{current_line}"
                 )
 
-                # ACTUALITZAR CLV
-                if hours_until_kickoff <= 0:
-
-                    update_clv(
-                        current_match,
-                        current_market,
-                        current_side,
-                        odd
-                    )
-
                 # DETECTAR MOVIMENT
                 if (
                     key in previous_odds
@@ -474,7 +472,6 @@ with sync_playwright() as p:
                         50
                     )
 
-                    # KICKOFF PROPER
                     if hours_until_kickoff <= 1:
 
                         steam_score += 40
@@ -482,10 +479,6 @@ with sync_playwright() as p:
                     elif hours_until_kickoff <= 3:
 
                         steam_score += 30
-
-                    elif hours_until_kickoff <= 6:
-
-                        steam_score += 15
 
                     steam_score += velocity_score
 
@@ -512,7 +505,7 @@ with sync_playwright() as p:
 
                         steam_tier = "Bronze"
 
-                    # FILTRE STEAM
+                    # ALERTA STEAM
                     if (
                         steam_score >= 5
                         and hours_until_kickoff <= 3
@@ -520,7 +513,6 @@ with sync_playwright() as p:
                         and abs(movement) >= 0.5
                     ):
 
-                        # COOLDOWN
                         if key in last_alerts:
 
                             cooldown = (
@@ -533,21 +525,14 @@ with sync_playwright() as p:
 
                         print(
                             f"\n🔥 STEAM MOVE DETECTAT 🔥\n"
-                            f"⚽ Partit: "
-                            f"{current_match}\n"
-                            f"📈 Mercat: "
-                            f"{current_side} "
+                            f"⚽ {current_match}\n"
+                            f"📈 {current_side} "
                             f"{current_market}\n"
-                            f"📏 Línia: "
-                            f"{current_line}\n"
-                            f"💰 Quota: "
-                            f"{old_odd} → {odd}\n"
-                            f"📊 Moviment: "
-                            f"{movement:.2f}%\n"
-                            f"🔥 Score: "
-                            f"{steam_score}/100\n"
-                            f"🏆 Tier: "
-                            f"{steam_tier}\n",
+                            f"📏 {current_line}\n"
+                            f"💰 {old_odd} → {odd}\n"
+                            f"📊 {movement:.2f}%\n"
+                            f"🔥 Score: {steam_score}/100\n"
+                            f"🏆 Tier: {steam_tier}\n",
                             flush=True
                         )
 
@@ -559,46 +544,11 @@ with sync_playwright() as p:
                             f"📏 {current_line}\n"
                             f"💰 {old_odd} → {odd}\n"
                             f"📊 {movement:.2f}%\n"
-                            f"🔥 Score: "
-                            f"{steam_score}/100\n"
-                            f"🏆 Tier: "
-                            f"{steam_tier}"
+                            f"🔥 Score: {steam_score}/100\n"
+                            f"🏆 Tier: {steam_tier}"
                         )
 
                         send_telegram(message)
-
-                        steam_entry = {
-                            "timestamp": str(datetime.now()),
-                            "match": current_match,
-                            "home_team": current_match.split(" - ")[0],
-                            "away_team": current_match.split(" - ")[1],
-                            "market": current_market,
-                            "side": current_side,
-                            "line": current_line,
-                            "old_odd": old_odd,
-                            "new_odd": odd,
-                            "movement": round(movement, 2),
-                            "steam_score": steam_score,
-                            "steam_tier": steam_tier,
-                            "hours_until_kickoff": round(
-                                hours_until_kickoff,
-                                2
-                            ),
-                            "closing_odd": None,
-                            "clv_percent": None,
-                            "result": None,
-                            "profit": None
-                        }
-
-                        with open(HISTORY_FILE, "r") as f:
-
-                            history = json.load(f)
-
-                        history.append(steam_entry)
-
-                        with open(HISTORY_FILE, "w") as f:
-
-                            json.dump(history, f, indent=4)
 
                         last_alerts[key] = time.time()
 
