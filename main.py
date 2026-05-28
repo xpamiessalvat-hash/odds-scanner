@@ -312,6 +312,16 @@ with sync_playwright() as p:
                             match_time - now
                         ).total_seconds() / 3600
 
+                        # IGNORAR PARTITS LLUNYANS
+                        if (
+                            hours_until_kickoff > 3
+                            or hours_until_kickoff < 0
+                        ):
+
+                            current_match = "UNKNOWN"
+
+                            continue
+
                     except:
 
                         hours_until_kickoff = 999
