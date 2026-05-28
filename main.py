@@ -8,6 +8,7 @@ import json
 previous_odds = {}
 last_alerts = {}
 last_move_times = {}
+
 HISTORY_FILE = "steam_history.json"
 
 if not os.path.exists(HISTORY_FILE):
@@ -90,18 +91,12 @@ def update_results():
 
     for entry in history:
 
-        # SI JA TÉ RESULTAT
         if entry["result"] is not None:
             continue
 
-        # SI ENCARA NO TÉ CLOSING LINE
         if entry["closing_odd"] is None:
             continue
 
-        # PLACEHOLDER RESULTAT
-        # després connectarem SofaScore
-
-        # EXEMPLE TEMPORAL
         if entry["clv_percent"] > 0:
 
             entry["result"] = "WIN"
@@ -159,12 +154,11 @@ with sync_playwright() as p:
             # SCROLL COMPLET
             for i in range(15):
 
-                 page.mouse.wheel(0, 10000)
+                page.mouse.wheel(0, 10000)
 
-                 page.wait_for_timeout(1500)
+                page.wait_for_timeout(1500)
 
             text = page.inner_text("body")
-            
 
             lines = text.splitlines()
 
@@ -173,6 +167,7 @@ with sync_playwright() as p:
             current_market = "UNKNOWN"
             current_side = "UNKNOWN"
             current_line = "UNKNOWN"
+
             hours_until_kickoff = 999
 
             blocked_section = False
@@ -185,7 +180,7 @@ with sync_playwright() as p:
                 if not line:
                     continue
 
-                # BLOQUEJAR FUTURES / OUTRIGHTS
+                # BLOQUEJAR FUTURES
                 blocked_words = [
                     "Winner",
                     "Outright",
@@ -200,6 +195,7 @@ with sync_playwright() as p:
                     word in line
                     for word in blocked_words
                 ):
+
                     blocked_section = True
                     continue
 
@@ -209,12 +205,13 @@ with sync_playwright() as p:
                     blocked_section = False
 
                     current_market = "Money Line"
+                    current_line = "ML"
 
                     moneyline_counter = 0
 
                     continue
 
-                # ASIAN HANDICAP
+                # HANDICAP
                 if (
                     "Spread" in line
                     or "Handicap" in line
@@ -223,6 +220,7 @@ with sync_playwright() as p:
                     blocked_section = False
 
                     current_market = "Handicap"
+                    current_line = "UNKNOWN"
 
                     moneyline_counter = 0
 
@@ -232,21 +230,21 @@ with sync_playwright() as p:
                 if (
                     "Total" in line
                     or "Over/Under" in line
-          ):
+                ):
 
                     blocked_section = False
 
                     current_market = "Total"
+                    current_line = "UNKNOWN"
 
                     moneyline_counter = 0
 
                     continue
 
-
                 if blocked_section:
                     continue
 
-                # FILTRE JUVENILS / RESERVES
+                # FILTRES
                 youth_words = [
                     "U17",
                     "U18",
@@ -266,7 +264,6 @@ with sync_playwright() as p:
                 ):
                     continue
 
-                # FILTRE AMISTOSOS
                 friendly_words = [
                     "Friendly",
                     "Club Friendly",
@@ -279,7 +276,7 @@ with sync_playwright() as p:
                 ):
                     continue
 
-                # DETECTAR PARTITS REALS
+                # DETECTAR PARTIT
                 if (
                     " - " in line
                     and len(line) < 60
@@ -287,13 +284,9 @@ with sync_playwright() as p:
                     and "Odds" not in line
                     and "Winner" not in line
                     and "LEAGUE" not in line
-                    and "WORLD CUP" not in line
-                    and "CHAMPIONS LEAGUE" not in line
-                    and "CONFERENCE LEAGUE" not in line
                 ):
 
                     current_match = line
-
                     continue
 
                 # DETECTAR HORA
@@ -333,18 +326,42 @@ with sync_playwright() as p:
                     if line in teams:
 
                         current_side = line
-                # DETECTAR LÍNIES TOTALS/HANDICAP
-                if (
-                    current_market in ["Total", "Handicap"]
-):
+
+                # OVER
+                if "Over" in line:
+
+                    current_side = "OVER"
+                    continue
+
+                # UNDER
+                if "Under" in line:
+
+                    current_side = "UNDER"
+                    continue
+
+                # DETECTAR LÍNIES
+                if current_market in ["Total", "Handicap"]:
 
                     try:
 
                         test_line = float(
                             line.replace("+", "")
-        )
+                        )
 
                         current_line = line
+
+                        allowed_suffixes = [
+                            ".0",
+                            ".25",
+                            ".5",
+                            ".75"
+                        ]
+
+                        if not any(
+                            suffix in current_line
+                            for suffix in allowed_suffixes
+                        ):
+                            continue
 
                         continue
 
@@ -352,29 +369,11 @@ with sync_playwright() as p:
 
                         pass
 
-                 
-                 # FILTRAR LÍNIES EXÒTIQUES
-                    if current_market in ["Total", "Handicap"]:
-
-                        allowed_suffixes = [
-                            ".0",
-                            ".25",
-                            ".5",
-                            ".75"
-             ]
-
-                    if not any(
-                        suffix in current_line
-                        for suffix in allowed_suffixes
-    ):
-
-                        continue    
                 # DETECTAR QUOTES
                 try:
 
                     odd = float(line)
 
-                    # FILTRAR QUOTES REALS
                     if odd < 1.01 or odd > 20:
                         continue
 
@@ -382,26 +381,27 @@ with sync_playwright() as p:
 
                     continue
 
+                # VALIDACIÓ
                 if (
-                   current_match == "UNKNOWN"
-                   or current_market == "UNKNOWN"
-                   or current_side == "UNKNOWN"
-):
-                   continue
+                    current_match == "UNKNOWN"
+                    or current_market == "UNKNOWN"
+                    or current_side == "UNKNOWN"
+                ):
+                    continue
 
-                # Handicap/Totals necessiten línia
                 if (
-                   current_market in ["Handicap", "Total"]
-                   and current_line == "UNKNOWN"
-):
-                   continue
+                    current_market in ["Handicap", "Total"]
+                    and current_line == "UNKNOWN"
+                ):
+                    continue
 
+                # KEY
                 key = (
                     f"{current_match}-"
                     f"{current_market}-"
                     f"{current_side}-"
                     f"{current_line}"
-)
+                )
 
                 # ACTUALITZAR CLV
                 if hours_until_kickoff <= 0:
@@ -426,33 +426,31 @@ with sync_playwright() as p:
                             old_odd - odd
                         ) / old_odd
                     ) * 100
+
                     velocity_score = 0
 
                     if key in last_move_times:
 
                         seconds_since_move = (
-                           time.time()
-                           - last_move_times[key]
-    )
+                            time.time()
+                            - last_move_times[key]
+                        )
 
-                    # MOVIMENT MOLT RÀPID
-                    if seconds_since_move <= 60:
+                        if seconds_since_move <= 60:
 
-                        velocity_score = 30
+                            velocity_score = 30
 
-                    # MOVIMENT RÀPID
-                    elif seconds_since_move <= 300:
+                        elif seconds_since_move <= 300:
 
-                        velocity_score = 15
+                            velocity_score = 15
+
                     steam_score = 0
 
-                    # SCORE MOVIMENT
                     steam_score += min(
                         abs(movement) * 40,
                         50
                     )
 
-                    # SCORE KICKOFF
                     if hours_until_kickoff <= 6:
 
                         steam_score += 30
@@ -460,13 +458,13 @@ with sync_playwright() as p:
                     elif hours_until_kickoff <= 12:
 
                         steam_score += 15
+
                     steam_score += velocity_score
 
-                    # LIMIT FINAL
                     steam_score = round(
                         min(steam_score, 100),
                         2
-)
+                    )
 
                     steam_tier = "Weak"
 
@@ -492,7 +490,6 @@ with sync_playwright() as p:
                         and hours_until_kickoff <= 12
                     ):
 
-                        # COOLDOWN ALERTES
                         if key in last_alerts:
 
                             cooldown = (
@@ -510,6 +507,8 @@ with sync_playwright() as p:
                             f"📈 Mercat: "
                             f"{current_side} "
                             f"{current_market}\n"
+                            f"📏 Línia: "
+                            f"{current_line}\n"
                             f"💰 Quota: "
                             f"{old_odd} → {odd}\n"
                             f"📊 Moviment: "
@@ -526,12 +525,13 @@ with sync_playwright() as p:
                             f"⚽ {current_match}\n"
                             f"📈 {current_side} "
                             f"{current_market}\n"
+                            f"📏 {current_line}\n"
                             f"💰 {old_odd} → {odd}\n"
                             f"📊 {movement:.2f}%\n"
                             f"🔥 Score: "
                             f"{steam_score}/100\n"
                             f"🏆 Tier: "
-                            f"{steam_tier}\n"
+                            f"{steam_tier}"
                         )
 
                         send_telegram(message)
@@ -539,16 +539,16 @@ with sync_playwright() as p:
                         steam_entry = {
                             "timestamp": str(datetime.now()),
                             "match": current_match,
-
                             "home_team": current_match.split(" - ")[0],
                             "away_team": current_match.split(" - ")[1],
-
                             "market": current_market,
                             "side": current_side,
+                            "line": current_line,
                             "old_odd": old_odd,
                             "new_odd": odd,
                             "movement": round(movement, 2),
                             "steam_score": steam_score,
+                            "steam_tier": steam_tier,
                             "hours_until_kickoff": round(
                                 hours_until_kickoff,
                                 2
@@ -574,7 +574,7 @@ with sync_playwright() as p:
                 previous_odds[key] = odd
                 last_move_times[key] = time.time()
 
-                # LIMITAR A 3 QUOTES MONEYLINE
+                # LIMITAR LÍNIES
                 if current_market == "Money Line":
 
                     moneyline_counter += 1
