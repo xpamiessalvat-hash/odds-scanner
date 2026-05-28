@@ -352,6 +352,21 @@ with sync_playwright() as p:
                     except:
 
                         pass
+
+                 # FILTRAR LÍNIES EXÒTIQUES
+                allowed_suffixes = [
+                     ".0",
+                     ".25",
+                     ".5",
+                     ".75"
+]
+
+                if not any(
+                    suffix in current_line
+                    for suffix in allowed_suffixes
+):
+
+                    continue   
                 # DETECTAR QUOTES
                 try:
 
