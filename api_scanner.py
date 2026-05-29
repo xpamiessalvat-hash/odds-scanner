@@ -1,7 +1,15 @@
 import requests
 import time
 
-print("API Scanner iniciat", flush=True)
+from datetime import (
+    datetime,
+    timezone
+)
+
+print(
+    "API Scanner iniciat",
+    flush=True
+)
 
 previous_odds = {}
 
@@ -43,7 +51,10 @@ def american_to_decimal(price):
 
 while True:
 
-    print("\nLoop iniciat...\n", flush=True)
+    print(
+        "\nLoop iniciat...\n",
+        flush=True
+    )
 
     try:
 
@@ -82,40 +93,94 @@ while True:
 
         for matchup in matchups:
 
-            matchup_id = matchup.get("id")
+            try:
 
-            participants = matchup.get(
-                "participants",
-                []
-            )
-
-            home_team = "HOME"
-            away_team = "AWAY"
-
-            for participant in participants:
-
-                alignment = participant.get(
-                    "alignment"
+                matchup_id = matchup.get(
+                    "id"
                 )
 
-                name = participant.get(
-                    "name",
-                    "UNKNOWN"
+                if not matchup_id:
+                    continue
+
+                # FILTRAR TEMPS
+                start_time = matchup.get(
+                    "startTime"
                 )
 
-                if alignment == "home":
+                if not start_time:
+                    continue
 
-                    home_team = name
+                try:
 
-                elif alignment == "away":
+                    match_time = (
+                        datetime.fromisoformat(
+                            start_time.replace(
+                                "Z",
+                                "+00:00"
+                            )
+                        )
+                    )
 
-                    away_team = name
+                    now = datetime.now(
+                        timezone.utc
+                    )
 
-            if matchup_id:
+                    hours_until_match = (
+                        (
+                            match_time - now
+                        ).total_seconds()
+                        / 3600
+                    )
+
+                    # NOMÉS PRÒXIMES 24H
+                    if (
+                        hours_until_match < 0
+                        or hours_until_match > 24
+                    ):
+                        continue
+
+                except:
+
+                    continue
+
+                participants = matchup.get(
+                    "participants",
+                    []
+                )
+
+                home_team = "HOME"
+                away_team = "AWAY"
+
+                for participant in participants:
+
+                    alignment = participant.get(
+                        "alignment"
+                    )
+
+                    name = participant.get(
+                        "name",
+                        "UNKNOWN"
+                    )
+
+                    if alignment == "home":
+
+                        home_team = name
+
+                    elif alignment == "away":
+
+                        away_team = name
 
                 matchup_map[matchup_id] = (
                     f"{home_team} vs "
                     f"{away_team}"
+                )
+
+            except Exception as e:
+
+                print(
+                    f"ERROR MATCHUP MAP: "
+                    f"{e}",
+                    flush=True
                 )
 
         print(
@@ -154,6 +219,19 @@ while True:
                         market_type = market.get(
                             "type"
                         )
+
+                        # FILTRAR MERCATS
+                        allowed_markets = [
+                            "moneyline",
+                            "spread",
+                            "total"
+                        ]
+
+                        if (
+                            market_type
+                            not in allowed_markets
+                        ):
+                            continue
 
                         # IGNORAR ALTERNATES
                         is_alternate = market.get(
@@ -215,13 +293,14 @@ while True:
                                 f"{points}"
                             )
 
-                            # DEBUG MOVIMENTS REALS
+                            # DETECTAR MOVIMENTS
                             if key in previous_odds:
 
                                 old_odd = (
                                     previous_odds[key]
                                 )
 
+                                # DEBUG LLEUGER
                                 if (
                                     old_odd
                                     != decimal_odd
