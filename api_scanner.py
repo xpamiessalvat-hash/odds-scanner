@@ -213,7 +213,18 @@ while True:
                                         f"{movement:.2f}%\n",
                                         flush=True
                                     )
+                            if key in previous_odds:
 
+                                old_odd = previous_odds[key]
+
+                                if old_odd != decimal_odd:
+
+                                    print(
+                                        f"{key}: "
+                                        f"{old_odd} -> "
+                                        f"{decimal_odd}",
+                                        flush=True
+                             )
                             previous_odds[key] = (
                                 decimal_odd
                             )
