@@ -1,6 +1,6 @@
 import requests
 import time
-
+print("API Scanner iniciat", flush=True)
 previous_odds = {}
 
 URL = (
