@@ -14,6 +14,7 @@ print(
 
 previous_odds = {}
 last_alerts = {}
+pending_steam = {}
 
 BOT_TOKEN = os.getenv(
     "BOT_TOKEN"
@@ -101,6 +102,8 @@ VALID_TEAM_TOTAL_POINTS = [
     2,
     2.25
 ]
+
+STEAM_CONFIRMATION_SECONDS = 60
 
 
 def send_telegram(message):
@@ -481,6 +484,8 @@ while True:
                                 f"{points}"
                             )
 
+                            current_time = time.time()
+
                             # DETECTAR MOVIMENTS
                             if key in previous_odds:
 
@@ -495,64 +500,105 @@ while True:
                                     ) / old_odd
                                 ) * 100
 
-                                # NOMÉS STEAM IMPORTANT
+                                # NOMÉS ODDS SHORTENING
                                 if (
-                                    abs(movement) >= 10
-                                    and abs(movement) <= 25
+                                    movement >= 10
+                                    and movement <= 25
                                 ):
 
-                                    print(
-                                        f"\n🔥 "
-                                        f"STEAM "
-                                        f"DETECTAT "
-                                        f"🔥\n"
-                                        f"🏆 {league_name}\n"
-                                        f"{key}\n"
-                                        f"{old_odd} "
-                                        f"-> "
-                                        f"{decimal_odd}\n"
-                                        f"{movement:.2f}%\n",
-                                        flush=True
-                                    )
+                                    # CREAR PENDING STEAM
+                                    if key not in pending_steam:
 
-                                    message = (
-                                        f"🔥 STEAM DETECTAT 🔥\n\n"
-                                        f"🏆 {league_name}\n"
-                                        f"⚽ {match_name}\n"
-                                        f"📈 {market_type}\n"
-                                        f"🎯 {side} "
-                                        f"{points}\n"
-                                        f"💰 {old_odd} "
-                                        f"-> "
-                                        f"{decimal_odd}\n"
-                                        f"📊 {movement:.2f}%"
-                                    )
+                                        pending_steam[key] = {
+                                            "timestamp": current_time,
+                                            "old_odd": old_odd,
+                                            "new_odd": decimal_odd,
+                                            "league_name": league_name,
+                                            "match_name": match_name,
+                                            "market_type": market_type,
+                                            "side": side,
+                                            "points": points
+                                        }
 
-                                    current_time = (
-                                        time.time()
-                                    )
+                                    else:
 
-                                    last_alert = (
-                                        last_alerts.get(
-                                            key,
-                                            0
-                                        )
-                                    )
-
-                                    # 15 MIN COOLDOWN
-                                    if (
-                                        current_time
-                                        - last_alert
-                                        > 900
-                                    ):
-
-                                        send_telegram(
-                                            message
+                                        steam_data = (
+                                            pending_steam[key]
                                         )
 
-                                        last_alerts[key] = (
+                                        elapsed = (
                                             current_time
+                                            - steam_data["timestamp"]
                                         )
+
+                                        # CONFIRMAR STEAM
+                                        if (
+                                            elapsed >=
+                                            STEAM_CONFIRMATION_SECONDS
+                                        ):
+
+                                            # CONFIRMACIÓ:
+                                            # quota continua baixa
+                                            if (
+                                                decimal_odd
+                                                <= steam_data["new_odd"]
+                                            ):
+
+                                                print(
+                                                    f"\n🔥 "
+                                                    f"STEAM "
+                                                    f"CONFIRMAT "
+                                                    f"🔥\n"
+                                                    f"🏆 {league_name}\n"
+                                                    f"{key}\n"
+                                                    f"{steam_data['old_odd']} "
+                                                    f"-> "
+                                                    f"{decimal_odd}\n"
+                                                    f"{movement:.2f}%\n",
+                                                    flush=True
+                                                )
+
+                                                message = (
+                                                    f"🔥 STEAM CONFIRMAT 🔥\n\n"
+                                                    f"🏆 {league_name}\n"
+                                                    f"⚽ {match_name}\n"
+                                                    f"📈 {market_type}\n"
+                                                    f"🎯 {side} "
+                                                    f"{points}\n"
+                                                    f"💰 "
+                                                    f"{steam_data['old_odd']} "
+                                                    f"-> "
+                                                    f"{decimal_odd}\n"
+                                                    f"📊 "
+                                                    f"{movement:.2f}%\n"
+                                                    f"⏱ Confirmat "
+                                                    f"{STEAM_CONFIRMATION_SECONDS}s"
+                                                )
+
+                                                last_alert = (
+                                                    last_alerts.get(
+                                                        key,
+                                                        0
+                                                    )
+                                                )
+
+                                                # 15 MIN COOLDOWN
+                                                if (
+                                                    current_time
+                                                    - last_alert
+                                                    > 900
+                                                ):
+
+                                                    send_telegram(
+                                                        message
+                                                    )
+
+                                                    last_alerts[key] = (
+                                                        current_time
+                                                    )
+
+                                            # ELIMINAR PENDING
+                                            del pending_steam[key]
 
                             previous_odds[key] = (
                                 decimal_odd
