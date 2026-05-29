@@ -58,7 +58,39 @@ BLOCKED_WORDS = [
     "Corners",
     "Esports",
     "Simulation",
-    "Women"
+    "Women",
+    "3rd Division",
+    "4. Liga",
+    "Amateur",
+    "Regional",
+    "Kolmonen",
+    "Kakkonen",
+    "Division 1 Women",
+    "NPL"
+]
+
+VALID_POINTS = [
+    -1.5,
+    -1.25,
+    -1,
+    -0.75,
+    -0.5,
+    -0.25,
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1,
+    1.25,
+    1.5,
+    1.75,
+    2,
+    2.25,
+    2.5,
+    2.75,
+    3,
+    3.25,
+    3.5
 ]
 
 
@@ -243,10 +275,10 @@ while True:
                                 / 3600
                             )
 
-                            # NOMÉS PRÒXIMES 72H
+                            # NOMÉS PRÒXIMES 24H
                             if (
                                 hours_until_match < 0
-                                or hours_until_match > 72
+                                or hours_until_match > 24
                             ):
                                 continue
 
@@ -285,6 +317,10 @@ while True:
                             f"{home_team} vs "
                             f"{away_team}"
                         )
+
+                        # IGNORAR CORNERS
+                        if "(Corners)" in match_name:
+                            continue
 
                         matchup_map[matchup_id] = {
                             "match_name": match_name,
@@ -357,9 +393,11 @@ while True:
                             "type"
                         )
 
-                        # NOMÉS MONEYLINE
+                        # MERCATS IMPORTANTS
                         allowed_markets = [
-                            "moneyline"
+                            "spread",
+                            "total",
+                            "team_total"
                         ]
 
                         if (
@@ -403,6 +441,16 @@ while True:
                             ):
                                 continue
 
+                            points = price_data.get(
+                                "points"
+                            )
+
+                            if (
+                                points
+                                not in VALID_POINTS
+                            ):
+                                continue
+
                             decimal_odd = (
                                 american_to_decimal(
                                     american_price
@@ -412,7 +460,8 @@ while True:
                             key = (
                                 f"{match_name}-"
                                 f"{market_type}-"
-                                f"{side}"
+                                f"{side}-"
+                                f"{points}"
                             )
 
                             # DETECTAR MOVIMENTS
@@ -453,8 +502,9 @@ while True:
                                         f"🔥 STEAM DETECTAT 🔥\n\n"
                                         f"🏆 {league_name}\n"
                                         f"⚽ {match_name}\n"
-                                        f"📈 {market_type} "
-                                        f"{side}\n"
+                                        f"📈 {market_type}\n"
+                                        f"🎯 {side} "
+                                        f"{points}\n"
                                         f"💰 {old_odd} "
                                         f"-> "
                                         f"{decimal_odd}\n"
