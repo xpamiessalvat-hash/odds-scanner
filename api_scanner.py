@@ -103,6 +103,23 @@ VALID_TEAM_TOTAL_POINTS = [
     2.25
 ]
 
+TOP_LEAGUES = [
+    "Premier League",
+    "Champions League",
+    "Serie A",
+    "La Liga",
+    "Bundesliga",
+    "Ligue 1",
+    "Eredivisie",
+    "Primeira Liga"
+]
+
+MARKET_WEIGHTS = {
+    "spread": 1.2,
+    "total": 1.15,
+    "team_total": 0.9
+}
+
 STEAM_CONFIRMATION_SECONDS = 60
 
 
@@ -158,6 +175,72 @@ def is_blocked_league(name):
             return True
 
     return False
+
+
+def calculate_steam_score(
+    movement,
+    market_type,
+    league_name,
+    hours_until_match
+):
+
+    # BASE SCORE
+    movement_score = movement * 2
+
+    # MARKET WEIGHT
+    market_weight = MARKET_WEIGHTS.get(
+        market_type,
+        1
+    )
+
+    # TIME WEIGHT
+    if hours_until_match <= 2:
+
+        time_weight = 1.3
+
+    elif hours_until_match <= 6:
+
+        time_weight = 1.15
+
+    else:
+
+        time_weight = 1
+
+    # LEAGUE WEIGHT
+    league_weight = 1
+
+    for top_league in TOP_LEAGUES:
+
+        if top_league.lower() in league_name.lower():
+
+            league_weight = 1.25
+            break
+
+    steam_score = (
+        movement_score
+        * market_weight
+        * time_weight
+        * league_weight
+    )
+
+    return round(
+        min(100, steam_score),
+        1
+    )
+
+
+def get_strength_label(score):
+
+    if score >= 85:
+        return "ELITE"
+
+    if score >= 70:
+        return "HIGH"
+
+    if score >= 55:
+        return "MEDIUM"
+
+    return "LOW"
 
 
 while True:
@@ -219,7 +302,6 @@ while True:
                 if not league_id:
                     continue
 
-                # FILTRAR LEAGUES
                 if is_blocked_league(
                     league_name
                 ):
@@ -257,7 +339,6 @@ while True:
                         if not matchup_id:
                             continue
 
-                        # FILTRAR TEMPS
                         start_time = matchup.get(
                             "startTime"
                         )
@@ -287,7 +368,6 @@ while True:
                                 / 3600
                             )
 
-                            # NOMÉS PRÒXIMES 24H
                             if (
                                 hours_until_match < 0
                                 or hours_until_match > 24
@@ -330,13 +410,13 @@ while True:
                             f"{away_team}"
                         )
 
-                        # IGNORAR CORNERS
                         if "(Corners)" in match_name:
                             continue
 
                         matchup_map[matchup_id] = {
                             "match_name": match_name,
-                            "league_name": league_name
+                            "league_name": league_name,
+                            "hours_until_match": hours_until_match
                         }
 
                     except Exception as e:
@@ -376,6 +456,11 @@ while True:
                     ["league_name"]
                 )
 
+                hours_until_match = (
+                    matchup_map[matchup_id]
+                    ["hours_until_match"]
+                )
+
                 market_url = (
                     "https://guest.api.arcadia.pinnacle.com"
                     f"/0.1/matchups/"
@@ -405,7 +490,6 @@ while True:
                             "type"
                         )
 
-                        # MERCATS IMPORTANTS
                         allowed_markets = [
                             "spread",
                             "total",
@@ -418,7 +502,6 @@ while True:
                         ):
                             continue
 
-                        # IGNORAR ALTERNATES
                         is_alternate = market.get(
                             "isAlternate",
                             False
@@ -463,7 +546,6 @@ while True:
                             ):
                                 continue
 
-                            # FILTRAR TEAM TOTALS
                             if (
                                 market_type == "team_total"
                                 and points
@@ -486,7 +568,6 @@ while True:
 
                             current_time = time.time()
 
-                            # DETECTAR MOVIMENTS
                             if key in previous_odds:
 
                                 old_odd = (
@@ -506,7 +587,6 @@ while True:
                                     and movement <= 25
                                 ):
 
-                                    # CREAR PENDING STEAM
                                     if key not in pending_steam:
 
                                         pending_steam[key] = {
@@ -517,7 +597,9 @@ while True:
                                             "match_name": match_name,
                                             "market_type": market_type,
                                             "side": side,
-                                            "points": points
+                                            "points": points,
+                                            "movement": movement,
+                                            "hours_until_match": hours_until_match
                                         }
 
                                     else:
@@ -531,18 +613,30 @@ while True:
                                             - steam_data["timestamp"]
                                         )
 
-                                        # CONFIRMAR STEAM
                                         if (
                                             elapsed >=
                                             STEAM_CONFIRMATION_SECONDS
                                         ):
 
-                                            # CONFIRMACIÓ:
-                                            # quota continua baixa
                                             if (
                                                 decimal_odd
                                                 <= steam_data["new_odd"]
                                             ):
+
+                                                steam_score = (
+                                                    calculate_steam_score(
+                                                        steam_data["movement"],
+                                                        market_type,
+                                                        league_name,
+                                                        hours_until_match
+                                                    )
+                                                )
+
+                                                strength = (
+                                                    get_strength_label(
+                                                        steam_score
+                                                    )
+                                                )
 
                                                 print(
                                                     f"\n🔥 "
@@ -551,10 +645,8 @@ while True:
                                                     f"🔥\n"
                                                     f"🏆 {league_name}\n"
                                                     f"{key}\n"
-                                                    f"{steam_data['old_odd']} "
-                                                    f"-> "
-                                                    f"{decimal_odd}\n"
-                                                    f"{movement:.2f}%\n",
+                                                    f"Score: "
+                                                    f"{steam_score}\n",
                                                     flush=True
                                                 )
 
@@ -570,9 +662,15 @@ while True:
                                                     f"-> "
                                                     f"{decimal_odd}\n"
                                                     f"📊 "
-                                                    f"{movement:.2f}%\n"
+                                                    f"{steam_data['movement']:.2f}%\n\n"
+                                                    f"⭐ Score: "
+                                                    f"{steam_score}/100\n"
+                                                    f"🔥 Strength: "
+                                                    f"{strength}\n"
                                                     f"⏱ Confirmat "
-                                                    f"{STEAM_CONFIRMATION_SECONDS}s"
+                                                    f"{STEAM_CONFIRMATION_SECONDS}s\n"
+                                                    f"🕒 Kickoff: "
+                                                    f"{hours_until_match:.1f}h"
                                                 )
 
                                                 last_alert = (
@@ -582,7 +680,6 @@ while True:
                                                     )
                                                 )
 
-                                                # 15 MIN COOLDOWN
                                                 if (
                                                     current_time
                                                     - last_alert
@@ -597,7 +694,6 @@ while True:
                                                         current_time
                                                     )
 
-                                            # ELIMINAR PENDING
                                             del pending_steam[key]
 
                             previous_odds[key] = (
