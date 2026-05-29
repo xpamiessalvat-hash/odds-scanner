@@ -1,6 +1,7 @@
 import requests
 import time
 import os
+import random
 
 from datetime import (
     datetime,
@@ -34,10 +35,18 @@ HEADERS = {
         "Safari/537.36"
     ),
     "Accept": "application/json",
+    "Accept-Language": "en-US,en;q=0.9",
     "Origin": "https://www.pinnacle.com",
     "Referer": "https://www.pinnacle.com/",
     "Connection": "keep-alive"
 }
+
+# SESSION PERSISTENT
+session = requests.Session()
+
+session.headers.update(
+    HEADERS
+)
 
 LEAGUES_URL = (
     "https://guest.api.arcadia.pinnacle.com"
@@ -245,7 +254,6 @@ def calculate_value_limit(
     movement
 ):
 
-    # RETENTION FACTOR
     if movement >= 20:
 
         retention = 0.6
@@ -286,9 +294,8 @@ while True:
             flush=True
         )
 
-        response = requests.get(
+        response = session.get(
             LEAGUES_URL,
-            headers=HEADERS,
             timeout=30
         )
 
@@ -298,6 +305,18 @@ while True:
             flush=True
         )
 
+        # BACKOFF CLOUDLFARE
+        if response.status_code == 403:
+
+            print(
+                "403 DETECTAT - BACKOFF 10 MIN",
+                flush=True
+            )
+
+            time.sleep(600)
+
+            continue
+
         if response.status_code != 200:
 
             print(
@@ -306,7 +325,7 @@ while True:
                 flush=True
             )
 
-            time.sleep(30)
+            time.sleep(120)
 
             continue
 
@@ -343,11 +362,29 @@ while True:
                     "/matchups"
                 )
 
-                response = requests.get(
+                response = session.get(
                     matchups_url,
-                    headers=HEADERS,
                     timeout=30
                 )
+
+                # RANDOM DELAY
+                time.sleep(
+                    random.uniform(0.4, 1.2)
+                )
+
+                if (
+                    response.status_code
+                    == 403
+                ):
+
+                    print(
+                        "403 MATCHUPS - BACKOFF",
+                        flush=True
+                    )
+
+                    time.sleep(600)
+
+                    continue
 
                 if (
                     response.status_code
@@ -498,11 +535,29 @@ while True:
                     "/markets/related/straight"
                 )
 
-                response = requests.get(
+                response = session.get(
                     market_url,
-                    headers=HEADERS,
                     timeout=30
                 )
+
+                # RANDOM DELAY
+                time.sleep(
+                    random.uniform(0.4, 1.2)
+                )
+
+                if (
+                    response.status_code
+                    == 403
+                ):
+
+                    print(
+                        "403 MARKETS - BACKOFF",
+                        flush=True
+                    )
+
+                    time.sleep(600)
+
+                    continue
 
                 if (
                     response.status_code
@@ -761,4 +816,5 @@ while True:
             flush=True
         )
 
-    time.sleep(30)
+    # LOOP MÉS LENT
+    time.sleep(120)
