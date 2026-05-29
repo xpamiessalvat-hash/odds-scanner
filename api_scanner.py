@@ -78,24 +78,54 @@ while True:
 
         matchups = response.json()
 
-        matchup_ids = []
+        matchup_map = {}
 
         for matchup in matchups:
 
             matchup_id = matchup.get("id")
 
+            participants = matchup.get(
+                "participants",
+                []
+            )
+
+            home_team = "HOME"
+            away_team = "AWAY"
+
+            for participant in participants:
+
+                alignment = participant.get(
+                    "alignment"
+                )
+
+                name = participant.get(
+                    "name",
+                    "UNKNOWN"
+                )
+
+                if alignment == "home":
+
+                    home_team = name
+
+                elif alignment == "away":
+
+                    away_team = name
+
             if matchup_id:
 
-                matchup_ids.append(matchup_id)
+                matchup_map[matchup_id] = (
+                    f"{home_team} vs "
+                    f"{away_team}"
+                )
 
         print(
             f"Matchups trobats: "
-            f"{len(matchup_ids)}",
+            f"{len(matchup_map)}",
             flush=True
         )
 
         # ITERAR MATCHUPS
-        for matchup_id in matchup_ids:
+        for matchup_id in matchup_map:
 
             try:
 
@@ -124,14 +154,16 @@ while True:
                         market_type = market.get(
                             "type"
                         )
+
+                        # IGNORAR ALTERNATES
                         is_alternate = market.get(
                             "isAlternate",
                             False
                         )
 
-                        # IGNORAR ALTERNATES
                         if is_alternate:
                             continue
+
                         prices = market.get(
                             "prices",
                             []
@@ -142,9 +174,11 @@ while True:
                             side = price_data.get(
                                 "designation"
                             )
-                        # IGNORAR SIDES INVALIDS
-                        if side is None:
-                            continue
+
+                            # IGNORAR SIDES INVALIDS
+                            if side is None:
+                                continue
+
                             american_price = (
                                 price_data.get(
                                     "price"
@@ -163,29 +197,42 @@ while True:
                                 )
                             )
 
-                            # IMPORTANT:
-                            # diferenciar línies
+                            # DIFERENCIAR LÍNIES
                             points = price_data.get(
                                 "points",
                                 "NA"
                             )
 
+                            match_name = matchup_map.get(
+                                matchup_id,
+                                str(matchup_id)
+                            )
+
                             key = (
-                                f"{matchup_id}-"
+                                f"{match_name}-"
                                 f"{market_type}-"
                                 f"{side}-"
                                 f"{points}"
                             )
 
-                            # DETECTAR MOVIMENT
-                            if (
-                                key
-                                in previous_odds
-                            ):
+                            # DEBUG MOVIMENTS REALS
+                            if key in previous_odds:
 
                                 old_odd = (
                                     previous_odds[key]
                                 )
+
+                                if (
+                                    old_odd
+                                    != decimal_odd
+                                ):
+
+                                    print(
+                                        f"{key}: "
+                                        f"{old_odd} -> "
+                                        f"{decimal_odd}",
+                                        flush=True
+                                    )
 
                                 movement = (
                                     (
@@ -195,11 +242,10 @@ while True:
                                 ) * 100
 
                                 # FILTRAR SOROLL
-                                # FILTRAR SOROLL
                                 if (
-                                   abs(movement) >= 0.5
-                                   and abs(movement) <= 25
-                               ):
+                                    abs(movement) >= 0.5
+                                    and abs(movement) <= 25
+                                ):
 
                                     print(
                                         f"\n🔥 "
@@ -213,18 +259,7 @@ while True:
                                         f"{movement:.2f}%\n",
                                         flush=True
                                     )
-                            if key in previous_odds:
 
-                                old_odd = previous_odds[key]
-
-                                if old_odd != decimal_odd:
-
-                                    print(
-                                        f"{key}: "
-                                        f"{old_odd} -> "
-                                        f"{decimal_odd}",
-                                        flush=True
-                             )
                             previous_odds[key] = (
                                 decimal_odd
                             )
