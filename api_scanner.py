@@ -57,7 +57,8 @@ BLOCKED_WORDS = [
     "Reserves",
     "Corners",
     "Esports",
-    "Simulation"
+    "Simulation",
+    "Women"
 ]
 
 
@@ -155,12 +156,6 @@ while True:
 
         leagues = response.json()
 
-        print(
-            f"Leagues trobades: "
-            f"{len(leagues)}",
-            flush=True
-        )
-
         matchup_map = {}
 
         # ITERAR LEAGUES
@@ -177,29 +172,14 @@ while True:
                     "UNKNOWN"
                 )
 
-                if (
-                    not league_id
-                ):
+                if not league_id:
                     continue
 
                 # FILTRAR LEAGUES
                 if is_blocked_league(
                     league_name
                 ):
-
-                    print(
-                        f"League ignorada: "
-                        f"{league_name}",
-                        flush=True
-                    )
-
                     continue
-
-                print(
-                    f"League acceptada: "
-                    f"{league_name}",
-                    flush=True
-                )
 
                 matchups_url = (
                     "https://guest.api.arcadia.pinnacle.com"
@@ -319,14 +299,6 @@ while True:
                             flush=True
                         )
 
-            except Exception as e:
-
-                print(
-                    f"ERROR LEAGUE: "
-                    f"{e}",
-                    flush=True
-                )
-
         print(
             f"Matchups totals: "
             f"{len(matchup_map)}",
@@ -377,11 +349,9 @@ while True:
                             "type"
                         )
 
-                        # FILTRAR MERCATS
+                        # NOMÉS MONEYLINE
                         allowed_markets = [
-                            "moneyline",
-                            "spread",
-                            "total"
+                            "moneyline"
                         ]
 
                         if (
@@ -431,16 +401,10 @@ while True:
                                 )
                             )
 
-                            points = price_data.get(
-                                "points",
-                                "NA"
-                            )
-
                             key = (
                                 f"{match_name}-"
                                 f"{market_type}-"
-                                f"{side}-"
-                                f"{points}"
+                                f"{side}"
                             )
 
                             # DETECTAR MOVIMENTS
@@ -457,23 +421,9 @@ while True:
                                     ) / old_odd
                                 ) * 100
 
-                                # DEBUG LLEUGER
-                                if (
-                                    old_odd
-                                    != decimal_odd
-                                ):
-
-                                    print(
-                                        f"{league_name} | "
-                                        f"{key}: "
-                                        f"{old_odd} -> "
-                                        f"{decimal_odd}",
-                                        flush=True
-                                    )
-
                                 # NOMÉS STEAM IMPORTANT
                                 if (
-                                    abs(movement) >= 5
+                                    abs(movement) >= 8
                                     and abs(movement) <= 25
                                 ):
 
@@ -482,8 +432,7 @@ while True:
                                         f"STEAM "
                                         f"DETECTAT "
                                         f"🔥\n"
-                                        f"League: "
-                                        f"{league_name}\n"
+                                        f"🏆 {league_name}\n"
                                         f"{key}\n"
                                         f"{old_odd} "
                                         f"-> "
@@ -497,8 +446,7 @@ while True:
                                         f"🏆 {league_name}\n"
                                         f"⚽ {match_name}\n"
                                         f"📈 {market_type} "
-                                        f"{side} "
-                                        f"{points}\n"
+                                        f"{side}\n"
                                         f"💰 {old_odd} "
                                         f"-> "
                                         f"{decimal_odd}\n"
