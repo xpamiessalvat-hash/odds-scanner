@@ -1,6 +1,8 @@
 import requests
 import time
+
 print("API Scanner iniciat", flush=True)
+
 previous_odds = {}
 
 URL = (
@@ -9,7 +11,18 @@ URL = (
 )
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0"
+    "User-Agent": (
+        "Mozilla/5.0 "
+        "(Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 "
+        "(KHTML, like Gecko) "
+        "Chrome/137.0.0.0 "
+        "Safari/537.36"
+    ),
+    "Accept": "application/json",
+    "Origin": "https://www.pinnacle.com",
+    "Referer": "https://www.pinnacle.com/",
+    "Connection": "keep-alive"
 }
 
 
@@ -30,9 +43,14 @@ def american_to_decimal(price):
 
 while True:
 
-    print("\nLoop iniciat...\n")
+    print("\nLoop iniciat...\n", flush=True)
 
     try:
+
+        print(
+            "Fent request API...",
+            flush=True
+        )
 
         response = requests.get(
             URL,
@@ -40,7 +58,29 @@ while True:
             timeout=30
         )
 
+        print(
+            f"STATUS: {response.status_code}",
+            flush=True
+        )
+
+        if response.status_code != 200:
+
+            print(
+                f"Resposta incorrecta: "
+                f"{response.text[:500]}",
+                flush=True
+            )
+
+            time.sleep(30)
+
+            continue
+
         data = response.json()
+
+        print(
+            f"Markets rebuts: {len(data)}",
+            flush=True
+        )
 
         for market in data:
 
@@ -69,6 +109,9 @@ while True:
                     american_price = price_data.get(
                         "price"
                     )
+
+                    if american_price is None:
+                        continue
 
                     decimal_odd = (
                         american_to_decimal(
@@ -116,11 +159,15 @@ while True:
             except Exception as e:
 
                 print(
-                    f"ERROR MARKET: {e}"
+                    f"ERROR MARKET: {e}",
+                    flush=True
                 )
 
     except Exception as e:
 
-        print(f"ERROR API: {e}")
+        print(
+            f"ERROR API: {e}",
+            flush=True
+        )
 
     time.sleep(30)
