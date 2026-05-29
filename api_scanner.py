@@ -124,7 +124,14 @@ while True:
                         market_type = market.get(
                             "type"
                         )
+                        is_alternate = market.get(
+                            "isAlternate",
+                            False
+                        )
 
+                        # IGNORAR ALTERNATES
+                        if is_alternate:
+                            continue
                         prices = market.get(
                             "prices",
                             []
