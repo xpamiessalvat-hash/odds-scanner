@@ -38,10 +38,27 @@ HEADERS = {
     "Connection": "keep-alive"
 }
 
-MATCHUPS_URL = (
+LEAGUES_URL = (
     "https://guest.api.arcadia.pinnacle.com"
-    "/0.1/sports/29/matchups/highlighted"
+    "/0.1/sports/29/leagues"
 )
+
+BLOCKED_WORDS = [
+    "Friendly",
+    "Friendlies",
+    "U17",
+    "U18",
+    "U19",
+    "U20",
+    "U21",
+    "U23",
+    "Youth",
+    "Reserve",
+    "Reserves",
+    "Corners",
+    "Esports",
+    "Simulation"
+]
 
 
 def send_telegram(message):
@@ -87,6 +104,17 @@ def american_to_decimal(price):
     )
 
 
+def is_blocked_league(name):
+
+    for word in BLOCKED_WORDS:
+
+        if word.lower() in name.lower():
+
+            return True
+
+    return False
+
+
 while True:
 
     print(
@@ -97,18 +125,18 @@ while True:
     try:
 
         print(
-            "Obtenint matchup IDs...",
+            "Obtenint leagues...",
             flush=True
         )
 
         response = requests.get(
-            MATCHUPS_URL,
+            LEAGUES_URL,
             headers=HEADERS,
             timeout=30
         )
 
         print(
-            f"STATUS MATCHUPS: "
+            f"STATUS LEAGUES: "
             f"{response.status_code}",
             flush=True
         )
@@ -125,104 +153,182 @@ while True:
 
             continue
 
-        matchups = response.json()
+        leagues = response.json()
+
+        print(
+            f"Leagues trobades: "
+            f"{len(leagues)}",
+            flush=True
+        )
 
         matchup_map = {}
 
-        for matchup in matchups:
+        # ITERAR LEAGUES
+        for league in leagues:
 
             try:
 
-                matchup_id = matchup.get(
+                league_id = league.get(
                     "id"
                 )
 
-                if not matchup_id:
-                    continue
-
-                # FILTRAR TEMPS
-                start_time = matchup.get(
-                    "startTime"
+                league_name = league.get(
+                    "name",
+                    "UNKNOWN"
                 )
 
-                if not start_time:
+                if (
+                    not league_id
+                ):
                     continue
 
-                try:
+                # FILTRAR LEAGUES
+                if is_blocked_league(
+                    league_name
+                ):
 
-                    match_time = (
-                        datetime.fromisoformat(
-                            start_time.replace(
-                                "Z",
-                                "+00:00"
-                            )
+                    print(
+                        f"League ignorada: "
+                        f"{league_name}",
+                        flush=True
+                    )
+
+                    continue
+
+                print(
+                    f"League acceptada: "
+                    f"{league_name}",
+                    flush=True
+                )
+
+                matchups_url = (
+                    "https://guest.api.arcadia.pinnacle.com"
+                    f"/0.1/leagues/"
+                    f"{league_id}"
+                    "/matchups"
+                )
+
+                response = requests.get(
+                    matchups_url,
+                    headers=HEADERS,
+                    timeout=30
+                )
+
+                if (
+                    response.status_code
+                    != 200
+                ):
+                    continue
+
+                matchups = response.json()
+
+                for matchup in matchups:
+
+                    try:
+
+                        matchup_id = matchup.get(
+                            "id"
                         )
-                    )
 
-                    now = datetime.now(
-                        timezone.utc
-                    )
+                        if not matchup_id:
+                            continue
 
-                    hours_until_match = (
-                        (
-                            match_time - now
-                        ).total_seconds()
-                        / 3600
-                    )
+                        # FILTRAR TEMPS
+                        start_time = matchup.get(
+                            "startTime"
+                        )
 
-                    # NOMÉS PRÒXIMES 72H
-                    if (
-                        hours_until_match < 0
-                        or hours_until_match > 72
-                    ):
-                        continue
+                        if not start_time:
+                            continue
 
-                except:
+                        try:
 
-                    continue
+                            match_time = (
+                                datetime.fromisoformat(
+                                    start_time.replace(
+                                        "Z",
+                                        "+00:00"
+                                    )
+                                )
+                            )
 
-                participants = matchup.get(
-                    "participants",
-                    []
-                )
+                            now = datetime.now(
+                                timezone.utc
+                            )
 
-                home_team = "HOME"
-                away_team = "AWAY"
+                            hours_until_match = (
+                                (
+                                    match_time - now
+                                ).total_seconds()
+                                / 3600
+                            )
 
-                for participant in participants:
+                            # NOMÉS PRÒXIMES 72H
+                            if (
+                                hours_until_match < 0
+                                or hours_until_match > 72
+                            ):
+                                continue
 
-                    alignment = participant.get(
-                        "alignment"
-                    )
+                        except:
 
-                    name = participant.get(
-                        "name",
-                        "UNKNOWN"
-                    )
+                            continue
 
-                    if alignment == "home":
+                        participants = matchup.get(
+                            "participants",
+                            []
+                        )
 
-                        home_team = name
+                        home_team = "HOME"
+                        away_team = "AWAY"
 
-                    elif alignment == "away":
+                        for participant in participants:
 
-                        away_team = name
+                            alignment = participant.get(
+                                "alignment"
+                            )
 
-                matchup_map[matchup_id] = (
-                    f"{home_team} vs "
-                    f"{away_team}"
-                )
+                            name = participant.get(
+                                "name",
+                                "UNKNOWN"
+                            )
+
+                            if alignment == "home":
+
+                                home_team = name
+
+                            elif alignment == "away":
+
+                                away_team = name
+
+                        match_name = (
+                            f"{home_team} vs "
+                            f"{away_team}"
+                        )
+
+                        matchup_map[matchup_id] = {
+                            "match_name": match_name,
+                            "league_name": league_name
+                        }
+
+                    except Exception as e:
+
+                        print(
+                            f"ERROR MATCHUP MAP: "
+                            f"{e}",
+                            flush=True
+                        )
 
             except Exception as e:
 
                 print(
-                    f"ERROR MATCHUP MAP: "
+                    f"ERROR LEAGUE: "
                     f"{e}",
                     flush=True
                 )
 
         print(
-            f"Matchups trobats: "
+            f"Matchups totals: "
             f"{len(matchup_map)}",
             flush=True
         )
@@ -232,14 +338,15 @@ while True:
 
             try:
 
-                match_name = matchup_map.get(
-                    matchup_id,
-                    str(matchup_id)
+                match_name = (
+                    matchup_map[matchup_id]
+                    ["match_name"]
                 )
 
-                # IGNORAR CORNERS
-                if "(Corners)" in match_name:
-                    continue
+                league_name = (
+                    matchup_map[matchup_id]
+                    ["league_name"]
+                )
 
                 market_url = (
                     "https://guest.api.arcadia.pinnacle.com"
@@ -254,7 +361,10 @@ while True:
                     timeout=30
                 )
 
-                if response.status_code != 200:
+                if (
+                    response.status_code
+                    != 200
+                ):
                     continue
 
                 markets = response.json()
@@ -300,7 +410,6 @@ while True:
                                 "designation"
                             )
 
-                            # IGNORAR SIDES INVALIDS
                             if side is None:
                                 continue
 
@@ -322,7 +431,6 @@ while True:
                                 )
                             )
 
-                            # DIFERENCIAR LÍNIES
                             points = price_data.get(
                                 "points",
                                 "NA"
@@ -356,13 +464,14 @@ while True:
                                 ):
 
                                     print(
+                                        f"{league_name} | "
                                         f"{key}: "
                                         f"{old_odd} -> "
                                         f"{decimal_odd}",
                                         flush=True
                                     )
 
-                                # FILTRAR SOROLL
+                                # NOMÉS STEAM IMPORTANT
                                 if (
                                     abs(movement) >= 5
                                     and abs(movement) <= 25
@@ -373,6 +482,8 @@ while True:
                                         f"STEAM "
                                         f"DETECTAT "
                                         f"🔥\n"
+                                        f"League: "
+                                        f"{league_name}\n"
                                         f"{key}\n"
                                         f"{old_odd} "
                                         f"-> "
@@ -382,8 +493,8 @@ while True:
                                     )
 
                                     message = (
-                                        f"🔥 STEAM "
-                                        f"DETECTAT 🔥\n\n"
+                                        f"🔥 STEAM DETECTAT 🔥\n\n"
+                                        f"🏆 {league_name}\n"
                                         f"⚽ {match_name}\n"
                                         f"📈 {market_type} "
                                         f"{side} "
@@ -391,8 +502,7 @@ while True:
                                         f"💰 {old_odd} "
                                         f"-> "
                                         f"{decimal_odd}\n"
-                                        f"📊 "
-                                        f"{movement:.2f}%"
+                                        f"📊 {movement:.2f}%"
                                     )
 
                                     current_time = (
