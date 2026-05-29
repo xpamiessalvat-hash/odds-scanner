@@ -184,29 +184,25 @@ def calculate_steam_score(
     hours_until_match
 ):
 
-    # BASE SCORE
     movement_score = movement * 2
 
-    # MARKET WEIGHT
     market_weight = MARKET_WEIGHTS.get(
         market_type,
         1
     )
 
-    # TIME WEIGHT
-    if hours_until_match <= 2:
+    if hours_until_match <= 1:
 
-        time_weight = 1.3
+        time_weight = 1.4
 
-    elif hours_until_match <= 6:
+    elif hours_until_match <= 2:
 
-        time_weight = 1.15
+        time_weight = 1.25
 
     else:
 
         time_weight = 1
 
-    # LEAGUE WEIGHT
     league_weight = 1
 
     for top_league in TOP_LEAGUES:
@@ -241,6 +237,39 @@ def get_strength_label(score):
         return "MEDIUM"
 
     return "LOW"
+
+
+def calculate_value_limit(
+    old_price,
+    steam_price,
+    movement
+):
+
+    # RETENTION FACTOR
+    if movement >= 20:
+
+        retention = 0.6
+
+    elif movement >= 15:
+
+        retention = 0.5
+
+    else:
+
+        retention = 0.4
+
+    value_limit = (
+        steam_price
+        + (
+            old_price
+            - steam_price
+        ) * retention
+    )
+
+    return round(
+        value_limit,
+        3
+    )
 
 
 while True:
@@ -368,9 +397,10 @@ while True:
                                 / 3600
                             )
 
+                            # NOMÉS 2H PRE-KICKOFF
                             if (
                                 hours_until_match < 0
-                                or hours_until_match > 24
+                                or hours_until_match > 2
                             ):
                                 continue
 
@@ -638,6 +668,14 @@ while True:
                                                     )
                                                 )
 
+                                                value_limit = (
+                                                    calculate_value_limit(
+                                                        steam_data["old_odd"],
+                                                        decimal_odd,
+                                                        steam_data["movement"]
+                                                    )
+                                                )
+
                                                 print(
                                                     f"\n🔥 "
                                                     f"STEAM "
@@ -645,8 +683,8 @@ while True:
                                                     f"🔥\n"
                                                     f"🏆 {league_name}\n"
                                                     f"{key}\n"
-                                                    f"Score: "
-                                                    f"{steam_score}\n",
+                                                    f"Value Limit: "
+                                                    f"{value_limit}\n",
                                                     flush=True
                                                 )
 
@@ -656,19 +694,19 @@ while True:
                                                     f"⚽ {match_name}\n"
                                                     f"📈 {market_type}\n"
                                                     f"🎯 {side} "
-                                                    f"{points}\n"
-                                                    f"💰 "
+                                                    f"{points}\n\n"
+                                                    f"💰 Steam:\n"
                                                     f"{steam_data['old_odd']} "
                                                     f"-> "
-                                                    f"{decimal_odd}\n"
+                                                    f"{decimal_odd}\n\n"
+                                                    f"✅ VALUE FINS:\n"
+                                                    f"{value_limit}\n\n"
                                                     f"📊 "
-                                                    f"{steam_data['movement']:.2f}%\n\n"
+                                                    f"{steam_data['movement']:.2f}%\n"
                                                     f"⭐ Score: "
                                                     f"{steam_score}/100\n"
                                                     f"🔥 Strength: "
                                                     f"{strength}\n"
-                                                    f"⏱ Confirmat "
-                                                    f"{STEAM_CONFIRMATION_SECONDS}s\n"
                                                     f"🕒 Kickoff: "
                                                     f"{hours_until_match:.1f}h"
                                                 )
