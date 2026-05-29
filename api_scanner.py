@@ -64,6 +64,18 @@ while True:
             flush=True
         )
 
+        if response.status_code != 200:
+
+            print(
+                f"Resposta incorrecta: "
+                f"{response.text[:500]}",
+                flush=True
+            )
+
+            time.sleep(30)
+
+            continue
+
         matchups = response.json()
 
         matchup_ids = []
@@ -101,7 +113,6 @@ while True:
                 )
 
                 if response.status_code != 200:
-
                     continue
 
                 markets = response.json()
@@ -143,16 +154,18 @@ while True:
                                 )
                             )
 
+                            # IMPORTANT:
+                            # diferenciar línies
+                            points = price_data.get(
+                                "points",
+                                "NA"
+                            )
+
                             key = (
                                 f"{matchup_id}-"
                                 f"{market_type}-"
-                                f"{side}"
-                            )
-
-                            print(
-                                f"{key} | "
-                                f"{decimal_odd}",
-                                flush=True
+                                f"{side}-"
+                                f"{points}"
                             )
 
                             # DETECTAR MOVIMENT
@@ -172,6 +185,7 @@ while True:
                                     ) / old_odd
                                 ) * 100
 
+                                # FILTRAR SOROLL
                                 if (
                                     abs(movement)
                                     >= 0.5
