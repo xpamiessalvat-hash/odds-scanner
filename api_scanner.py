@@ -1,5 +1,6 @@
 import requests
 import time
+import os
 
 from datetime import (
     datetime,
@@ -12,6 +13,14 @@ print(
 )
 
 previous_odds = {}
+
+BOT_TOKEN = os.getenv(
+    "BOT_TOKEN"
+)
+
+CHAT_ID = os.getenv(
+    "CHAT_ID"
+)
 
 HEADERS = {
     "User-Agent": (
@@ -32,6 +41,34 @@ MATCHUPS_URL = (
     "https://guest.api.arcadia.pinnacle.com"
     "/0.1/sports/29/matchups/highlighted"
 )
+
+
+def send_telegram(message):
+
+    try:
+
+        url = (
+            f"https://api.telegram.org/"
+            f"bot{BOT_TOKEN}/sendMessage"
+        )
+
+        data = {
+            "chat_id": CHAT_ID,
+            "text": message
+        }
+
+        requests.post(
+            url,
+            data=data,
+            timeout=10
+        )
+
+    except Exception as e:
+
+        print(
+            f"ERROR TELEGRAM: {e}",
+            flush=True
+        )
 
 
 def american_to_decimal(price):
@@ -132,10 +169,10 @@ while True:
                         / 3600
                     )
 
-                    # NOMÉS PRÒXIMES 24H
+                    # NOMÉS PRÒXIMES 72H
                     if (
                         hours_until_match < 0
-                        or hours_until_match > 24
+                        or hours_until_match > 72
                     ):
                         continue
 
@@ -337,6 +374,24 @@ while True:
                                         f"{decimal_odd}\n"
                                         f"{movement:.2f}%\n",
                                         flush=True
+                                    )
+
+                                    message = (
+                                        f"🔥 STEAM "
+                                        f"DETECTAT 🔥\n\n"
+                                        f"⚽ {match_name}\n"
+                                        f"📈 {market_type} "
+                                        f"{side} "
+                                        f"{points}\n"
+                                        f"💰 {old_odd} "
+                                        f"-> "
+                                        f"{decimal_odd}\n"
+                                        f"📊 "
+                                        f"{movement:.2f}%"
+                                    )
+
+                                    send_telegram(
+                                        message
                                     )
 
                             previous_odds[key] = (
