@@ -193,10 +193,11 @@ while True:
                                 ) * 100
 
                                 # FILTRAR SOROLL
+                                # FILTRAR SOROLL
                                 if (
-                                    abs(movement)
-                                    >= 0.5
-                                ):
+                                   abs(movement) >= 0.5
+                                   and abs(movement) <= 25
+                               ):
 
                                     print(
                                         f"\n🔥 "
