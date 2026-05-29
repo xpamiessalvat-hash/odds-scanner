@@ -483,7 +483,9 @@ while True:
                         matchup_map[matchup_id] = {
                             "match_name": match_name,
                             "league_name": league_name,
-                            "hours_until_match": hours_until_match
+                            "hours_until_match": hours_until_match,
+                            "home_team": home_team,
+                            "away_team": away_team
                         }
 
                     except Exception as e:
@@ -526,6 +528,16 @@ while True:
                 hours_until_match = (
                     matchup_map[matchup_id]
                     ["hours_until_match"]
+                )
+
+                home_team = (
+                    matchup_map[matchup_id]
+                    ["home_team"]
+                )
+
+                away_team = (
+                    matchup_map[matchup_id]
+                    ["away_team"]
                 )
 
                 market_url = (
@@ -644,6 +656,28 @@ while True:
                                 )
                             )
 
+                            # TEAM TOTAL MAPPING
+                            team_name = ""
+
+                            participant_id = (
+                                price_data.get(
+                                    "participantId"
+                                )
+                            )
+
+                            if (
+                                market_type
+                                == "team_total"
+                            ):
+
+                                if participant_id == 0:
+
+                                    team_name = home_team
+
+                                elif participant_id == 1:
+
+                                    team_name = away_team
+
                             key = (
                                 f"{match_name}-"
                                 f"{market_type}-"
@@ -684,7 +718,8 @@ while True:
                                             "side": side,
                                             "points": points,
                                             "movement": movement,
-                                            "hours_until_match": hours_until_match
+                                            "hours_until_match": hours_until_match,
+                                            "team_name": team_name
                                         }
 
                                     else:
@@ -731,13 +766,31 @@ while True:
                                                     )
                                                 )
 
+                                                # TEAM TOTAL TEXT
+                                                market_text = (
+                                                    f"{side} "
+                                                    f"{points}"
+                                                )
+
+                                                if (
+                                                    market_type
+                                                    == "team_total"
+                                                    and steam_data["team_name"]
+                                                ):
+
+                                                    market_text = (
+                                                        f"{steam_data['team_name']} "
+                                                        f"{side} "
+                                                        f"{points}"
+                                                    )
+
                                                 print(
                                                     f"\n🔥 "
                                                     f"STEAM "
                                                     f"CONFIRMAT "
                                                     f"🔥\n"
                                                     f"🏆 {league_name}\n"
-                                                    f"{key}\n"
+                                                    f"{market_text}\n"
                                                     f"Value Limit: "
                                                     f"{value_limit}\n",
                                                     flush=True
@@ -748,8 +801,7 @@ while True:
                                                     f"🏆 {league_name}\n"
                                                     f"⚽ {match_name}\n"
                                                     f"📈 {market_type}\n"
-                                                    f"🎯 {side} "
-                                                    f"{points}\n\n"
+                                                    f"🎯 {market_text}\n\n"
                                                     f"💰 Steam:\n"
                                                     f"{steam_data['old_odd']} "
                                                     f"-> "
