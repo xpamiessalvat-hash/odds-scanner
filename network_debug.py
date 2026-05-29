@@ -57,8 +57,9 @@ def handle_response(response):
 with sync_playwright() as p:
 
     browser = p.chromium.launch(
-        headless=False
-    )
+    headless=True,
+    args=["--no-sandbox"]
+)
 
     page = browser.new_page()
 
