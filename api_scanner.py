@@ -299,6 +299,14 @@ while True:
                             flush=True
                         )
 
+            except Exception as e:
+
+                print(
+                    f"ERROR LEAGUE: "
+                    f"{e}",
+                    flush=True
+                )
+
         print(
             f"Matchups totals: "
             f"{len(matchup_map)}",
