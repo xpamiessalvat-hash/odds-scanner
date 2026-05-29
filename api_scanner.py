@@ -142,7 +142,9 @@ while True:
                             side = price_data.get(
                                 "designation"
                             )
-
+                        # IGNORAR SIDES INVALIDS
+                        if side is None:
+                            continue
                             american_price = (
                                 price_data.get(
                                     "price"
