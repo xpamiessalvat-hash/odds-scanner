@@ -93,6 +93,15 @@ VALID_POINTS = [
     3.5
 ]
 
+VALID_TEAM_TOTAL_POINTS = [
+    1,
+    1.25,
+    1.5,
+    1.75,
+    2,
+    2.25
+]
+
 
 def send_telegram(message):
 
@@ -451,6 +460,14 @@ while True:
                             ):
                                 continue
 
+                            # FILTRAR TEAM TOTALS
+                            if (
+                                market_type == "team_total"
+                                and points
+                                not in VALID_TEAM_TOTAL_POINTS
+                            ):
+                                continue
+
                             decimal_odd = (
                                 american_to_decimal(
                                     american_price
@@ -480,7 +497,7 @@ while True:
 
                                 # NOMÉS STEAM IMPORTANT
                                 if (
-                                    abs(movement) >= 8
+                                    abs(movement) >= 10
                                     and abs(movement) <= 25
                                 ):
 
