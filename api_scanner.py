@@ -22,7 +22,7 @@ HEADERS = {
 
 MATCHUPS_URL = (
     "https://guest.api.arcadia.pinnacle.com"
-    "/0.1/leagues/29/matchups"
+    "/0.1/sports/29/matchups/highlighted"
 )
 
 
