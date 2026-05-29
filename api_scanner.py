@@ -5,11 +5,6 @@ print("API Scanner iniciat", flush=True)
 
 previous_odds = {}
 
-URL = (
-    "https://guest.api.arcadia.pinnacle.com"
-    "/0.1/leagues/29/markets/straight"
-)
-
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 "
@@ -24,6 +19,11 @@ HEADERS = {
     "Referer": "https://www.pinnacle.com/",
     "Connection": "keep-alive"
 }
+
+MATCHUPS_URL = (
+    "https://guest.api.arcadia.pinnacle.com"
+    "/0.1/leagues/29/matchups"
+)
 
 
 def american_to_decimal(price):
@@ -48,118 +48,165 @@ while True:
     try:
 
         print(
-            "Fent request API...",
+            "Obtenint matchup IDs...",
             flush=True
         )
 
         response = requests.get(
-            URL,
+            MATCHUPS_URL,
             headers=HEADERS,
             timeout=30
         )
 
         print(
-            f"STATUS: {response.status_code}",
+            f"STATUS MATCHUPS: "
+            f"{response.status_code}",
             flush=True
         )
 
-        if response.status_code != 200:
+        matchups = response.json()
 
-            print(
-                f"Resposta incorrecta: "
-                f"{response.text[:500]}",
-                flush=True
-            )
+        matchup_ids = []
 
-            time.sleep(30)
+        for matchup in matchups:
 
-            continue
+            matchup_id = matchup.get("id")
 
-        data = response.json()
+            if matchup_id:
+
+                matchup_ids.append(matchup_id)
 
         print(
-            f"Markets rebuts: {len(data)}",
+            f"Matchups trobats: "
+            f"{len(matchup_ids)}",
             flush=True
         )
 
-        for market in data:
+        # ITERAR MATCHUPS
+        for matchup_id in matchup_ids:
 
             try:
 
-                market_type = market.get("type")
+                market_url = (
+                    "https://guest.api.arcadia.pinnacle.com"
+                    f"/0.1/matchups/"
+                    f"{matchup_id}"
+                    "/markets/related/straight"
+                )
 
-                if market_type != "moneyline":
+                response = requests.get(
+                    market_url,
+                    headers=HEADERS,
+                    timeout=30
+                )
+
+                if response.status_code != 200:
+
                     continue
 
-                matchup_id = market.get(
-                    "matchupId"
-                )
+                markets = response.json()
 
-                prices = market.get(
-                    "prices",
-                    []
-                )
+                for market in markets:
 
-                for price_data in prices:
+                    try:
 
-                    side = price_data.get(
-                        "designation"
-                    )
-
-                    american_price = price_data.get(
-                        "price"
-                    )
-
-                    if american_price is None:
-                        continue
-
-                    decimal_odd = (
-                        american_to_decimal(
-                            american_price
+                        market_type = market.get(
+                            "type"
                         )
-                    )
 
-                    key = (
-                        f"{matchup_id}-"
-                        f"{side}"
-                    )
+                        prices = market.get(
+                            "prices",
+                            []
+                        )
 
-                    # DEBUG
-                    print(
-                        f"{key} | "
-                        f"{decimal_odd}",
-                        flush=True
-                    )
+                        for price_data in prices:
 
-                    # DETECTAR MOVIMENT
-                    if key in previous_odds:
+                            side = price_data.get(
+                                "designation"
+                            )
 
-                        old_odd = previous_odds[key]
+                            american_price = (
+                                price_data.get(
+                                    "price"
+                                )
+                            )
 
-                        movement = (
-                            (
-                                old_odd
-                                - decimal_odd
-                            ) / old_odd
-                        ) * 100
+                            if (
+                                american_price
+                                is None
+                            ):
+                                continue
 
-                        if abs(movement) >= 0.5:
+                            decimal_odd = (
+                                american_to_decimal(
+                                    american_price
+                                )
+                            )
+
+                            key = (
+                                f"{matchup_id}-"
+                                f"{market_type}-"
+                                f"{side}"
+                            )
 
                             print(
-                                f"\n🔥 STEAM DETECTAT 🔥\n"
-                                f"{key}\n"
-                                f"{old_odd} -> "
-                                f"{decimal_odd}\n"
-                                f"{movement:.2f}%\n",
+                                f"{key} | "
+                                f"{decimal_odd}",
                                 flush=True
                             )
 
-                    previous_odds[key] = decimal_odd
+                            # DETECTAR MOVIMENT
+                            if (
+                                key
+                                in previous_odds
+                            ):
+
+                                old_odd = (
+                                    previous_odds[key]
+                                )
+
+                                movement = (
+                                    (
+                                        old_odd
+                                        - decimal_odd
+                                    ) / old_odd
+                                ) * 100
+
+                                if (
+                                    abs(movement)
+                                    >= 0.5
+                                ):
+
+                                    print(
+                                        f"\n🔥 "
+                                        f"STEAM "
+                                        f"DETECTAT "
+                                        f"🔥\n"
+                                        f"{key}\n"
+                                        f"{old_odd} "
+                                        f"-> "
+                                        f"{decimal_odd}\n"
+                                        f"{movement:.2f}%\n",
+                                        flush=True
+                                    )
+
+                            previous_odds[key] = (
+                                decimal_odd
+                            )
+
+                    except Exception as e:
+
+                        print(
+                            f"ERROR MARKET: "
+                            f"{e}",
+                            flush=True
+                        )
 
             except Exception as e:
 
                 print(
-                    f"ERROR MARKET: {e}",
+                    f"ERROR MATCHUP: "
+                    f"{e}",
                     flush=True
                 )
 
