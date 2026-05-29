@@ -13,6 +13,7 @@ print(
 )
 
 previous_odds = {}
+last_alerts = {}
 
 BOT_TOKEN = os.getenv(
     "BOT_TOKEN"
@@ -231,6 +232,15 @@ while True:
 
             try:
 
+                match_name = matchup_map.get(
+                    matchup_id,
+                    str(matchup_id)
+                )
+
+                # IGNORAR CORNERS
+                if "(Corners)" in match_name:
+                    continue
+
                 market_url = (
                     "https://guest.api.arcadia.pinnacle.com"
                     f"/0.1/matchups/"
@@ -318,11 +328,6 @@ while True:
                                 "NA"
                             )
 
-                            match_name = matchup_map.get(
-                                matchup_id,
-                                str(matchup_id)
-                            )
-
                             key = (
                                 f"{match_name}-"
                                 f"{market_type}-"
@@ -337,6 +342,13 @@ while True:
                                     previous_odds[key]
                                 )
 
+                                movement = (
+                                    (
+                                        old_odd
+                                        - decimal_odd
+                                    ) / old_odd
+                                ) * 100
+
                                 # DEBUG LLEUGER
                                 if (
                                     old_odd
@@ -350,16 +362,9 @@ while True:
                                         flush=True
                                     )
 
-                                movement = (
-                                    (
-                                        old_odd
-                                        - decimal_odd
-                                    ) / old_odd
-                                ) * 100
-
                                 # FILTRAR SOROLL
                                 if (
-                                    abs(movement) >= 0.5
+                                    abs(movement) >= 5
                                     and abs(movement) <= 25
                                 ):
 
@@ -390,9 +395,31 @@ while True:
                                         f"{movement:.2f}%"
                                     )
 
-                                    send_telegram(
-                                        message
+                                    current_time = (
+                                        time.time()
                                     )
+
+                                    last_alert = (
+                                        last_alerts.get(
+                                            key,
+                                            0
+                                        )
+                                    )
+
+                                    # 15 MIN COOLDOWN
+                                    if (
+                                        current_time
+                                        - last_alert
+                                        > 900
+                                    ):
+
+                                        send_telegram(
+                                            message
+                                        )
+
+                                        last_alerts[key] = (
+                                            current_time
+                                        )
 
                             previous_odds[key] = (
                                 decimal_odd
