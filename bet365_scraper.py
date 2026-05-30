@@ -1,4 +1,5 @@
 
+
 import requests
 import time
 import os
@@ -10,7 +11,7 @@ from datetime import (
 )
 
 print(
-    "API Scanner iniciat",
+    "🔥 VERSION OPTIMITZADA SPREAD + TOTALS 🔥",
     flush=True
 )
 
@@ -69,14 +70,16 @@ BLOCKED_WORDS = [
     "Esports",
     "Simulation",
     "Women",
+    "Femminile",
+    "Feminine",
+    "Reserve League",
+    "Youth League",
+    "UEFA Youth",
+    "MLS Next",
     "3rd Division",
     "4. Liga",
     "Amateur",
-    "Regional",
-    "Kolmonen",
-    "Kakkonen",
-    "Division 1 Women",
-    "NPL"
+    "Regional"
 ]
 
 # NOMÉS ASIAN HANDICAP
@@ -104,13 +107,11 @@ VALID_SPREADS = [
     2.5
 ]
 
-# NOMÉS TOTALS IMPORTANTS
+# TOTALS IMPORTANTS
 VALID_TOTALS = [
-    2.0,
     2.25,
     2.5,
-    2.75,
-    3.0
+    2.75
 ]
 
 TOP_LEAGUES = [
@@ -202,7 +203,6 @@ def calculate_steam_score(
         1
     )
 
-    # MÉS IMPORTANT QUAN FALTA POC
     if hours_until_match <= 1:
 
         time_weight = 1.5
@@ -256,8 +256,6 @@ def calculate_value_limit(
     steam_price,
     movement
 ):
-
-    # RETENCIÓ MÉS CONSERVADORA
 
     if movement >= 20:
 
@@ -337,7 +335,6 @@ while True:
 
         matchup_map = {}
 
-        # LEAGUES
         for league in leagues:
 
             try:
@@ -423,7 +420,6 @@ while True:
                                 / 3600
                             )
 
-                            # NOMÉS PARTITS FINS 2H
                             if (
                                 hours_until_match < 0
                                 or hours_until_match > 2
@@ -495,7 +491,6 @@ while True:
             flush=True
         )
 
-        # MATCHUPS
         for matchup_id in matchup_map:
 
             try:
@@ -547,7 +542,6 @@ while True:
                             "type"
                         )
 
-                        # NOMÉS AQUESTS MERCATS
                         allowed_markets = [
                             "spread",
                             "total"
@@ -597,7 +591,7 @@ while True:
                                 "points"
                             )
 
-                            # FILTRE SPREADS
+                            # SPREAD FILTER
                             if (
                                 market_type
                                 == "spread"
@@ -609,7 +603,7 @@ while True:
                                 ):
                                     continue
 
-                            # FILTRE TOTALS
+                            # TOTAL FILTER
                             elif (
                                 market_type
                                 == "total"
@@ -626,6 +620,13 @@ while True:
                                     american_price
                                 )
                             )
+
+                            # FILTRE ODDS EXTREMES
+                            if (
+                                decimal_odd < 1.45
+                                or decimal_odd > 4.5
+                            ):
+                                continue
 
                             key = (
                                 f"{match_name}-"
@@ -652,7 +653,7 @@ while True:
                                 # NOMÉS STEAMS REALS
                                 if (
                                     movement >= MIN_STEAM_MOVE
-                                    and movement <= 25
+                                    and movement <= 20
                                 ):
 
                                     if key not in pending_steam:
@@ -681,7 +682,6 @@ while True:
                                             - steam_data["timestamp"]
                                         )
 
-                                        # CONFIRMACIÓ
                                         if (
                                             elapsed >=
                                             STEAM_CONFIRMATION_SECONDS
@@ -764,7 +764,6 @@ while True:
                                                     )
                                                 )
 
-                                                # ANTI SPAM
                                                 if (
                                                     current_time
                                                     - last_alert
@@ -806,6 +805,7 @@ while True:
             flush=True
         )
 
-    # LOOP
     time.sleep(120)
+
+
 
