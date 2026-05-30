@@ -1,595 +1,803 @@
-from playwright.sync_api import sync_playwright
-import time
-from datetime import datetime
+
 import requests
+import time
 import os
-import json
+import random
+
+from datetime import (
+    datetime,
+    timezone
+)
+
+print(
+    "🔥 VERSION FILTRADA SENSE TEAM TOTALS 🔥",
+    flush=True
+)
 
 previous_odds = {}
 last_alerts = {}
-last_move_times = {}
+pending_steam = {}
 
-HISTORY_FILE = "steam_history.json"
+BOT_TOKEN = os.getenv(
+    "BOT_TOKEN"
+)
 
-if not os.path.exists(HISTORY_FILE):
+CHAT_ID = os.getenv(
+    "CHAT_ID"
+)
 
-    with open(HISTORY_FILE, "w") as f:
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 "
+        "(Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 "
+        "(KHTML, like Gecko) "
+        "Chrome/137.0.0.0 "
+        "Safari/537.36"
+    ),
+    "Accept": "application/json",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Origin": "https://www.pinnacle.com",
+    "Referer": "https://www.pinnacle.com/",
+    "Connection": "keep-alive"
+}
 
-        json.dump([], f)
+session = requests.Session()
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-CHAT_ID = os.getenv("CHAT_ID")
+session.headers.update(
+    HEADERS
+)
+
+LEAGUES_URL = (
+    "https://guest.api.arcadia.pinnacle.com"
+    "/0.1/sports/29/leagues"
+)
+
+BLOCKED_WORDS = [
+    "Friendly",
+    "Friendlies",
+    "U17",
+    "U18",
+    "U19",
+    "U20",
+    "U21",
+    "U23",
+    "Youth",
+    "Reserve",
+    "Reserves",
+    "Corners",
+    "Esports",
+    "Simulation",
+    "Women",
+    "3rd Division",
+    "4. Liga",
+    "Amateur",
+    "Regional",
+    "Kolmonen",
+    "Kakkonen",
+    "Division 1 Women",
+    "NPL"
+]
+
+# NOMÉS ASIAN HANDICAP
+VALID_SPREADS = [
+    -2.5,
+    -2.25,
+    -2.0,
+    -1.75,
+    -1.5,
+    -1.25,
+    -1.0,
+    -0.75,
+    -0.5,
+    -0.25,
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    1.75,
+    2.0,
+    2.25,
+    2.5
+]
+
+# NOMÉS TOTALS IMPORTANTS
+VALID_TOTALS = [
+    2.0,
+    2.25,
+    2.5,
+    2.75,
+    3.0
+]
+
+TOP_LEAGUES = [
+    "Premier League",
+    "Champions League",
+    "Serie A",
+    "La Liga",
+    "Bundesliga",
+    "Ligue 1",
+    "Eredivisie",
+    "Primeira Liga"
+]
+
+MARKET_WEIGHTS = {
+    "spread": 1.25,
+    "total": 1.2
+}
+
+STEAM_CONFIRMATION_SECONDS = 60
+
+MIN_STEAM_MOVE = 12
 
 
 def send_telegram(message):
 
-    if not BOT_TOKEN or not CHAT_ID:
-        return
+    try:
 
-    url = (
-        f"https://api.telegram.org/bot"
-        f"{BOT_TOKEN}/sendMessage"
+        url = (
+            f"https://api.telegram.org/"
+            f"bot{BOT_TOKEN}/sendMessage"
+        )
+
+        data = {
+            "chat_id": CHAT_ID,
+            "text": message
+        }
+
+        requests.post(
+            url,
+            data=data,
+            timeout=10
+        )
+
+    except Exception as e:
+
+        print(
+            f"ERROR TELEGRAM: {e}",
+            flush=True
+        )
+
+
+def american_to_decimal(price):
+
+    if price > 0:
+
+        return round(
+            (price / 100) + 1,
+            3
+        )
+
+    return round(
+        (100 / abs(price)) + 1,
+        3
     )
 
-    data = {
-        "chat_id": CHAT_ID,
-        "text": message
-    }
 
-    requests.post(url, data=data)
+def is_blocked_league(name):
+
+    for word in BLOCKED_WORDS:
+
+        if word.lower() in name.lower():
+
+            return True
+
+    return False
 
 
-def update_clv(
-    current_match,
-    current_market,
-    current_side,
-    current_odd
+def calculate_steam_score(
+    movement,
+    market_type,
+    league_name,
+    hours_until_match
 ):
 
-    with open(HISTORY_FILE, "r") as f:
+    movement_score = movement * 2
 
-        history = json.load(f)
-
-    updated = False
-
-    for entry in history:
-
-        if (
-            entry["match"] == current_match
-            and entry["market"] == current_market
-            and entry["side"] == current_side
-            and entry["closing_odd"] is None
-        ):
-
-            entry["closing_odd"] = current_odd
-
-            clv = (
-                (
-                    entry["new_odd"]
-                    - current_odd
-                ) / entry["new_odd"]
-            ) * 100
-
-            entry["clv_percent"] = round(clv, 2)
-
-            updated = True
-
-    if updated:
-
-        with open(HISTORY_FILE, "w") as f:
-
-            json.dump(history, f, indent=4)
-
-
-def update_results():
-
-    with open(HISTORY_FILE, "r") as f:
-
-        history = json.load(f)
-
-    updated = False
-
-    for entry in history:
-
-        if entry["result"] is not None:
-            continue
-
-        if entry["closing_odd"] is None:
-            continue
-
-        if entry["clv_percent"] > 0:
-
-            entry["result"] = "WIN"
-
-            entry["profit"] = round(
-                entry["new_odd"] - 1,
-                2
-            )
-
-        else:
-
-            entry["result"] = "LOSS"
-
-            entry["profit"] = -1
-
-        updated = True
-
-    if updated:
-
-        with open(HISTORY_FILE, "w") as f:
-
-            json.dump(history, f, indent=4)
-
-
-print("Script iniciat", flush=True)
-
-with sync_playwright() as p:
-
-    print("Playwright iniciat", flush=True)
-
-    browser = p.chromium.launch(
-        headless=True,
-        args=["--no-sandbox"]
+    market_weight = MARKET_WEIGHTS.get(
+        market_type,
+        1
     )
 
-    while True:
+    if hours_until_match <= 1:
 
-        print("Loop iniciat", flush=True)
+        time_weight = 1.5
 
-        update_results()
+    elif hours_until_match <= 2:
 
-        page = browser.new_page()
+        time_weight = 1.3
 
-        # EVITAR CACHE
-        page.set_extra_http_headers({
-            "Cache-Control": "no-cache"
-        })
+    else:
 
-        try:
+        time_weight = 1
 
-            page.goto(
-                "https://www.pinnacle.com/en/soccer",
-                timeout=60000,
-                wait_until="networkidle"
+    league_weight = 1
+
+    for top_league in TOP_LEAGUES:
+
+        if top_league.lower() in league_name.lower():
+
+            league_weight = 1.3
+            break
+
+    steam_score = (
+        movement_score
+        * market_weight
+        * time_weight
+        * league_weight
+    )
+
+    return round(
+        min(100, steam_score),
+        1
+    )
+
+
+def get_strength_label(score):
+
+    if score >= 85:
+        return "ELITE"
+
+    if score >= 70:
+        return "HIGH"
+
+    if score >= 55:
+        return "MEDIUM"
+
+    return "LOW"
+
+
+def calculate_value_limit(
+    old_price,
+    steam_price,
+    movement
+):
+
+    if movement >= 20:
+
+        retention = 0.65
+
+    elif movement >= 15:
+
+        retention = 0.55
+
+    else:
+
+        retention = 0.45
+
+    value_limit = (
+        steam_price
+        + (
+            old_price
+            - steam_price
+        ) * retention
+    )
+
+    return round(
+        value_limit,
+        3
+    )
+
+
+while True:
+
+    print(
+        "\nLoop iniciat...\n",
+        flush=True
+    )
+
+    try:
+
+        print(
+            "Obtenint leagues...",
+            flush=True
+        )
+
+        response = session.get(
+            LEAGUES_URL,
+            timeout=30
+        )
+
+        print(
+            f"STATUS LEAGUES: "
+            f"{response.status_code}",
+            flush=True
+        )
+
+        if response.status_code == 403:
+
+            print(
+                "403 DETECTAT - BACKOFF 10 MIN",
+                flush=True
             )
 
-            # REFRESH REAL
-            page.reload(wait_until="networkidle")
+            time.sleep(600)
 
-            page.wait_for_timeout(5000)
+            continue
 
-            page.wait_for_selector("body")
+        if response.status_code != 200:
 
-            # SCROLL COMPLET
-            for i in range(15):
+            print(
+                f"Resposta incorrecta: "
+                f"{response.text[:300]}",
+                flush=True
+            )
 
-                page.mouse.wheel(0, 10000)
+            time.sleep(120)
 
-                page.wait_for_timeout(1500)
+            continue
 
-            text = page.inner_text("body")
+        leagues = response.json()
 
-            lines = text.splitlines()
+        matchup_map = {}
 
-            current_match = "UNKNOWN"
-            current_time = "UNKNOWN"
-            current_market = "UNKNOWN"
-            current_side = "UNKNOWN"
-            current_line = "UNKNOWN"
+        for league in leagues:
 
-            hours_until_kickoff = 999
+            try:
 
-            blocked_section = False
-            moneyline_counter = 0
-
-            for line in lines:
-
-                line = line.strip()
-
-                if not line:
-                    continue
-
-                # BLOQUEJAR FUTURES
-                blocked_words = [
-                    "Winner",
-                    "Outright",
-                    "Futures",
-                    "Specials",
-                    "To Qualify",
-                    "Relegation",
-                    "Top Goalscorer"
-                ]
-
-                if any(
-                    word in line
-                    for word in blocked_words
-                ):
-
-                    blocked_section = True
-                    continue
-
-                # MONEY LINE
-                if "Money Line" in line:
-
-                    blocked_section = False
-
-                    current_market = "Money Line"
-                    current_line = "ML"
-
-                    moneyline_counter = 0
-
-                    continue
-
-                # HANDICAP
-                if (
-                    "Spread" in line
-                    or "Handicap" in line
-                ):
-
-                    blocked_section = False
-
-                    current_market = "Handicap"
-                    current_line = "UNKNOWN"
-
-                    moneyline_counter = 0
-
-                    continue
-
-                # TOTALS
-                if (
-                    "Total" in line
-                    or "Over/Under" in line
-                ):
-
-                    blocked_section = False
-
-                    current_market = "Total"
-                    current_line = "UNKNOWN"
-
-                    moneyline_counter = 0
-
-                    continue
-
-                if blocked_section:
-                    continue
-
-                # FILTRE JUVENILS
-                youth_words = [
-                    "U17",
-                    "U18",
-                    "U19",
-                    "U20",
-                    "U21",
-                    "U23",
-                    "Youth",
-                    "Reserve",
-                    "Reserves",
-                    "B Team"
-                ]
-
-                if any(
-                    word in line
-                    for word in youth_words
-                ):
-                    continue
-
-                # FILTRE AMISTOSOS
-                friendly_words = [
-                    "Friendly",
-                    "Club Friendly",
-                    "Exhibition"
-                ]
-
-                if any(
-                    word in line
-                    for word in friendly_words
-                ):
-                    continue
-
-                # DETECTAR PARTIT
-                if (
-                    " - " in line
-                    and len(line) < 60
-                    and "Soccer" not in line
-                    and "Odds" not in line
-                    and "Winner" not in line
-                    and "LEAGUE" not in line
-                    and "SOCCER" not in line
-                    and "FIFA" not in line
-                    and "UEFA" not in line
-                ):
-
-                    current_match = line
-                    continue
-
-                # DETECTAR HORA
-                if "/" in line and ":" in line:
-
-                    current_time = line
-
-                    try:
-
-                        match_time = datetime.strptime(
-                            current_time,
-                            "%m/%d/%Y %H:%M"
-                        )
-
-                        now = datetime.now()
-
-                        hours_until_kickoff = (
-                            match_time - now
-                        ).total_seconds() / 3600
-
-                        # IGNORAR PARTITS LLUNYANS
-                        if (
-                            hours_until_kickoff > 3
-                            or hours_until_kickoff < 0
-                        ):
-
-                            current_match = "UNKNOWN"
-
-                            continue
-
-                    except:
-
-                        hours_until_kickoff = 999
-
-                    continue
-
-                # DRAW
-                if line == "Draw":
-
-                    current_side = "DRAW"
-
-                # EQUIPS
-                elif current_match != "UNKNOWN":
-
-                    teams = current_match.split(" - ")
-
-                    if line in teams:
-
-                        current_side = line
-
-                # OVER
-                if "Over" in line:
-
-                    current_side = "OVER"
-                    continue
-
-                # UNDER
-                if "Under" in line:
-
-                    current_side = "UNDER"
-                    continue
-
-                # DETECTAR LÍNIES
-                if current_market in ["Total", "Handicap"]:
-
-                    try:
-
-                        test_line = float(
-                            line.replace("+", "")
-                        )
-
-                        current_line = line
-
-                        allowed_suffixes = [
-                            ".0",
-                            ".25",
-                            ".5",
-                            ".75"
-                        ]
-
-                        if not any(
-                            suffix in current_line
-                            for suffix in allowed_suffixes
-                        ):
-                            continue
-
-                        continue
-
-                    except:
-
-                        pass
-
-                # DETECTAR QUOTES
-                try:
-
-                    odd = float(line)
-
-                    # FILTRE LIQUIDITAT
-                    if odd < 1.20 or odd > 10:
-                        continue
-
-                except:
-
-                    continue
-
-                # VALIDACIÓ
-                if (
-                    current_match == "UNKNOWN"
-                    or current_market == "UNKNOWN"
-                    or current_side == "UNKNOWN"
-                ):
-                    continue
-
-                if (
-                    current_market in ["Handicap", "Total"]
-                    and current_line == "UNKNOWN"
-                ):
-                    continue
-
-                # KEY
-                key = (
-                    f"{current_match}-"
-                    f"{current_market}-"
-                    f"{current_side}-"
-                    f"{current_line}"
+                league_id = league.get(
+                    "id"
                 )
 
-                # DETECTAR MOVIMENT
-                if (
-                    key in previous_odds
-                    and previous_odds[key] != 0
+                league_name = league.get(
+                    "name",
+                    "UNKNOWN"
+                )
+
+                if not league_id:
+                    continue
+
+                if is_blocked_league(
+                    league_name
                 ):
+                    continue
 
-                    old_odd = previous_odds[key]
+                matchups_url = (
+                    "https://guest.api.arcadia.pinnacle.com"
+                    f"/0.1/leagues/"
+                    f"{league_id}"
+                    "/matchups"
+                )
 
-                    movement = (
-                        (
-                            old_odd - odd
-                        ) / old_odd
-                    ) * 100
+                response = session.get(
+                    matchups_url,
+                    timeout=30
+                )
 
-                    print(
-                        f"{key} | "
-                        f"{old_odd} -> {odd} | "
-                        f"{movement:.2f}%",
-                        flush=True
-                    )
+                time.sleep(
+                    random.uniform(0.4, 1.2)
+                )
 
-                    velocity_score = 0
+                if (
+                    response.status_code
+                    != 200
+                ):
+                    continue
 
-                    if key in last_move_times:
+                matchups = response.json()
 
-                        seconds_since_move = (
-                            time.time()
-                            - last_move_times[key]
+                for matchup in matchups:
+
+                    try:
+
+                        matchup_id = matchup.get(
+                            "id"
                         )
 
-                        if seconds_since_move <= 60:
+                        if not matchup_id:
+                            continue
 
-                            velocity_score = 30
+                        start_time = matchup.get(
+                            "startTime"
+                        )
 
-                        elif seconds_since_move <= 300:
+                        if not start_time:
+                            continue
 
-                            velocity_score = 15
+                        try:
 
-                    steam_score = 0
-
-                    steam_score += min(
-                        abs(movement) * 40,
-                        50
-                    )
-
-                    if hours_until_kickoff <= 1:
-
-                        steam_score += 40
-
-                    elif hours_until_kickoff <= 3:
-
-                        steam_score += 30
-
-                    steam_score += velocity_score
-
-                    steam_score = round(
-                        min(steam_score, 100),
-                        2
-                    )
-
-                    steam_tier = "Weak"
-
-                    if steam_score >= 90:
-
-                        steam_tier = "Nuclear"
-
-                    elif steam_score >= 75:
-
-                        steam_tier = "Gold"
-
-                    elif steam_score >= 60:
-
-                        steam_tier = "Silver"
-
-                    elif steam_score >= 40:
-
-                        steam_tier = "Bronze"
-
-                    # ALERTA STEAM
-                    if (
-                        steam_score >= 5
-                        and hours_until_kickoff <= 3
-                        and hours_until_kickoff >= 0
-                        and abs(movement) >= 0.5
-                    ):
-
-                        if key in last_alerts:
-
-                            cooldown = (
-                                time.time()
-                                - last_alerts[key]
+                            match_time = (
+                                datetime.fromisoformat(
+                                    start_time.replace(
+                                        "Z",
+                                        "+00:00"
+                                    )
+                                )
                             )
 
-                            if cooldown < 1800:
+                            now = datetime.now(
+                                timezone.utc
+                            )
+
+                            hours_until_match = (
+                                (
+                                    match_time - now
+                                ).total_seconds()
+                                / 3600
+                            )
+
+                            # NOMÉS 2H PREMATCH
+                            if (
+                                hours_until_match < 0
+                                or hours_until_match > 2
+                            ):
                                 continue
 
+                        except:
+
+                            continue
+
+                        participants = matchup.get(
+                            "participants",
+                            []
+                        )
+
+                        home_team = "HOME"
+                        away_team = "AWAY"
+
+                        for participant in participants:
+
+                            alignment = participant.get(
+                                "alignment"
+                            )
+
+                            name = participant.get(
+                                "name",
+                                "UNKNOWN"
+                            )
+
+                            if alignment == "home":
+
+                                home_team = name
+
+                            elif alignment == "away":
+
+                                away_team = name
+
+                        match_name = (
+                            f"{home_team} vs "
+                            f"{away_team}"
+                        )
+
+                        if "(Corners)" in match_name:
+                            continue
+
+                        matchup_map[matchup_id] = {
+                            "match_name": match_name,
+                            "league_name": league_name,
+                            "hours_until_match": hours_until_match
+                        }
+
+                    except Exception as e:
+
                         print(
-                            f"\n🔥 STEAM MOVE DETECTAT 🔥\n"
-                            f"⚽ {current_match}\n"
-                            f"📈 {current_side} "
-                            f"{current_market}\n"
-                            f"📏 {current_line}\n"
-                            f"💰 {old_odd} → {odd}\n"
-                            f"📊 {movement:.2f}%\n"
-                            f"🔥 Score: {steam_score}/100\n"
-                            f"🏆 Tier: {steam_tier}\n",
+                            f"ERROR MATCHUP: {e}",
                             flush=True
                         )
 
-                        message = (
-                            f"🔥 STEAM MOVE DETECTAT 🔥\n\n"
-                            f"⚽ {current_match}\n"
-                            f"📈 {current_side} "
-                            f"{current_market}\n"
-                            f"📏 {current_line}\n"
-                            f"💰 {old_odd} → {odd}\n"
-                            f"📊 {movement:.2f}%\n"
-                            f"🔥 Score: {steam_score}/100\n"
-                            f"🏆 Tier: {steam_tier}"
-                        )
+            except Exception as e:
 
-                        send_telegram(message)
+                print(
+                    f"ERROR LEAGUE: {e}",
+                    flush=True
+                )
 
-                        last_alerts[key] = time.time()
+        print(
+            f"Matchups totals: "
+            f"{len(matchup_map)}",
+            flush=True
+        )
 
-                previous_odds[key] = odd
-                last_move_times[key] = time.time()
-
-                # RESET DESPRÉS QUOTA
-                if current_market == "Money Line":
-
-                    current_side = "UNKNOWN"
-
-                elif current_market in ["Total", "Handicap"]:
-
-                    current_line = "UNKNOWN"
-
-                # LIMITAR MONEYLINE
-                if current_market == "Money Line":
-
-                    moneyline_counter += 1
-
-                    if moneyline_counter >= 10:
-
-                        current_market = "UNKNOWN"
-
-            print(
-                "Escaneig completat...",
-                flush=True
-            )
-
-        except Exception as e:
-
-            print(
-                f"ERROR: {e}",
-                flush=True
-            )
-
-        finally:
+        # MATCHUPS
+        for matchup_id in matchup_map:
 
             try:
-                page.close()
-            except:
-                pass
 
-        time.sleep(30)
+                match_name = (
+                    matchup_map[matchup_id]
+                    ["match_name"]
+                )
+
+                league_name = (
+                    matchup_map[matchup_id]
+                    ["league_name"]
+                )
+
+                hours_until_match = (
+                    matchup_map[matchup_id]
+                    ["hours_until_match"]
+                )
+
+                market_url = (
+                    "https://guest.api.arcadia.pinnacle.com"
+                    f"/0.1/matchups/"
+                    f"{matchup_id}"
+                    "/markets/related/straight"
+                )
+
+                response = session.get(
+                    market_url,
+                    timeout=30
+                )
+
+                time.sleep(
+                    random.uniform(0.4, 1.2)
+                )
+
+                if (
+                    response.status_code
+                    != 200
+                ):
+                    continue
+
+                markets = response.json()
+
+                for market in markets:
+
+                    try:
+
+                        market_type = market.get(
+                            "type"
+                        )
+
+                        # NOMÉS SPREAD + TOTAL
+                        allowed_markets = [
+                            "spread",
+                            "total"
+                        ]
+
+                        if (
+                            market_type
+                            not in allowed_markets
+                        ):
+                            continue
+
+                        is_alternate = market.get(
+                            "isAlternate",
+                            False
+                        )
+
+                        if is_alternate:
+                            continue
+
+                        prices = market.get(
+                            "prices",
+                            []
+                        )
+
+                        for price_data in prices:
+
+                            side = price_data.get(
+                                "designation"
+                            )
+
+                            if side is None:
+                                continue
+
+                            american_price = (
+                                price_data.get(
+                                    "price"
+                                )
+                            )
+
+                            if (
+                                american_price
+                                is None
+                            ):
+                                continue
+
+                            points = price_data.get(
+                                "points"
+                            )
+
+                            # SPREAD FILTER
+                            if (
+                                market_type
+                                == "spread"
+                            ):
+
+                                if (
+                                    points
+                                    not in VALID_SPREADS
+                                ):
+                                    continue
+
+                            # TOTAL FILTER
+                            elif (
+                                market_type
+                                == "total"
+                            ):
+
+                                if (
+                                    points
+                                    not in VALID_TOTALS
+                                ):
+                                    continue
+
+                            decimal_odd = (
+                                american_to_decimal(
+                                    american_price
+                                )
+                            )
+
+                            key = (
+                                f"{match_name}-"
+                                f"{market_type}-"
+                                f"{side}-"
+                                f"{points}"
+                            )
+
+                            current_time = time.time()
+
+                            if key in previous_odds:
+
+                                old_odd = (
+                                    previous_odds[key]
+                                )
+
+                                movement = (
+                                    (
+                                        old_odd
+                                        - decimal_odd
+                                    ) / old_odd
+                                ) * 100
+
+                                # NOMÉS STEAMS REALS
+                                if (
+                                    movement >= MIN_STEAM_MOVE
+                                    and movement <= 25
+                                ):
+
+                                    if key not in pending_steam:
+
+                                        pending_steam[key] = {
+                                            "timestamp": current_time,
+                                            "old_odd": old_odd,
+                                            "new_odd": decimal_odd,
+                                            "league_name": league_name,
+                                            "match_name": match_name,
+                                            "market_type": market_type,
+                                            "side": side,
+                                            "points": points,
+                                            "movement": movement,
+                                            "hours_until_match": hours_until_match
+                                        }
+
+                                    else:
+
+                                        steam_data = (
+                                            pending_steam[key]
+                                        )
+
+                                        elapsed = (
+                                            current_time
+                                            - steam_data["timestamp"]
+                                        )
+
+                                        if (
+                                            elapsed >=
+                                            STEAM_CONFIRMATION_SECONDS
+                                        ):
+
+                                            if (
+                                                decimal_odd
+                                                <= steam_data["new_odd"]
+                                            ):
+
+                                                steam_score = (
+                                                    calculate_steam_score(
+                                                        steam_data["movement"],
+                                                        market_type,
+                                                        league_name,
+                                                        hours_until_match
+                                                    )
+                                                )
+
+                                                strength = (
+                                                    get_strength_label(
+                                                        steam_score
+                                                    )
+                                                )
+
+                                                value_limit = (
+                                                    calculate_value_limit(
+                                                        steam_data["old_odd"],
+                                                        decimal_odd,
+                                                        steam_data["movement"]
+                                                    )
+                                                )
+
+                                                market_text = (
+                                                    f"{side} "
+                                                    f"{points}"
+                                                )
+
+                                                print(
+                                                    f"\n🔥 "
+                                                    f"STEAM "
+                                                    f"CONFIRMAT "
+                                                    f"🔥\n"
+                                                    f"🏆 {league_name}\n"
+                                                    f"{match_name}\n"
+                                                    f"{market_type}\n"
+                                                    f"{market_text}\n"
+                                                    f"{steam_data['old_odd']} "
+                                                    f"-> "
+                                                    f"{decimal_odd}\n",
+                                                    flush=True
+                                                )
+
+                                                message = (
+                                                    f"🔥 STEAM CONFIRMAT 🔥\n\n"
+                                                    f"🏆 {league_name}\n"
+                                                    f"⚽ {match_name}\n"
+                                                    f"📈 {market_type}\n"
+                                                    f"🎯 {market_text}\n\n"
+                                                    f"💰 Steam:\n"
+                                                    f"{steam_data['old_odd']} "
+                                                    f"-> "
+                                                    f"{decimal_odd}\n\n"
+                                                    f"✅ VALUE FINS:\n"
+                                                    f"{value_limit}\n\n"
+                                                    f"📊 "
+                                                    f"{steam_data['movement']:.2f}%\n"
+                                                    f"⭐ Score: "
+                                                    f"{steam_score}/100\n"
+                                                    f"🔥 Strength: "
+                                                    f"{strength}\n"
+                                                    f"🕒 Kickoff: "
+                                                    f"{hours_until_match:.1f}h"
+                                                )
+
+                                                last_alert = (
+                                                    last_alerts.get(
+                                                        key,
+                                                        0
+                                                    )
+                                                )
+
+                                                if (
+                                                    current_time
+                                                    - last_alert
+                                                    > 900
+                                                ):
+
+                                                    send_telegram(
+                                                        message
+                                                    )
+
+                                                    last_alerts[key] = (
+                                                        current_time
+                                                    )
+
+                                            del pending_steam[key]
+
+                            previous_odds[key] = (
+                                decimal_odd
+                            )
+
+                    except Exception as e:
+
+                        print(
+                            f"ERROR MARKET: {e}",
+                            flush=True
+                        )
+
+            except Exception as e:
+
+                print(
+                    f"ERROR MATCHUP: {e}",
+                    flush=True
+                )
+
+    except Exception as e:
+
+        print(
+            f"ERROR API: {e}",
+            flush=True
+        )
+
+    time.sleep(120)
