@@ -88,34 +88,29 @@ BLOCKED_WORDS = [
 # NOMÉS ASIAN HANDICAP
 VALID_SPREADS = [
     -2.5,
-    -2.25,
     -2.0,
-    -1.75,
     -1.5,
-    -1.25,
     -1.0,
-    -0.75,
     -0.5,
-    -0.25,
     0,
-    0.25,
     0.5,
-    0.75,
     1.0,
-    1.25,
     1.5,
-    1.75,
     2.0,
-    2.25,
     2.5
 ]
 
+
+
 # NOMÉS TOTALS IMPORTANTS
 VALID_TOTALS = [
-    2.25,
+    1.5,
     2.5,
-    2.75
+    3.5,
+    4.5
 ]
+
+
 
 TOP_LEAGUES = [
     "Premier League",
