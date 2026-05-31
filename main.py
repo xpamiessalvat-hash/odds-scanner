@@ -106,11 +106,9 @@ VALID_SPREADS = [
 
 # NOMÉS TOTALS IMPORTANTS
 VALID_TOTALS = [
-    2.0,
     2.25,
     2.5,
-    2.75,
-    3.0
+    2.75
 ]
 
 TOP_LEAGUES = [
@@ -131,7 +129,9 @@ MARKET_WEIGHTS = {
 
 STEAM_CONFIRMATION_SECONDS = 60
 
-MIN_STEAM_MOVE = 12
+# THRESHOLDS SEPARATS
+MIN_SPREAD_STEAM = 12
+MIN_TOTAL_STEAM = 6
 
 
 def send_telegram(message):
@@ -491,7 +491,6 @@ while True:
             flush=True
         )
 
-        # MATCHUPS
         for matchup_id in matchup_map:
 
             try:
@@ -543,7 +542,6 @@ while True:
                             "type"
                         )
 
-                        # NOMÉS SPREAD + TOTAL
                         allowed_markets = [
                             "spread",
                             "total"
@@ -645,9 +643,15 @@ while True:
                                     ) / old_odd
                                 ) * 100
 
-                                # NOMÉS STEAMS REALS
+                                # THRESHOLD DIFERENT
+                                min_required = (
+                                    MIN_TOTAL_STEAM
+                                    if market_type == "total"
+                                    else MIN_SPREAD_STEAM
+                                )
+
                                 if (
-                                    movement >= MIN_STEAM_MOVE
+                                    movement >= min_required
                                     and movement <= 25
                                 ):
 
@@ -801,3 +805,4 @@ while True:
         )
 
     time.sleep(120)
+
