@@ -1,8 +1,10 @@
 
+
 import requests
 import time
 import os
 import random
+import json
 
 from datetime import (
     datetime,
@@ -24,6 +26,10 @@ BOT_TOKEN = os.getenv(
 
 CHAT_ID = os.getenv(
     "CHAT_ID"
+)
+
+GOOGLE_SHEETS_WEBHOOK = (
+    "https://script.google.com/macros/s/AKfycbwlf4n7_9WnIRrVkjd1KYdvJSn64YhVa4bgguDH0MUUaxsrrV_fiON_rHw14FiKiPnc/exec"
 )
 
 HEADERS = {
@@ -158,6 +164,29 @@ def send_telegram(message):
 
         print(
             f"ERROR TELEGRAM: {e}",
+            flush=True
+        )
+
+
+def save_to_sheets(data):
+
+    try:
+
+        requests.post(
+            GOOGLE_SHEETS_WEBHOOK,
+            json=data,
+            timeout=10
+        )
+
+        print(
+            "✅ Guardat a Google Sheets",
+            flush=True
+        )
+
+    except Exception as e:
+
+        print(
+            f"ERROR SHEETS: {e}",
             flush=True
         )
 
@@ -419,7 +448,6 @@ while True:
                                 / 3600
                             )
 
-                            # NOMÉS 2H PREMATCH
                             if (
                                 hours_until_match < 0
                                 or hours_until_match > 2
@@ -591,7 +619,6 @@ while True:
                                 "points"
                             )
 
-                            # SPREAD FILTER
                             if (
                                 market_type
                                 == "spread"
@@ -603,7 +630,6 @@ while True:
                                 ):
                                     continue
 
-                            # TOTAL FILTER
                             elif (
                                 market_type
                                 == "total"
@@ -643,7 +669,6 @@ while True:
                                     ) / old_odd
                                 ) * 100
 
-                                # THRESHOLD DIFERENT
                                 min_required = (
                                     MIN_TOTAL_STEAM
                                     if market_type == "total"
@@ -756,6 +781,25 @@ while True:
                                                     f"{hours_until_match:.1f}h"
                                                 )
 
+                                                save_to_sheets({
+                                                    "league": league_name,
+                                                    "match": match_name,
+                                                    "market": market_type,
+                                                    "selection": market_text,
+                                                    "entry_odds": decimal_odd,
+                                                    "value_limit": value_limit,
+                                                    "steam_percent": round(
+                                                        steam_data['movement'],
+                                                        2
+                                                    ),
+                                                    "steam_score": steam_score,
+                                                    "strength": strength,
+                                                    "kickoff_hours": round(
+                                                        hours_until_match,
+                                                        1
+                                                    )
+                                                })
+
                                                 last_alert = (
                                                     last_alerts.get(
                                                         key,
@@ -805,4 +849,6 @@ while True:
         )
 
     time.sleep(120)
+
+
 
