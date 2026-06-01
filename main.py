@@ -29,7 +29,7 @@ CHAT_ID = os.getenv(
 )
 
 GOOGLE_SHEETS_WEBHOOK = (
-"https://script.google.com/macros/s/AKfycbwRDT5SqOL-dNPiiBlSNNQMy6CDxx9OG_lJB3vSa-JZxV4zXzqmyMS0NoDRBKVBaPNn/exec"
+"https://script.google.com/macros/s/AKfycbyqSQQponHncNlIVn_tW4jW7NfLIVx7kUw9EBZZdT-RgeoGCeHn8liCY-RQfqOb3n5a/exec"
 )
 HEADERS = {
     "User-Agent": (
@@ -774,25 +774,6 @@ while True:
                                                     f"🕒 Kickoff: "
                                                     f"{hours_until_match:.1f}h"
                                                 )
-
-                                                save_to_sheets({
-                                                    "league": league_name,
-                                                    "match": match_name,
-                                                    "market": market_type,
-                                                    "selection": market_text,
-                                                    "entry_odds": decimal_odd,
-                                                    "value_limit": value_limit,
-                                                    "steam_percent": round(
-                                                        steam_data['movement'],
-                                                        2
-                                                    ),
-                                                    "steam_score": steam_score,
-                                                    "strength": strength,
-                                                    "kickoff_hours": round(
-                                                        hours_until_match,
-                                                        1
-                                                    )
-                                                })
 
                                                 last_alert = (
                                                     last_alerts.get(
