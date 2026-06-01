@@ -29,7 +29,7 @@ CHAT_ID = os.getenv(
 )
 
 GOOGLE_SHEETS_WEBHOOK = (
-"https://script.google.com/macros/s/AKfycbyqSQQponHncNlIVn_tW4jW7NfLIVx7kUw9EBZZdT-RgeoGCeHn8liCY-RQfqOb3n5a/exec"
+"https://script.google.com/macros/s/AKfycbzYM5xrBqacg7Vjb53okMn5Ea84_21WPdg3rQyi1zimPgJ25YSEKAaDi5HZOHrT8Ac1/exec"
 )
 HEADERS = {
     "User-Agent": (
