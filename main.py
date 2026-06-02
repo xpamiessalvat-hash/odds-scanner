@@ -1,5 +1,4 @@
 
-
 import requests
 import time
 import os
@@ -28,9 +27,8 @@ CHAT_ID = os.getenv(
     "CHAT_ID"
 )
 
-GOOGLE_SHEETS_WEBHOOK = (
-"https://script.google.com/macros/s/AKfycbzYM5xrBqacg7Vjb53okMn5Ea84_21WPdg3rQyi1zimPgJ25YSEKAaDi5HZOHrT8Ac1/exec"
-)
+GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbzYM5xrBqacg7Vjb53okMn5Ea84_21WPdg3rQyi1zimPgJ25YSEKAaDi5HZOHrT8Ac1/exec"
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 "
@@ -84,7 +82,6 @@ BLOCKED_WORDS = [
     "NPL"
 ]
 
-# NOMÉS ASIAN HANDICAP
 VALID_SPREADS = [
     -2.5,
     -2.0,
@@ -99,17 +96,12 @@ VALID_SPREADS = [
     2.5
 ]
 
-
-
-# NOMÉS TOTALS IMPORTANTS
 VALID_TOTALS = [
     1.5,
     2.5,
     3.5,
     4.5
 ]
-
-
 
 TOP_LEAGUES = [
     "Premier League",
@@ -129,7 +121,6 @@ MARKET_WEIGHTS = {
 
 STEAM_CONFIRMATION_SECONDS = 60
 
-# THRESHOLDS SEPARATS
 MIN_SPREAD_STEAM = 12
 MIN_TOTAL_STEAM = 4
 
@@ -166,14 +157,20 @@ def save_to_sheets(data):
 
     try:
 
-        requests.post(
+        response = requests.post(
             GOOGLE_SHEETS_WEBHOOK,
             json=data,
             timeout=10
         )
 
         print(
-            "✅ Guardat a Google Sheets",
+            f"✅ Guardat a Google Sheets: "
+            f"{response.status_code}",
+            flush=True
+        )
+
+        print(
+            response.text,
             flush=True
         )
 
@@ -484,9 +481,6 @@ while True:
                             f"{away_team}"
                         )
 
-                        if "(Corners)" in match_name:
-                            continue
-
                         matchup_map[matchup_id] = {
                             "match_name": match_name,
                             "league_name": league_name,
@@ -564,14 +558,12 @@ while True:
                             "type"
                         )
 
-                        allowed_markets = [
-                            "spread",
-                            "total"
-                        ]
-
                         if (
                             market_type
-                            not in allowed_markets
+                            not in [
+                                "spread",
+                                "total"
+                            ]
                         ):
                             continue
 
@@ -594,20 +586,11 @@ while True:
                                 "designation"
                             )
 
-                            if side is None:
-                                continue
-
                             american_price = (
                                 price_data.get(
                                     "price"
                                 )
                             )
-
-                            if (
-                                american_price
-                                is None
-                            ):
-                                continue
 
                             points = price_data.get(
                                 "points"
@@ -686,7 +669,8 @@ while True:
                                             "side": side,
                                             "points": points,
                                             "movement": movement,
-                                            "hours_until_match": hours_until_match
+                                            "hours_until_match": hours_until_match,
+                                            "matchup_id": matchup_id
                                         }
 
                                     else:
@@ -775,26 +759,32 @@ while True:
                                                     f"{hours_until_match:.1f}h"
                                                 )
 
-                                                last_alert = (
-                                                    last_alerts.get(
-                                                        key,
-                                                        0
-                                                    )
+                                                save_to_sheets({
+                                                    "league": league_name,
+                                                    "match": match_name,
+                                                    "market": market_type,
+                                                    "selection": market_text,
+                                                    "entry_odds": decimal_odd,
+                                                    "value_limit": value_limit,
+                                                    "steam_percent": round(
+                                                        steam_data['movement'],
+                                                        2
+                                                    ),
+                                                    "steam_score": steam_score,
+                                                    "strength": strength,
+                                                    "kickoff_hours": round(
+                                                        hours_until_match,
+                                                        1
+                                                    ),
+                                                    "matchup_id": matchup_id,
+                                                    "market_type": market_type,
+                                                    "points": points,
+                                                    "side": side
+                                                })
+
+                                                send_telegram(
+                                                    message
                                                 )
-
-                                                if (
-                                                    current_time
-                                                    - last_alert
-                                                    > 900
-                                                ):
-
-                                                    send_telegram(
-                                                        message
-                                                    )
-
-                                                    last_alerts[key] = (
-                                                        current_time
-                                                    )
 
                                             del pending_steam[key]
 
@@ -824,6 +814,5 @@ while True:
         )
 
     time.sleep(120)
-
 
 
