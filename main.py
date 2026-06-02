@@ -444,7 +444,7 @@ while True:
 
                             if (
                                 hours_until_match < 0
-                                or hours_until_match > 2
+                                or hours_until_match > 4
                             ):
                                 continue
 
