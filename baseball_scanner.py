@@ -13,7 +13,6 @@ print(
     "⚾ BASEBALL SCANNER ⚾",
     flush=True
 )
-
 previous_odds = {}
 last_alerts = {}
 pending_steam = {}
@@ -129,8 +128,8 @@ def send_telegram(message):
     try:
 
         url = (
-            f"https://api.telegram.org/bot{BOT_TOKEN}/"
-            "sendMessage"
+            f"https://api.telegram.org/"
+            f"bot{BOT_TOKEN}/sendMessage"
         )
 
         payload = {
@@ -149,22 +148,30 @@ def send_telegram(message):
             flush=True
         )
 
+        print(
+            f"TELEGRAM RESPONSE: {response.text}",
+            flush=True
+        )
+
     except Exception as e:
 
         print(
             f"ERROR TELEGRAM: {e}",
             flush=True
         )
-        # Response may not be defined here if the request failed
-        try:
-            print(f"TELEGRAM STATUS: {response.status_code}", flush=True)
-        except Exception:
-            print("TELEGRAM STATUS: UNKNOWN", flush=True)
+
+
+send_telegram("ARRANCADA BASEBALL")
+
+print(
+    "MISSATGE ARRANCADA ENVIAT",
+    flush=True
+)
+
+
 def save_to_sheets(data):
 
     try:
-        if not GOOGLE_SHEETS_WEBHOOK:
-            return
 
         response = requests.post(
             GOOGLE_SHEETS_WEBHOOK,
@@ -173,7 +180,13 @@ def save_to_sheets(data):
         )
 
         print(
-            f"SHEETS STATUS: {response.status_code}",
+            f"✅ Guardat a Google Sheets: "
+            f"{response.status_code}",
+            flush=True
+        )
+
+        print(
+            response.text,
             flush=True
         )
 
@@ -183,6 +196,7 @@ def save_to_sheets(data):
             f"ERROR SHEETS: {e}",
             flush=True
         )
+
 def american_to_decimal(price):
 
     if price > 0:
