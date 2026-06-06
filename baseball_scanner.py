@@ -155,7 +155,11 @@ def send_telegram(message):
             f"ERROR TELEGRAM: {e}",
             flush=True
         )
-        print(f"TELEGRAM STATUS: {response.status_code}", flush=True)
+        # Response may not be defined here if the request failed
+        try:
+            print(f"TELEGRAM STATUS: {response.status_code}", flush=True)
+        except Exception:
+            print("TELEGRAM STATUS: UNKNOWN", flush=True)
 def save_to_sheets(data):
 
     try:
@@ -752,38 +756,10 @@ while True:
                                                             f"{hours_until_match:.1f}h"
                                                         )
 
-                                                save_to_sheets({
-                                                    "league": league_name,
-                                                    "match": match_name,
-                                                    "market": market_type,
-                                                    "selection": market_text,
-                                                    "entry_odds": decimal_odd,
-                                                    "value_limit": value_limit,
-                                                    "steam_percent": round(
-                                                        steam_data['movement'],
-                                                        2
-                                                    ),
-                                                    "steam_score": steam_score,
-                                                    "strength": strength,
-                                                    "kickoff_hours": round(
-                                                        hours_until_match,
-                                                        1
-                                                    ),
-                                                    "matchup_id": matchup_id,
-                                                    "market_type": market_type,
-                                                    "points": points,
-                                                    "side": side
-                                                })
+                                                        # cleanup
+                                                        del pending_steam[key]
 
-                                                send_telegram(
-                                                    message
-                                                )
-
-                                            del pending_steam[key]
-
-                                            previous_odds[key] = (
-                                                decimal_odd
-                                            )
+                                                        previous_odds[key] = decimal_odd
 
                     except Exception as e:
 
