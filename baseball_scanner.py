@@ -122,27 +122,7 @@ MIN_MONEYLINE_STEAM = 5
 MIN_SPREAD_STEAM = 5
 MIN_TOTAL_STEAM = 4
 
-def save_to_sheets(data):
-
-    try:
-
-        response = requests.post(
-            GOOGLE_SHEETS_WEBHOOK,
-            json=data,
-            timeout=10
-        )
-
-        print(
-            f"SHEETS STATUS: {response.status_code}",
-            flush=True
-        )
-
-    except Exception as e:
-
-        print(
-            f"ERROR SHEETS: {e}",
-            flush=True
-        )
+# Initialization complete
 
 def send_telegram(message):
 
@@ -176,6 +156,29 @@ def send_telegram(message):
             flush=True
         )
         print(f"TELEGRAM STATUS: {response.status_code}", flush=True)
+def save_to_sheets(data):
+
+    try:
+        if not GOOGLE_SHEETS_WEBHOOK:
+            return
+
+        response = requests.post(
+            GOOGLE_SHEETS_WEBHOOK,
+            json=data,
+            timeout=10
+        )
+
+        print(
+            f"SHEETS STATUS: {response.status_code}",
+            flush=True
+        )
+
+    except Exception as e:
+
+        print(
+            f"ERROR SHEETS: {e}",
+            flush=True
+        )
 def american_to_decimal(price):
 
     if price > 0:

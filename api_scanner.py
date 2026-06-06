@@ -131,26 +131,52 @@ MARKET_WEIGHTS = {
 
 STEAM_CONFIRMATION_SECONDS = 60
 
+print(
+    "ABANS TELEGRAM",
+    flush=True
+)
 
 def send_telegram(message):
 
     try:
+
+        print(
+            "ENTRANT A TELEGRAM",
+            flush=True
+        )
 
         url = (
             f"https://api.telegram.org/"
             f"bot{BOT_TOKEN}/sendMessage"
         )
 
-        data = {
+        payload = {
             "chat_id": CHAT_ID,
             "text": message
         }
 
-        requests.post(
+        response = requests.post(
             url,
-            data=data,
+            json=payload,
             timeout=10
         )
+
+        print(
+            f"TELEGRAM STATUS: {response.status_code}",
+            flush=True
+        )
+
+        print(
+            f"TELEGRAM RESPONSE: {response.text}",
+            flush=True
+        )
+
+        if response.status_code != 200:
+
+            print(
+                "ERROR ENVIANT TELEGRAM",
+                flush=True
+            )
 
     except Exception as e:
 
