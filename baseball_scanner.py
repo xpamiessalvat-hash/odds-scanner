@@ -175,10 +175,7 @@ def send_telegram(message):
             f"ERROR TELEGRAM: {e}",
             flush=True
         )
-
-print(f"BOT_TOKEN={BOT_TOKEN[:15]}...", flush=True)
-print(f"CHAT_ID={CHAT_ID}", flush=True)
-
+        print(f"TELEGRAM STATUS: {response.status_code}", flush=True)
 def american_to_decimal(price):
 
     if price > 0:
