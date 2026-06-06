@@ -3,7 +3,7 @@ import time
 import os
 import random
 import json
-
+print("VERSIO TEST 12345", flush=True)
 from datetime import (
     datetime,
     timezone
@@ -122,35 +122,6 @@ MIN_MONEYLINE_STEAM = 5
 MIN_SPREAD_STEAM = 5
 MIN_TOTAL_STEAM = 4
 
-
-def send_telegram(message):
-
-    try:
-
-        url = (
-            f"https://api.telegram.org/"
-            f"bot{BOT_TOKEN}/sendMessage"
-        )
-
-        data = {
-            "chat_id": CHAT_ID,
-            "text": message
-        }
-
-        requests.post(
-            url,
-            data=data,
-            timeout=10
-        )
-
-    except Exception as e:
-
-        print(
-            f"ERROR TELEGRAM: {e}",
-            flush=True
-        )
-
-
 def save_to_sheets(data):
 
     try:
@@ -162,13 +133,7 @@ def save_to_sheets(data):
         )
 
         print(
-            f"✅ Guardat a Google Sheets: "
-            f"{response.status_code}",
-            flush=True
-        )
-
-        print(
-            response.text,
+            f"SHEETS STATUS: {response.status_code}",
             flush=True
         )
 
@@ -179,7 +144,39 @@ def save_to_sheets(data):
             flush=True
         )
 
+def send_telegram(message):
 
+    try:
+
+        url = (
+            f"https://api.telegram.org/bot{BOT_TOKEN}/"
+            "sendMessage"
+        )
+
+        payload = {
+            "chat_id": CHAT_ID,
+            "text": message
+        }
+
+        response = requests.post(
+            url,
+            json=payload,
+            timeout=10
+        )
+
+        print(
+            f"TELEGRAM STATUS: {response.status_code}",
+            flush=True
+        )
+
+    except Exception as e:
+
+        print(
+            f"ERROR TELEGRAM: {e}",
+            flush=True
+        )
+print("ARRIBO AL TEST TELEGRAM", flush=True)
+send_telegram("TEST BEISBOL")
 def american_to_decimal(price):
 
     if price > 0:
