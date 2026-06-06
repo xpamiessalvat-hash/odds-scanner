@@ -18,9 +18,9 @@ previous_odds = {}
 last_alerts = {}
 pending_steam = {}
 
-BOT_TOKEN = "EL_TEU_TOKEN_REAL"
+BOT_TOKEN = "8826186519:AAFh2H6EUgyvENWyL5-AZ9tphGUxqNoCkpU"
 
-CHAT_ID = "EL_TEU_CHAT_ID_REAL"
+CHAT_ID = "-1003576336170"
 
 GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbzYM5xrBqacg7Vjb53okMn5Ea84_21WPdg3rQyi1zimPgJ25YSEKAaDi5HZOHrT8Ac1/exec"
 
@@ -176,6 +176,10 @@ def send_telegram(message):
             flush=True
         )
 print("ARRIBO AL TEST TELEGRAM", flush=True)
+
+print(f"BOT_TOKEN={BOT_TOKEN[:15]}...", flush=True)
+print(f"CHAT_ID={CHAT_ID}", flush=True)
+
 send_telegram("TEST BEISBOL")
 def american_to_decimal(price):
 
