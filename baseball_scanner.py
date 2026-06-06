@@ -3,7 +3,7 @@ import time
 import os
 import random
 import json
-print("VERSIO TEST 12345", flush=True)
+
 from datetime import (
     datetime,
     timezone
@@ -175,12 +175,10 @@ def send_telegram(message):
             f"ERROR TELEGRAM: {e}",
             flush=True
         )
-print("ARRIBO AL TEST TELEGRAM", flush=True)
 
 print(f"BOT_TOKEN={BOT_TOKEN[:15]}...", flush=True)
 print(f"CHAT_ID={CHAT_ID}", flush=True)
 
-send_telegram("TEST BEISBOL")
 def american_to_decimal(price):
 
     if price > 0:
