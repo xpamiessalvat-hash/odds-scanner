@@ -117,9 +117,9 @@ MARKET_WEIGHTS = {
 
 STEAM_CONFIRMATION_SECONDS = 60
 
-MIN_MONEYLINE_STEAM = 5
-MIN_SPREAD_STEAM = 5
-MIN_TOTAL_STEAM = 4
+MIN_MONEYLINE_STEAM = 7
+MIN_SPREAD_STEAM = 6
+MIN_TOTAL_STEAM = 5
 
 # Initialization complete
 
@@ -161,13 +161,6 @@ def send_telegram(message):
         )
 
 
-# TEST D'ARRANCADA (elimina'l quan acabis les proves)
-send_telegram("ARRANCADA BASEBALL")
-
-print(
-    "MISSATGE ARRANCADA ENVIAT",
-    flush=True
-)
 
 def save_to_sheets(data):
 
@@ -732,7 +725,7 @@ while True:
                                                             )
                                                         )
 
-                                                        if steam_score < 65:
+                                                        if steam_score < 70:
 
                                                             del pending_steam[key]
 
@@ -744,6 +737,12 @@ while True:
                                                             )
                                                         )
 
+                                                        if strength == "LOW":
+
+                                                            del pending_steam[key]
+
+                                                            continue
+
                                                         value_limit = (
                                                             calculate_value_limit(
                                                                 steam_data["old_odd"],
@@ -753,9 +752,24 @@ while True:
                                                         )
 
                                                         if market_type == "moneyline":
-                                                            market_text = side if side else "moneyline"
+
+                                                            market_text = (
+                                                                side
+                                                                if side
+                                                                else "moneyline"
+                                                            )
+
                                                         else:
-                                                            market_text = f"{side} {points}"
+
+                                                            if side is None:
+
+                                                                market_text = str(points)
+
+                                                            else:
+
+                                                                market_text = (
+                                                                    f"{side} {points}"
+                                                                )
 
                                                         print(
                                                             f"🏆 {league_name}\n"
@@ -813,15 +827,6 @@ while True:
                                                             "side": side
                                                         })
 
-                                                        print(
-                                                            "MISSATGE A ENVIAR:",
-                                                            flush=True
-                                                        )
-
-                                                        print(
-                                                            message,
-                                                            flush=True
-                                                        )
 
                                                         send_telegram(
                                                             message
