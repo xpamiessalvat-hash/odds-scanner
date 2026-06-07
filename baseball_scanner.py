@@ -172,6 +172,15 @@ print(
 def save_to_sheets(data):
 
     try:
+        print(
+            "ENTRANT A SAVE_TO_SHEETS",
+            flush=True
+        )
+
+        print(
+            data,
+            flush=True
+        )
 
         response = requests.post(
             GOOGLE_SHEETS_WEBHOOK,
