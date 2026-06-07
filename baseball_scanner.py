@@ -472,7 +472,7 @@ while True:
 
                             if (
                                 hours_until_match < 0
-                                or hours_until_match > 8
+                                or hours_until_match > 24
                             ):
                                 continue
 
