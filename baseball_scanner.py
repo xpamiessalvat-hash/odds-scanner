@@ -13,6 +13,10 @@ print(
     "⚾ BASEBALL SCANNER ⚾",
     flush=True
 )
+print(
+    "VERSIO DEBUG FILTRES 999",
+    flush=True
+)
 previous_odds = {}
 last_alerts = {}
 pending_steam = {}
@@ -808,7 +812,10 @@ while True:
                                                             f"🕒 Kickoff: "
                                                             f"{hours_until_match:.1f}h"
                                                         )
-
+                                                        print(
+                                                            f"PASSA FILTRE: score={steam_score} strength={strength}",
+                                                            flush=True
+                                                        )
                                                         save_to_sheets({
                                                             "league": league_name,
                                                             "match": match_name,
