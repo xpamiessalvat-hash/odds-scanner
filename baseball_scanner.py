@@ -727,6 +727,11 @@ while True:
 
                                                         if steam_score < 70:
 
+                                                            print(
+                                                                f"DESCARTAT SCORE: {steam_score}",
+                                                                flush=True
+                                                          )
+
                                                             del pending_steam[key]
 
                                                             continue
