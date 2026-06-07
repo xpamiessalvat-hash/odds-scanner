@@ -189,13 +189,34 @@ def save_to_sheets(data):
             response.text,
             flush=True
         )
-
     except Exception as e:
 
         print(
             f"ERROR SHEETS: {e}",
             flush=True
         )
+
+    return None
+
+
+# Call save_to_sheets and tests
+save_to_sheets({
+    ...
+})
+
+print(
+    "HE ARRIBAT AL SEND_TELEGRAM",
+    flush=True
+)
+
+send_telegram(
+    "STEAM DETECTAT TEST"
+)
+
+print(
+    "HE SORTIT DEL SEND_TELEGRAM",
+    flush=True
+)
 
 def american_to_decimal(price):
 
