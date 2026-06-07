@@ -161,13 +161,13 @@ def send_telegram(message):
         )
 
 
+# TEST D'ARRANCADA (elimina'l quan acabis les proves)
 send_telegram("ARRANCADA BASEBALL")
 
 print(
     "MISSATGE ARRANCADA ENVIAT",
     flush=True
 )
-
 
 def save_to_sheets(data):
 
@@ -189,6 +189,7 @@ def save_to_sheets(data):
             response.text,
             flush=True
         )
+
     except Exception as e:
 
         print(
@@ -199,29 +200,12 @@ def save_to_sheets(data):
     return None
 
 
-# Call save_to_sheets and tests
-save_to_sheets({
-    ...
-})
-
-print(
-    "HE ARRIBAT AL SEND_TELEGRAM",
-    flush=True
-)
-
-send_telegram(
-    "STEAM DETECTAT TEST"
-)
-
-print(
-    "HE SORTIT DEL SEND_TELEGRAM",
-    flush=True
-)
-
 def american_to_decimal(price):
 
-    if price > 0:
+    if price is None:
+        return None
 
+    if price > 0:
         return round(
             (price / 100) + 1,
             3
@@ -789,6 +773,43 @@ while True:
                                                             f"{strength}\n"
                                                             f"🕒 Kickoff: "
                                                             f"{hours_until_match:.1f}h"
+                                                        )
+
+                                                        save_to_sheets({
+                                                            "league": league_name,
+                                                            "match": match_name,
+                                                            "market": market_type,
+                                                            "selection": market_text,
+                                                            "entry_odds": decimal_odd,
+                                                            "value_limit": value_limit,
+                                                            "steam_percent": round(
+                                                                steam_data['movement'],
+                                                                2
+                                                            ),
+                                                            "steam_score": steam_score,
+                                                            "strength": strength,
+                                                            "kickoff_hours": round(
+                                                                hours_until_match,
+                                                                1
+                                                            ),
+                                                            "matchup_id": matchup_id,
+                                                            "market_type": market_type,
+                                                            "points": points,
+                                                            "side": side
+                                                        })
+
+                                                        print(
+                                                            "MISSATGE A ENVIAR:",
+                                                            flush=True
+                                                        )
+
+                                                        print(
+                                                            message,
+                                                            flush=True
+                                                        )
+
+                                                        send_telegram(
+                                                            message
                                                         )
 
                                                         # cleanup
