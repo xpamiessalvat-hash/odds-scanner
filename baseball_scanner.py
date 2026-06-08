@@ -168,6 +168,11 @@ def send_telegram(message):
 
 def save_to_sheets(data):
 
+    print(
+        "XXXXXXXX SAVE_TO_SHEETS XXXXXXXX",
+        flush=True
+    )
+
     try:
         print(
             "ENTRANT A SAVE_TO_SHEETS",
@@ -478,7 +483,7 @@ while True:
 
                             if (
                                 hours_until_match < 0
-                                or hours_until_match > 24
+                                or hours_until_match > 8
                             ):
                                 continue
 
@@ -495,7 +500,6 @@ while True:
                         away_team = "AWAY"
 
                         for participant in participants:
-
                             alignment = participant.get(
                                 "alignment"
                             )
@@ -506,11 +510,9 @@ while True:
                             )
 
                             if alignment == "home":
-
                                 home_team = name
 
                             elif alignment == "away":
-
                                 away_team = name
 
                         match_name = (
