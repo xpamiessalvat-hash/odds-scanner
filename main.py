@@ -469,12 +469,18 @@ while True:
                             )
 
                             if alignment == "home":
-
                                 home_team = name
-
                             elif alignment == "away":
-
                                 away_team = name
+
+                        if len(participants) < 2:
+                            continue
+
+                        if (
+                            home_team == "HOME"
+                            or away_team == "AWAY"
+                        ):
+                            continue
 
                         match_name = (
                             f"{home_team} vs "
