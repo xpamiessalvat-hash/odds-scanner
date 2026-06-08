@@ -770,7 +770,10 @@ while True:
                                                     f"🕒 Kickoff: "
                                                     f"{hours_until_match:.1f}h"
                                                 )
-
+                                                print(
+                                                    f"SAVE SHEET -> score={steam_score} strength={strength}",
+                                                    flush=True
+           )
                                                 save_to_sheets({
                                                     "league": league_name,
                                                     "match": match_name,
