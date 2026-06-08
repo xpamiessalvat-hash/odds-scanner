@@ -709,6 +709,18 @@ while True:
                                                     )
                                                 )
 
+                                                if steam_score < 70:
+
+                                                    del pending_steam[key]
+
+                                                    continue
+
+                                                if strength == "LOW":
+
+                                                    del pending_steam[key]
+
+                                                    continue
+
                                                 value_limit = (
                                                     calculate_value_limit(
                                                         steam_data["old_odd"],
