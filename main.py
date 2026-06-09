@@ -9,14 +9,6 @@ from datetime import (
     timezone
 )
 
-print(
-    "XAVIER TEST UNIC 2026",
-    flush=True
-)
-
-raise Exception("TEST XAVIER STOP")
-
-
 previous_odds = {}
 last_alerts = {}
 pending_steam = {}
