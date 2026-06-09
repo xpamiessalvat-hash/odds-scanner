@@ -449,6 +449,9 @@ while True:
                             "id"
                         )
 
+                        if matchup.get("parentId"):
+                            continue
+
                         if not matchup_id:
                             continue
 
@@ -495,6 +498,15 @@ while True:
                             "participants",
                             []
                         )
+
+                        # TYLKO PARTITS REALS
+                        real_teams = [
+                            p for p in participants
+                            if p.get("alignment") in ["home", "away"]
+                        ]
+
+                        if len(real_teams) != 2:
+                            continue
 
                         home_team = "HOME"
                         away_team = "AWAY"
