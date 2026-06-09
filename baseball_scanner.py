@@ -503,7 +503,6 @@ while True:
                             alignment = participant.get(
                                 "alignment"
                             )
-
                             name = participant.get(
                                 "name",
                                 "UNKNOWN"
@@ -514,6 +513,10 @@ while True:
 
                             elif alignment == "away":
                                 away_team = name
+
+                        print("PARTICIPANTS RAW:", participants, flush=True)
+                        print("HOME:", home_team, flush=True)
+                        print("AWAY:", away_team, flush=True)
 
                         match_name = (
                             f"{home_team} vs "
