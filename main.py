@@ -10,9 +10,11 @@ from datetime import (
 )
 
 print(
-    "🔥 VERSION FILTRADA SENSE TEAM TOTALS 🔥",
+    "XAVIER TEST UNIC 2026",
     flush=True
 )
+
+raise Exception("TEST XAVIER STOP")
 
 
 previous_odds = {}
