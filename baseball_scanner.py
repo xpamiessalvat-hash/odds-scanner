@@ -858,6 +858,16 @@ while True:
                                                             f"PASSA FILTRE: score={steam_score} strength={strength}",
                                                             flush=True
                                                         )
+                                                        print(
+    f"SAVE DEBUG: "
+    f"match={match_name} | "
+    f"market={market_type} | "
+    f"side={side} | "
+    f"points={points} | "
+    f"market_text={market_text}",
+    flush=True
+)
+                                                        
                                                         save_to_sheets({
                                                             "league": league_name,
                                                             "match": match_name,
