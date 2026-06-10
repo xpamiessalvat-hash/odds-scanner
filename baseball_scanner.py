@@ -742,6 +742,10 @@ while True:
                                 ):
 
                                     if key not in pending_steam:
+                                        print(
+    f"PENDING STEAM: {match_name}",
+    flush=True
+)
                                         pending_steam[key] = {
                                             "timestamp": current_time,
                                             "old_odd": old_odd,
@@ -872,7 +876,10 @@ while True:
                                                     f"market_text={market_text}",
                                                     flush=True
                                                 )
-
+                                                print(
+                                                    f"SAVING MATCH: {match_name}",
+                                                    flush=True
+                                                )
                                                 save_to_sheets({
                                                     "league": league_name,
                                                     "match": match_name,
