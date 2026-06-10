@@ -670,11 +670,17 @@ while True:
                                         f"{side}-"
                                         f"{points}"
                                     )
-
+                                    print(
+                                        f"MERCAT: {key} -> {decimal_odd}",
+                                        flush=True
+                                    )
                                     current_time = time.time()
 
                                     if key in previous_odds:
-
+                                        print(
+                                            f"COMPARANT: {key}",
+                                            flush=True
+                                        )
                                         old_odd = (
                                             previous_odds[key]
                                         )
