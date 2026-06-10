@@ -499,7 +499,6 @@ while True:
                             []
                         )
 
-                        # TYLKO PARTITS REALS
                         real_teams = [
                             p for p in participants
                             if p.get("alignment") in ["home", "away"]
@@ -512,9 +511,11 @@ while True:
                         away_team = "AWAY"
 
                         for participant in participants:
+
                             alignment = participant.get(
                                 "alignment"
                             )
+
                             name = participant.get(
                                 "name",
                                 "UNKNOWN"
@@ -526,13 +527,32 @@ while True:
                             elif alignment == "away":
                                 away_team = name
 
-                        print("PARTICIPANTS RAW:", participants, flush=True)
-                        print("HOME:", home_team, flush=True)
-                        print("AWAY:", away_team, flush=True)
+                        # descarta qualsevol matchup que no hagi identificat equips reals
+                        if home_team == "HOME" or away_team == "AWAY":
+                            continue
 
                         match_name = (
                             f"{home_team} vs "
                             f"{away_team}"
+                        )
+
+                        # descarta mercats especials que Pinnacle retorna com si fossin matchups
+                        invalid_words = [
+                            "Home Runs",
+                            "Away Runs",
+                            "Runs (",
+                            "Games)"
+                        ]
+
+                        if any(
+                            word in match_name
+                            for word in invalid_words
+                        ):
+                            continue
+
+                        print(
+                            f"MATCHUP OK: {match_name}",
+                            flush=True
                         )
 
                         matchup_map[matchup_id] = {
@@ -540,7 +560,6 @@ while True:
                             "league_name": league_name,
                             "hours_until_match": hours_until_match
                         }
-
                     except Exception as e:
 
                         print(
