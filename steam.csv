@@ -1,0 +1,26 @@
+timestamp;match;market;designation;points;old_odd;new_odd;movement_pct;steam_level
+2026-06-17T12:10:48.009112+00:00;Arizona Diamondbacks vs Los Angeles Angels;total;over;9.0;-112;-105;3.14;BRONZE
+2026-06-17T12:10:48.426055+00:00;Washington Nationals vs Kansas City Royals;total;over;10.0;-108;101;4.37;BRONZE
+2026-06-17T12:10:48.427224+00:00;Washington Nationals vs Kansas City Royals;total;under;10.0;-106;-114;3.41;BRONZE
+2026-06-17T13:22:06.710727+00:00;Arizona Diamondbacks vs Los Angeles Angels;total;over;9.0;-105;-117;5.0;SILVER
+2026-06-17T13:22:06.711676+00:00;Arizona Diamondbacks vs Los Angeles Angels;total;under;9.0;-107;104;5.45;SILVER
+2026-06-17T14:06:18.738564+00:00;Los Angeles Dodgers vs Tampa Bay Rays;moneyline;home;;-171;-157;3.29;BRONZE
+2026-06-17T14:06:18.748632+00:00;Los Angeles Dodgers vs Tampa Bay Rays;moneyline;away;;156;144;4.69;BRONZE
+2026-06-17T14:06:18.749752+00:00;Los Angeles Dodgers vs Tampa Bay Rays;spread;home;-1.5;126;134;3.54;BRONZE
+2026-06-17T14:19:21.816628+00:00;Seattle Mariners vs Baltimore Orioles;moneyline;home;;-137;-125;4.05;BRONZE
+2026-06-17T14:19:21.817746+00:00;Seattle Mariners vs Baltimore Orioles;moneyline;away;;126;115;4.87;BRONZE
+2026-06-17T14:19:21.818886+00:00;Seattle Mariners vs Baltimore Orioles;spread;home;-1.5;156;166;3.91;BRONZE
+2026-06-17T16:24:58.087521+00:00;Atlanta Braves vs San Francisco Giants;moneyline;away;;126;135;3.98;BRONZE
+2026-06-17T18:10:09.241437+00:00;Arizona Diamondbacks vs Los Angeles Angels;spread;home;-1.5;125;118;3.11;BRONZE
+2026-06-17T18:20:11.757553+00:00;St. Louis Cardinals vs San Diego Padres;moneyline;home;;-119;-128;3.21;BRONZE
+2026-06-17T18:24:12.662776+00:00;Arizona Diamondbacks vs Los Angeles Angels;total;over;9.0;-118;-110;3.34;BRONZE
+2026-06-17T18:24:12.663946+00:00;Arizona Diamondbacks vs Los Angeles Angels;total;under;9.0;105;-102;3.4;BRONZE
+2026-06-17T19:18:25.116603+00:00;New York Yankees vs Chicago White Sox;spread;home;-1.5;112;119;3.3;BRONZE
+2026-06-17T19:57:32.973659+00:00;Atlanta Braves vs San Francisco Giants;total;over;9.0;-114;-106;3.53;BRONZE
+2026-06-17T19:57:32.975201+00:00;Atlanta Braves vs San Francisco Giants;total;under;9.0;102;-106;3.79;BRONZE
+2026-06-17T21:00:45.837036+00:00;Milwaukee Brewers vs Cleveland Guardians;total;over;7.5;-109;-101;3.79;BRONZE
+2026-06-17T21:00:45.837988+00:00;Milwaukee Brewers vs Cleveland Guardians;total;under;7.5;-103;-111;3.55;BRONZE
+2026-06-17T21:12:48.352011+00:00;Chicago Cubs vs Colorado Rockies;spread;home;-1.5;103;-105;3.82;BRONZE
+2026-06-17T21:12:48.353027+00:00;Chicago Cubs vs Colorado Rockies;spread;away;1.5;-113;-105;3.58;BRONZE
+2026-06-17T21:33:52.241560+00:00;New York Yankees vs Chicago White Sox;moneyline;away;;155;146;3.53;BRONZE
+2026-06-17T21:33:52.242662+00:00;New York Yankees vs Chicago White Sox;spread;home;-1.5;120;127;3.18;BRONZE

@@ -13,6 +13,10 @@ print(
     "⚾ BASEBALL SCANNER ⚾",
     flush=True
 )
+print(
+    "VERSIO DEBUG FILTRES 999",
+    flush=True
+)
 previous_odds = {}
 last_alerts = {}
 pending_steam = {}
@@ -117,9 +121,9 @@ MARKET_WEIGHTS = {
 
 STEAM_CONFIRMATION_SECONDS = 60
 
-MIN_MONEYLINE_STEAM = 5
-MIN_SPREAD_STEAM = 5
-MIN_TOTAL_STEAM = 4
+MIN_MONEYLINE_STEAM = 7
+MIN_SPREAD_STEAM = 6
+MIN_TOTAL_STEAM = 5
 
 # Initialization complete
 
@@ -161,15 +165,13 @@ def send_telegram(message):
         )
 
 
-# TEST D'ARRANCADA (elimina'l quan acabis les proves)
-send_telegram("ARRANCADA BASEBALL")
-
-print(
-    "MISSATGE ARRANCADA ENVIAT",
-    flush=True
-)
 
 def save_to_sheets(data):
+
+    print(
+        "XXXXXXXX SAVE_TO_SHEETS XXXXXXXX",
+        flush=True
+    )
 
     try:
         print(
@@ -447,6 +449,9 @@ while True:
                             "id"
                         )
 
+                        if matchup.get("parentId"):
+                            continue
+
                         if not matchup_id:
                             continue
 
@@ -481,7 +486,7 @@ while True:
 
                             if (
                                 hours_until_match < 0
-                                or hours_until_match > 24
+                                or hours_until_match > 8
                             ):
                                 continue
 
@@ -493,6 +498,14 @@ while True:
                             "participants",
                             []
                         )
+
+                        real_teams = [
+                            p for p in participants
+                            if p.get("alignment") in ["home", "away"]
+                        ]
+
+                        if len(real_teams) != 2:
+                            continue
 
                         home_team = "HOME"
                         away_team = "AWAY"
@@ -509,16 +522,37 @@ while True:
                             )
 
                             if alignment == "home":
-
                                 home_team = name
 
                             elif alignment == "away":
-
                                 away_team = name
+
+                        # descarta qualsevol matchup que no hagi identificat equips reals
+                        if home_team == "HOME" or away_team == "AWAY":
+                            continue
 
                         match_name = (
                             f"{home_team} vs "
                             f"{away_team}"
+                        )
+
+                        # descarta mercats especials que Pinnacle retorna com si fossin matchups
+                        invalid_words = [
+                            "Home Runs",
+                            "Away Runs",
+                            "Runs (",
+                            "Games)"
+                        ]
+
+                        if any(
+                            word in match_name
+                            for word in invalid_words
+                        ):
+                            continue
+
+                        print(
+                            f"MATCHUP OK: {match_name}",
+                            flush=True
                         )
 
                         matchup_map[matchup_id] = {
@@ -526,7 +560,6 @@ while True:
                             "league_name": league_name,
                             "hours_until_match": hours_until_match
                         }
-
                     except Exception as e:
 
                         print(
@@ -620,217 +653,264 @@ while True:
 
                         for price_data in prices:
 
-                                    side = price_data.get(
-                                        "designation"
-                                    )
+                            side = price_data.get(
+                                "designation"
+                            )
 
-                                    american_price = (
-                                        price_data.get(
-                                            "price"
-                                        )
-                                    )
+                            # filtra mercats invàlids
+                            if market_type == "moneyline":
 
-                                    points = price_data.get(
-                                        "points"
-                                    )
+                                if side not in ["home", "away"]:
+                                    continue
 
-                                    if market_type == "spread":
+                            elif market_type == "spread":
 
-                                        if points not in VALID_SPREADS:
-                                            continue
+                                if side not in ["home", "away"]:
+                                    continue
 
-                                    elif market_type == "total":
+                            elif market_type == "total":
 
-                                        if points not in VALID_TOTALS:
-                                            continue
+                                if side not in ["over", "under"]:
+                                    continue
 
-                                    decimal_odd = (
-                                        american_to_decimal(
-                                            american_price
-                                        )
-                                    )
+                            american_price = (
+                                price_data.get(
+                                    "price"
+                                )
+                            )
 
-                                    key = (
-                                        f"{match_name}-"
-                                        f"{market_type}-"
-                                        f"{side}-"
-                                        f"{points}"
-                                    )
+                            points = price_data.get(
+                                "points"
+                            )
 
-                                    current_time = time.time()
+                            if market_type == "spread":
 
-                                    if key in previous_odds:
+                                if points not in VALID_SPREADS:
+                                    continue
 
-                                        old_odd = (
-                                            previous_odds[key]
-                                        )
+                            elif market_type == "total":
 
-                                        movement = (
-                                            (
-                                                old_odd
-                                                - decimal_odd
-                                            ) / old_odd
-                                        ) * 100
+                                if points not in VALID_TOTALS:
+                                    continue
 
-                                        if market_type == "moneyline":
-                                            min_required = MIN_MONEYLINE_STEAM
+                            decimal_odd = (
+                                american_to_decimal(
+                                    american_price
+                                )
+                            )
 
-                                        elif market_type == "spread":
-                                            min_required = MIN_SPREAD_STEAM
+                            key = (
+                                f"{match_name}-"
+                                f"{market_type}-"
+                                f"{side}-"
+                                f"{points}"
+                            )
+                            print(
+                                f"MERCAT: {key} -> {decimal_odd}",
+                                flush=True
+                            )
+                            current_time = time.time()
 
-                                        else:
-                                            min_required = MIN_TOTAL_STEAM
+                            if key in previous_odds:
+                                print(
+                                    f"COMPARANT: {key}",
+                                    flush=True
+                                )
+                                old_odd = (
+                                    previous_odds[key]
+                                )
+
+                                movement = (
+                                    (
+                                        old_odd
+                                        - decimal_odd
+                                    ) / old_odd
+                                ) * 100
+
+                                if market_type == "moneyline":
+                                    min_required = MIN_MONEYLINE_STEAM
+
+                                elif market_type == "spread":
+                                    min_required = MIN_SPREAD_STEAM
+
+                                else:
+                                    min_required = MIN_TOTAL_STEAM
+
+                                if (
+                                    movement >= min_required
+                                    and movement <= 25
+                                ):
+
+                                    if key not in pending_steam:
+                                        print(
+    f"PENDING STEAM: {match_name}",
+    flush=True
+)
+                                        pending_steam[key] = {
+                                            "timestamp": current_time,
+                                            "old_odd": old_odd,
+                                            "new_odd": decimal_odd,
+                                            "league_name": league_name,
+                                            "match_name": match_name,
+                                            "market_type": market_type,
+                                            "side": side,
+                                            "points": points,
+                                            "movement": movement,
+                                            "hours_until_match": hours_until_match,
+                                            "matchup_id": matchup_id
+                                        }
+                                    else:
+                                        steam_data = pending_steam[key]
+
+                                        elapsed = current_time - steam_data["timestamp"]
 
                                         if (
-                                            movement >= min_required
-                                            and movement <= 25
+                                            elapsed >=
+                                            STEAM_CONFIRMATION_SECONDS
                                         ):
 
-                                            if key not in pending_steam:
+                                            if (
+                                                decimal_odd
+                                                <= steam_data["new_odd"]
+                                            ):
 
-                                                pending_steam[key] = {
-                                                    "timestamp": current_time,
-                                                    "old_odd": old_odd,
-                                                    "new_odd": decimal_odd,
-                                                    "league_name": league_name,
-                                                    "match_name": match_name,
+                                                steam_score = (
+                                                    calculate_steam_score(
+                                                        steam_data["movement"],
+                                                        market_type,
+                                                        league_name,
+                                                        hours_until_match
+                                                    )
+                                                )
+
+                                                if steam_score < 70:
+                                                    print(
+                                                        f"DESCARTAT SCORE: {steam_score}",
+                                                        flush=True
+                                                    )
+                                                    del pending_steam[key]
+                                                    continue
+
+                                                strength = (
+                                                    get_strength_label(
+                                                        steam_score
+                                                    )
+                                                )
+
+                                                if strength == "LOW":
+
+                                                    del pending_steam[key]
+
+                                                    continue
+
+                                                value_limit = (
+                                                    calculate_value_limit(
+                                                        steam_data["old_odd"],
+                                                        decimal_odd,
+                                                        steam_data["movement"]
+                                                    )
+                                                )
+
+                                                if market_type == "moneyline":
+
+                                                    market_text = (
+                                                        side
+                                                        if side
+                                                        else "moneyline"
+                                                    )
+
+                                                else:
+
+                                                    if side is None:
+
+                                                        market_text = str(points)
+
+                                                    else:
+
+                                                        market_text = (
+                                                            f"{side} {points}"
+                                                        )
+
+                                                print(
+                                                    f"🏆 {league_name}\n"
+                                                    f"{match_name}\n"
+                                                    f"{market_type}\n"
+                                                    f"{market_text}\n"
+                                                    f"{steam_data['old_odd']} "
+                                                    f"-> "
+                                                    f"{decimal_odd}\n",
+                                                    flush=True
+                                                )
+
+                                                message = (
+                                                    f"⚾🔥 BASEBALL STEAM 🔥⚾\n\n"
+                                                    f"🏆 {league_name}\n"
+                                                    f"⚽ {match_name}\n"
+                                                    f"📈 {market_type}\n"
+                                                    f"🎯 {market_text}\n\n"
+                                                    f"💰 Steam:\n"
+                                                    f"{steam_data['old_odd']} "
+                                                    f"-> "
+                                                    f"{decimal_odd}\n\n"
+                                                    f"✅ VALUE FINS:\n"
+                                                    f"{value_limit}\n\n"
+                                                    f"📊 "
+                                                    f"{steam_data['movement']:.2f}%\n"
+                                                    f"⭐ Score: "
+                                                    f"{steam_score}/100\n"
+                                                    f"🔥 Strength: "
+                                                    f"{strength}\n"
+                                                    f"🕒 Kickoff: "
+                                                    f"{hours_until_match:.1f}h"
+                                                )
+                                                print(
+                                                    f"PASSA FILTRE: score={steam_score} strength={strength}",
+                                                    flush=True
+                                                )
+                                                print(
+                                                    f"SAVE DEBUG: "
+                                                    f"match={match_name} | "
+                                                    f"market={market_type} | "
+                                                    f"side={side} | "
+                                                    f"points={points} | "
+                                                    f"market_text={market_text}",
+                                                    flush=True
+                                                )
+                                                print(
+                                                    f"SAVING MATCH: {match_name}",
+                                                    flush=True
+                                                )
+                                                save_to_sheets({
+                                                    "league": league_name,
+                                                    "match": match_name,
+                                                    "market": market_type,
+                                                    "selection": market_text,
+                                                    "entry_odds": decimal_odd,
+                                                    "value_limit": value_limit,
+                                                    "steam_percent": round(
+                                                        steam_data['movement'],
+                                                        2
+                                                    ),
+                                                    "steam_score": steam_score,
+                                                    "strength": strength,
+                                                    "kickoff_hours": round(
+                                                        hours_until_match,
+                                                        1
+                                                    ),
+                                                    "matchup_id": matchup_id,
                                                     "market_type": market_type,
-                                                    "side": side,
                                                     "points": points,
-                                                    "movement": movement,
-                                                    "hours_until_match": hours_until_match,
-                                                    "matchup_id": matchup_id
-                                                }
+                                                    "side": side
+                                                })
 
-                                            else:
-
-                                                steam_data = (
-                                                    pending_steam[key]
+                                                send_telegram(
+                                                    message
                                                 )
 
-                                                elapsed = (
-                                                    current_time
-                                                    - steam_data["timestamp"]
-                                                )
+                                                # cleanup
+                                                del pending_steam[key]
 
-                                                if (
-                                                    elapsed >=
-                                                    STEAM_CONFIRMATION_SECONDS
-                                                ):
-
-                                                    if (
-                                                        decimal_odd
-                                                        <= steam_data["new_odd"]
-                                                    ):
-
-                                                        steam_score = (
-                                                            calculate_steam_score(
-                                                                steam_data["movement"],
-                                                                market_type,
-                                                                league_name,
-                                                                hours_until_match
-                                                            )
-                                                        )
-
-                                                        if steam_score < 65:
-
-                                                            del pending_steam[key]
-
-                                                            continue
-
-                                                        strength = (
-                                                            get_strength_label(
-                                                                steam_score
-                                                            )
-                                                        )
-
-                                                        value_limit = (
-                                                            calculate_value_limit(
-                                                                steam_data["old_odd"],
-                                                                decimal_odd,
-                                                                steam_data["movement"]
-                                                            )
-                                                        )
-
-                                                        if market_type == "moneyline":
-                                                            market_text = side if side else "moneyline"
-                                                        else:
-                                                            market_text = f"{side} {points}"
-
-                                                        print(
-                                                            f"🏆 {league_name}\n"
-                                                            f"{match_name}\n"
-                                                            f"{market_type}\n"
-                                                            f"{market_text}\n"
-                                                            f"{steam_data['old_odd']} "
-                                                            f"-> "
-                                                            f"{decimal_odd}\n",
-                                                            flush=True
-                                                        )
-
-                                                        message = (
-                                                            f"⚾🔥 BASEBALL STEAM 🔥⚾\n\n"
-                                                            f"🏆 {league_name}\n"
-                                                            f"⚽ {match_name}\n"
-                                                            f"📈 {market_type}\n"
-                                                            f"🎯 {market_text}\n\n"
-                                                            f"💰 Steam:\n"
-                                                            f"{steam_data['old_odd']} "
-                                                            f"-> "
-                                                            f"{decimal_odd}\n\n"
-                                                            f"✅ VALUE FINS:\n"
-                                                            f"{value_limit}\n\n"
-                                                            f"📊 "
-                                                            f"{steam_data['movement']:.2f}%\n"
-                                                            f"⭐ Score: "
-                                                            f"{steam_score}/100\n"
-                                                            f"🔥 Strength: "
-                                                            f"{strength}\n"
-                                                            f"🕒 Kickoff: "
-                                                            f"{hours_until_match:.1f}h"
-                                                        )
-
-                                                        save_to_sheets({
-                                                            "league": league_name,
-                                                            "match": match_name,
-                                                            "market": market_type,
-                                                            "selection": market_text,
-                                                            "entry_odds": decimal_odd,
-                                                            "value_limit": value_limit,
-                                                            "steam_percent": round(
-                                                                steam_data['movement'],
-                                                                2
-                                                            ),
-                                                            "steam_score": steam_score,
-                                                            "strength": strength,
-                                                            "kickoff_hours": round(
-                                                                hours_until_match,
-                                                                1
-                                                            ),
-                                                            "matchup_id": matchup_id,
-                                                            "market_type": market_type,
-                                                            "points": points,
-                                                            "side": side
-                                                        })
-
-                                                        print(
-                                                            "MISSATGE A ENVIAR:",
-                                                            flush=True
-                                                        )
-
-                                                        print(
-                                                            message,
-                                                            flush=True
-                                                        )
-
-                                                        send_telegram(
-                                                            message
-                                                        )
-
-                                                        # cleanup
-                                                        del pending_steam[key]
-
-                                                        previous_odds[key] = decimal_odd
+                                                previous_odds[key] = decimal_odd
 
                     except Exception as e:
 
