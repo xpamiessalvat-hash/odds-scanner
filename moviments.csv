@@ -3578,3 +3578,9 @@ timestamp;match;market;designation;points;old_odd;new_odd;movement_pct
 2026-06-18T10:16:10.664704+00:00;Milwaukee Brewers vs Cleveland Guardians;spread;home;-1.5;151;152;0.4
 2026-06-18T10:46:52.825537+00:00;Philadelphia Phillies vs New York Mets;moneyline;away;;108;107;0.48
 2026-06-18T10:46:52.826539+00:00;Philadelphia Phillies vs New York Mets;spread;home;-1.5;164;165;0.38
+2026-06-18T18:36:07.667085+00:00;Philadelphia Phillies vs New York Mets;spread;away;1.5;-190;-191;0.18
+2026-06-18T18:42:45.510932+00:00;Seattle Mariners vs Baltimore Orioles;moneyline;away;;124;125;0.45
+2026-06-18T18:42:45.512300+00:00;Seattle Mariners vs Baltimore Orioles;spread;away;1.5;-171;-170;0.22
+2026-06-18T18:42:45.513443+00:00;Seattle Mariners vs Baltimore Orioles;total;over;7.5;-111;-112;0.42
+2026-06-18T18:42:45.601461+00:00;New York Yankees vs Chicago White Sox;total;under;9.5;100;101;0.5
+2026-06-18T18:48:46.548542+00:00;Athletics vs Los Angeles Angels;spread;away;1.5;-134;-135;0.32

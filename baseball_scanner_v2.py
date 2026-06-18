@@ -4,18 +4,20 @@ import csv
 import os
 import urllib.request
 import urllib.error
+import traceback
+
 from datetime import datetime, timezone
-try:
-    from .core.utils import (
-        american_to_decimal,
-        get_steam_level
-    )
-except (ImportError, ModuleNotFoundError, ValueError):
-    pass
+
+from core.utils import (
+    american_to_decimal,
+    get_steam_level
+)
 
 try:
     import requests
 except ImportError:
+    import urllib.request
+    import urllib.error
 
     class _Response:
         def __init__(self, status_code, content):
@@ -485,16 +487,16 @@ while True:
                                         )
 
                                         writer.writerow([
-    datetime.now(timezone.utc).isoformat(),
-    data["match_name"],
-    market["type"],
-    designation,
-    points,
-    old_odd,
-    american_odd,
-    movement_pct,
-    steam_level
-])
+                                            datetime.now(timezone.utc).isoformat(),
+                                            data["match_name"],
+                                            market["type"],
+                                            designation,
+                                            points,
+                                            old_odd,
+                                            american_odd,
+                                            movement_pct,
+                                            steam_level
+                                        ])
 
                                     last_steam[steam_key] = current_time
 
@@ -522,9 +524,9 @@ while True:
 
     except Exception as e:
 
-        print(
-            f"ERROR: {e}",
-            flush=True
-        )
+    print(
+        f"ERROR: {e}",
+        flush=True
+    )
 
     time.sleep(120)
