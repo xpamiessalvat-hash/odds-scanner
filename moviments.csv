@@ -3995,3 +3995,27 @@ timestamp;match;market;designation;points;old_odd;new_odd;movement_pct
 2026-06-19T08:43:58.328000+00:00;Texas Rangers vs San Diego Padres;spread;home;-1.5;145;144;0.41
 2026-06-19T08:52:01.700846+00:00;Detroit Tigers vs Chicago White Sox;moneyline;home;;-219;-218;0.14
 2026-06-19T08:52:01.701798+00:00;Detroit Tigers vs Chicago White Sox;moneyline;away;;194;193;0.34
+2026-06-19T09:14:06.966775+00:00;Tampa Bay Rays vs Washington Nationals;spread;home;-1.5;166;167;0.38
+2026-06-19T09:14:06.978805+00:00;Tampa Bay Rays vs Washington Nationals;total;over;8.0;-107;-106;0.46
+2026-06-19T09:14:06.979854+00:00;Tampa Bay Rays vs Washington Nationals;total;under;8.0;-107;-108;0.45
+2026-06-19T09:14:08.827968+00:00;Tampa Bay Rays vs Washington Nationals;spread;home;-1.5;166;167;0.38
+2026-06-19T09:14:08.828693+00:00;Tampa Bay Rays vs Washington Nationals;total;over;8.0;-107;-106;0.46
+2026-06-19T09:14:08.829291+00:00;Tampa Bay Rays vs Washington Nationals;total;under;8.0;-107;-108;0.45
+2026-06-19T09:15:07.590263+00:00;Colorado Rockies vs Pittsburgh Pirates;moneyline;away;;-130;-131;0.33
+2026-06-19T09:15:09.831357+00:00;Colorado Rockies vs Pittsburgh Pirates;moneyline;away;;-130;-131;0.33
+2026-06-19T09:27:13.053092+00:00;Houston Astros vs Cleveland Guardians;moneyline;home;;-113;-114;0.41
+2026-06-19T09:27:13.061431+00:00;Houston Astros vs Cleveland Guardians;moneyline;away;;102;103;0.5
+2026-06-19T09:27:13.062383+00:00;Houston Astros vs Cleveland Guardians;spread;home;-1.5;179;178;0.36
+2026-06-19T09:27:13.063014+00:00;Houston Astros vs Cleveland Guardians;spread;away;1.5;-206;-205;0.16
+2026-06-19T09:27:13.063769+00:00;Houston Astros vs Cleveland Guardians;total;over;8.5;-106;-103;1.41
+2026-06-19T09:27:13.064355+00:00;Houston Astros vs Cleveland Guardians;total;under;8.5;-108;-111;1.3
+2026-06-19T09:27:14.800726+00:00;Houston Astros vs Cleveland Guardians;moneyline;home;;-113;-114;0.41
+2026-06-19T09:27:14.801703+00:00;Houston Astros vs Cleveland Guardians;moneyline;away;;102;103;0.5
+2026-06-19T09:27:14.802475+00:00;Houston Astros vs Cleveland Guardians;spread;home;-1.5;179;178;0.36
+2026-06-19T09:27:14.803257+00:00;Houston Astros vs Cleveland Guardians;spread;away;1.5;-206;-205;0.16
+2026-06-19T09:27:14.803947+00:00;Houston Astros vs Cleveland Guardians;total;over;8.5;-106;-103;1.41
+2026-06-19T09:27:14.804541+00:00;Houston Astros vs Cleveland Guardians;total;under;8.5;-108;-111;1.3
+2026-06-19T09:33:16.235765+00:00;Seattle Mariners vs Boston Red Sox;total;over;6.5;-120;-119;0.38
+2026-06-19T09:33:16.237118+00:00;Seattle Mariners vs Boston Red Sox;total;under;6.5;105;104;0.49
+2026-06-19T09:33:17.596401+00:00;Seattle Mariners vs Boston Red Sox;total;over;6.5;-120;-119;0.38
+2026-06-19T09:33:17.597459+00:00;Seattle Mariners vs Boston Red Sox;total;under;6.5;105;104;0.49

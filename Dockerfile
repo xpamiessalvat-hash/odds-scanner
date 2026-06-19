@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/python:v1.60.0-jammy
+FROM python:3.12-slim
 
 WORKDIR /app
 
@@ -6,6 +6,8 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN python -m playwright install chromium
+
 COPY . .
 
-CMD ["python", "main.py"]
+CMD ["python", "baseball_scanner_v2.py"]
