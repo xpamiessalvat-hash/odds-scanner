@@ -45,3 +45,40 @@ timestamp;match;market;designation;points;old_odd;new_odd;movement_pct;steam_lev
 2026-06-19T01:35:29.684923+00:00;Athletics vs Los Angeles Angels;spread;away;1.5;-124;-114;3.92;BRONZE
 2026-06-19T01:50:34.714534+00:00;Athletics vs Los Angeles Angels;moneyline;home;;-182;-969;28.8;PLATINUM
 2026-06-19T05:54:56.345710+00:00;New York Yankees vs Cincinnati Reds;moneyline;away;;223;233;3.1;BRONZE
+2026-06-19T15:07:17.883052+00:00;Atlanta Braves vs Milwaukee Brewers;moneyline;home;;159;145;5.41;SILVER
+2026-06-19T15:07:17.884689+00:00;Atlanta Braves vs Milwaukee Brewers;moneyline;home;;159;145;5.41;SILVER
+2026-06-19T15:07:17.887995+00:00;Atlanta Braves vs Milwaukee Brewers;moneyline;away;;-178;-158;4.55;BRONZE
+2026-06-19T15:07:17.889461+00:00;Atlanta Braves vs Milwaukee Brewers;moneyline;away;;-178;-158;4.55;BRONZE
+2026-06-19T15:07:17.892533+00:00;Atlanta Braves vs Milwaukee Brewers;spread;home;1.5;-111;-120;3.55;BRONZE
+2026-06-19T15:07:17.897018+00:00;Atlanta Braves vs Milwaukee Brewers;spread;away;-1.5;-101;108;4.52;BRONZE
+2026-06-19T15:07:17.897650+00:00;Atlanta Braves vs Milwaukee Brewers;spread;away;-1.5;-101;108;4.52;BRONZE
+2026-06-19T15:07:18.037628+00:00;Seattle Mariners vs Boston Red Sox;moneyline;home;;-127;-107;8.23;GOLD
+2026-06-19T15:07:18.038355+00:00;Seattle Mariners vs Boston Red Sox;moneyline;home;;-127;-107;8.23;GOLD
+2026-06-19T15:07:18.042265+00:00;Seattle Mariners vs Boston Red Sox;moneyline;away;;115;-102;7.89;SILVER
+2026-06-19T15:07:18.042677+00:00;Seattle Mariners vs Boston Red Sox;moneyline;away;;115;-102;7.89;SILVER
+2026-06-19T15:07:18.044916+00:00;Seattle Mariners vs Boston Red Sox;spread;home;-1.5;171;194;8.49;GOLD
+2026-06-19T15:07:18.045278+00:00;Seattle Mariners vs Boston Red Sox;spread;home;-1.5;171;194;8.49;GOLD
+2026-06-19T15:07:18.047326+00:00;Seattle Mariners vs Boston Red Sox;spread;away;1.5;-197;-220;3.52;BRONZE
+2026-06-19T15:07:18.047699+00:00;Seattle Mariners vs Boston Red Sox;spread;away;1.5;-197;-220;3.52;BRONZE
+2026-06-19T15:07:18.345693+00:00;Detroit Tigers vs Chicago White Sox;moneyline;home;;-218;-189;4.83;BRONZE
+2026-06-19T15:07:18.346136+00:00;Detroit Tigers vs Chicago White Sox;moneyline;home;;-218;-189;4.83;BRONZE
+2026-06-19T15:07:18.348646+00:00;Detroit Tigers vs Chicago White Sox;moneyline;away;;198;173;8.39;GOLD
+2026-06-19T15:07:18.349371+00:00;Detroit Tigers vs Chicago White Sox;moneyline;away;;198;173;8.39;GOLD
+2026-06-19T15:07:18.352749+00:00;Detroit Tigers vs Chicago White Sox;spread;home;-1.5;-100;111;5.5;SILVER
+2026-06-19T15:07:18.354161+00:00;Detroit Tigers vs Chicago White Sox;spread;home;-1.5;-100;111;5.5;SILVER
+2026-06-19T15:07:18.357082+00:00;Detroit Tigers vs Chicago White Sox;spread;away;1.5;-111;-123;4.62;BRONZE
+2026-06-19T15:07:18.358500+00:00;Detroit Tigers vs Chicago White Sox;spread;away;1.5;-111;-123;4.62;BRONZE
+2026-06-19T15:07:18.362379+00:00;Detroit Tigers vs Chicago White Sox;total;over;8.0;-113;-100;6.1;SILVER
+2026-06-19T15:07:18.365275+00:00;Detroit Tigers vs Chicago White Sox;total;under;8.0;-101;-112;4.89;BRONZE
+2026-06-19T15:09:20.255745+00:00;Detroit Tigers vs Chicago White Sox;total;over;8.0;-100;-107;3.27;BRONZE
+2026-06-19T15:09:20.261348+00:00;Detroit Tigers vs Chicago White Sox;total;under;8.0;-112;-105;3.14;BRONZE
+2026-06-19T15:30:31.545851+00:00;Miami Marlins vs San Francisco Giants;total;over;8.0;-114;-106;3.53;BRONZE
+2026-06-19T15:30:31.549279+00:00;Miami Marlins vs San Francisco Giants;total;under;8.0;101;-106;3.31;BRONZE
+2026-06-19T15:30:33.113275+00:00;Miami Marlins vs San Francisco Giants;total;over;8.0;-114;-106;3.53;BRONZE
+2026-06-19T15:30:33.116075+00:00;Miami Marlins vs San Francisco Giants;total;under;8.0;101;-106;3.31;BRONZE
+2026-06-19T15:43:38.286758+00:00;Detroit Tigers vs Chicago White Sox;total;under;8.0;-105;102;3.46;BRONZE
+2026-06-19T15:43:38.952336+00:00;Detroit Tigers vs Chicago White Sox;total;under;8.0;-105;102;3.46;BRONZE
+2026-06-19T15:59:47.775532+00:00;Tampa Bay Rays vs Washington Nationals;total;over;8.0;-110;-103;3.24;BRONZE
+2026-06-19T16:05:52.424173+00:00;Kansas City Royals vs St. Louis Cardinals;total;over;9.0;-108;-116;3.32;BRONZE
+2026-06-19T16:05:52.438042+00:00;Kansas City Royals vs St. Louis Cardinals;total;under;9.0;-104;103;3.49;BRONZE
+2026-06-19T16:05:52.438042+00:00;Kansas City Royals vs St. Louis Cardinals;total;under;9.0;-104;103;3.49;BRONZE

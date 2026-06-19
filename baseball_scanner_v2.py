@@ -12,7 +12,14 @@ from core.utils import (
     american_to_decimal,
     get_steam_level
 )
-
+from core.config import (
+    CSV_FILE,
+    STEAM_FILE,
+    CLV_FILE,
+    BOT_TOKEN,
+    CHAT_ID,
+    BASE_URL
+)
 try:
     import requests
 except ImportError:
@@ -80,10 +87,6 @@ previous_odds = {}
 pending_steam = {}
 last_steam = {}
 open_steams = {}
-
-CSV_FILE = "moviments.csv"
-STEAM_FILE = "steam.csv"
-CLV_FILE = "closing_lines.csv"
 
 if not os.path.exists(CSV_FILE):
 
