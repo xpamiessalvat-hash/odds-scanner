@@ -517,16 +517,16 @@ while True:
 
                     previous_odds[key] = american_odd
 
-            print(
-                f"{data['match_name']} -> {valids}",
-                flush=True
-            )
+                print(
+                    f"{data['match_name']} -> {valids}",
+                    flush=True
+                )
 
     except Exception as e:
 
-    print(
-        f"ERROR: {e}",
-        flush=True
-    )
+        print(
+            f"ERROR: {e}",
+            flush=True
+        )
 
-    time.sleep(120)
+    time.sleep(60)

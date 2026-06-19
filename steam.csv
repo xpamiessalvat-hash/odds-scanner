@@ -24,3 +24,24 @@ timestamp;match;market;designation;points;old_odd;new_odd;movement_pct;steam_lev
 2026-06-17T21:12:48.353027+00:00;Chicago Cubs vs Colorado Rockies;spread;away;1.5;-113;-105;3.58;BRONZE
 2026-06-17T21:33:52.241560+00:00;New York Yankees vs Chicago White Sox;moneyline;away;;155;146;3.53;BRONZE
 2026-06-17T21:33:52.242662+00:00;New York Yankees vs Chicago White Sox;spread;home;-1.5;120;127;3.18;BRONZE
+2026-06-18T18:52:53.868190+00:00;Texas Rangers vs Minnesota Twins;moneyline;home;;108;510;193.27;PLATINUM
+2026-06-18T18:52:53.870096+00:00;Texas Rangers vs Minnesota Twins;moneyline;away;;-117;-746;38.86;PLATINUM
+2026-06-18T22:19:33.858186+00:00;Athletics vs Los Angeles Angels;moneyline;away;;142;150;3.31;BRONZE
+2026-06-18T22:51:42.421355+00:00;Philadelphia Phillies vs New York Mets;moneyline;home;;-118;152;36.4;PLATINUM
+2026-06-18T22:51:42.422392+00:00;Philadelphia Phillies vs New York Mets;moneyline;away;;109;-187;26.57;PLATINUM
+2026-06-18T23:34:27.081098+00:00;Athletics vs Los Angeles Angels;total;over;10.0;100;-107;3.27;BRONZE
+2026-06-18T23:34:27.082283+00:00;Athletics vs Los Angeles Angels;total;under;10.0;-112;-105;3.14;BRONZE
+2026-06-18T23:38:28.682083+00:00;Tampa Bay Rays vs Washington Nationals;moneyline;home;;-115;-124;3.38;BRONZE
+2026-06-18T23:38:28.683337+00:00;Tampa Bay Rays vs Washington Nationals;moneyline;away;;105;113;3.9;BRONZE
+2026-06-18T23:38:28.684609+00:00;Tampa Bay Rays vs Washington Nationals;spread;home;-1.5;179;170;3.23;BRONZE
+2026-06-18T23:54:33.553885+00:00;Kansas City Royals vs St. Louis Cardinals;moneyline;home;;-109;170;40.81;PLATINUM
+2026-06-18T23:54:33.555082+00:00;Kansas City Royals vs St. Louis Cardinals;moneyline;away;;101;-201;25.5;PLATINUM
+2026-06-19T00:50:15.195794+00:00;Athletics vs Los Angeles Angels;total;under;10.0;-105;102;3.46;BRONZE
+2026-06-19T01:00:17.499469+00:00;Seattle Mariners vs Boston Red Sox;moneyline;home;;-130;-121;3.23;BRONZE
+2026-06-19T01:00:17.500705+00:00;Seattle Mariners vs Boston Red Sox;moneyline;away;;118;109;4.13;BRONZE
+2026-06-19T01:00:17.501969+00:00;Seattle Mariners vs Boston Red Sox;spread;home;-1.5;169;178;3.35;BRONZE
+2026-06-19T01:35:29.682408+00:00;Athletics vs Los Angeles Angels;moneyline;away;;155;166;4.31;BRONZE
+2026-06-19T01:35:29.683777+00:00;Athletics vs Los Angeles Angels;spread;home;-1.5;112;103;4.25;BRONZE
+2026-06-19T01:35:29.684923+00:00;Athletics vs Los Angeles Angels;spread;away;1.5;-124;-114;3.92;BRONZE
+2026-06-19T01:50:34.714534+00:00;Athletics vs Los Angeles Angels;moneyline;home;;-182;-969;28.8;PLATINUM
+2026-06-19T05:54:56.345710+00:00;New York Yankees vs Cincinnati Reds;moneyline;away;;223;233;3.1;BRONZE
