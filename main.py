@@ -887,6 +887,7 @@ while True:
     f"RESUM LOOP | "
     f"Matchups={len(matchup_map)} | "
     f"Candidats={candidate_count} | "
+    f"Pending={len(pending_steam)} | "
     f"ConfirmTry={confirmation_attempts} | "
     f"ConfirmKO={confirmation_failed} | "
     f"ScoreKO={score_rejected} | "
