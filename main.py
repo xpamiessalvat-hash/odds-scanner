@@ -739,15 +739,13 @@ while True:
                                                     )
 
                                                 if steam_score < 60:
-
+                                                    score_rejected += 1
                                                     del pending_steam[key]
-
                                                     continue
 
                                                 if strength == "LOW":
-
+                                                    strength_rejected += 1
                                                     del pending_steam[key]
-
                                                     continue
 
                                                 value_limit = (
@@ -870,13 +868,15 @@ while True:
             flush=True
         )
     print(
-        f"RESUM LOOP | "
-        f"Matchups={len(matchup_map)} | "
-        f"Candidats={candidate_count} | "
-        f"Confirmats={confirmed_count} | "
-        f"Telegram={telegram_count}",
-        flush=True
-    )
+    f"RESUM LOOP | "
+    f"Matchups={len(matchup_map)} | "
+    f"Candidats={candidate_count} | "
+    f"ScoreKO={score_rejected} | "
+    f"StrengthKO={strength_rejected} | "
+    f"Confirmats={confirmed_count} | "
+    f"Telegram={telegram_count}",
+    flush=True
+)
     
     time.sleep(120)
 
