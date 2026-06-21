@@ -117,7 +117,7 @@ STEAM_CONFIRMATION_SECONDS = 60
 
 MIN_SPREAD_STEAM = 8
 MIN_TOTAL_STEAM = 4
-
+DEBUG = False
 
 def send_telegram(message):
 
@@ -652,14 +652,15 @@ while True:
                                     else MIN_SPREAD_STEAM
                                 )
 
-                                print(
-                                    f"CANDIDAT | "
-                                    f"{match_name} | "
-                                    f"{market_type} | "
-                                    f"{movement:.2f}% | "
-                                    f"Min={min_required}",
-                                    flush=True
-                                )
+                                if DEBUG:
+                                    print(
+                                        f"CANDIDAT | "
+                                        f"{match_name} | "
+                                        f"{market_type} | "
+                                        f"{movement:.2f}% | "
+                                        f"Min={min_required}",
+                                        flush=True
+                                    )
                                 if (
                                     movement >= min_required
                                     and movement <= 25
@@ -716,22 +717,25 @@ while True:
                                                         steam_score
                                                     )
                                                 )
-                                                print(
-                                                    f"DEBUG STEAM | "
-                                                    f"{match_name} | "
-                                                    f"{market_type} | "
-                                                    f"Mov={steam_data['movement']:.2f}% | "
-                                                    f"Score={steam_score} | "
-                                                    f"{league_name}",
-                                                    flush=True
-                                                )
-                                                print(
-    f"SCORE | "
-    f"{match_name} | "
-    f"{steam_score} | "
-    f"{strength}",
-    flush=True
-)
+                                                if DEBUG:
+                                                    print(
+                                                        f"DEBUG STEAM | "
+                                                        f"{match_name} | "
+                                                        f"{market_type} | "
+                                                        f"Mov={steam_data['movement']:.2f}% | "
+                                                        f"Score={steam_score} | "
+                                                        f"{league_name}",
+                                                        flush=True
+                                                    )
+
+                                                    print(
+                                                        f"SCORE | "
+                                                        f"{match_name} | "
+                                                        f"{steam_score} | "
+                                                        f"{strength}",
+                                                        flush=True
+                                                    )
+
                                                 if steam_score < 60:
 
                                                     del pending_steam[key]
@@ -835,7 +839,7 @@ while True:
                                                     message
                                                 )
 
-                                            del pending_steam[key]
+                                                del pending_steam[key]
 
                             previous_odds[key] = (
                                 decimal_odd
