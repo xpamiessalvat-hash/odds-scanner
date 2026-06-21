@@ -302,9 +302,12 @@ while True:
         "\nLoop iniciat...\n",
         flush=True
     )
+
+    candidate_count = 0
+    confirmation_attempts = 0
+    confirmation_failed = 0
     score_rejected = 0
     strength_rejected = 0
-    candidate_count = 0
     confirmed_count = 0
     telegram_count = 0
 
@@ -703,6 +706,8 @@ while True:
                                             STEAM_CONFIRMATION_SECONDS
                                         ):
 
+                                            confirmation_attempts += 1
+
                                             if (
                                                 decimal_odd
                                                 <= steam_data["new_odd"]
@@ -722,7 +727,9 @@ while True:
                                                         steam_score
                                                     )
                                                 )
+
                                                 if DEBUG:
+
                                                     print(
                                                         f"DEBUG STEAM | "
                                                         f"{match_name} | "
@@ -846,6 +853,12 @@ while True:
 
                                                 del pending_steam[key]
 
+                                            else:
+
+                                                confirmation_failed += 1
+                                                del pending_steam[key]
+                                                continue
+
                             previous_odds[key] = (
                                 decimal_odd
                             )
@@ -874,6 +887,8 @@ while True:
     f"RESUM LOOP | "
     f"Matchups={len(matchup_map)} | "
     f"Candidats={candidate_count} | "
+    f"ConfirmTry={confirmation_attempts} | "
+    f"ConfirmKO={confirmation_failed} | "
     f"ScoreKO={score_rejected} | "
     f"StrengthKO={strength_rejected} | "
     f"Confirmats={confirmed_count} | "
