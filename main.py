@@ -21,7 +21,7 @@ CHAT_ID = os.getenv(
     "CHAT_ID"
 )
 
-GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbzYM5xrBqacg7Vjb53okMn5Ea84_21WPdg3rQyi1zimPgJ25YSEKAaDi5HZOHrT8Ac1/exec"
+GOOGLE_SHEETS_WEBHOOK = GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbxwdYpjhLe2vcgOiBwXZkLYERh7c4CmvZmwBH5ziqf7C_0rH_LScxg9LTiRyFj4yg6q/exec"
 
 HEADERS = {
     "User-Agent": (
