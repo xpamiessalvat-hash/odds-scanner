@@ -209,7 +209,8 @@ def calculate_steam_score(
     hours_until_match
 ):
 
-    movement_score = movement * 2
+    # Donem molt més pes al moviment
+    movement_score = movement * 4.5
 
     market_weight = MARKET_WEIGHTS.get(
         market_type,
@@ -218,11 +219,11 @@ def calculate_steam_score(
 
     if hours_until_match <= 1:
 
-        time_weight = 1.5
+        time_weight = 1.35
 
     elif hours_until_match <= 2:
 
-        time_weight = 1.3
+        time_weight = 1.20
 
     else:
 
@@ -234,7 +235,7 @@ def calculate_steam_score(
 
         if top_league.lower() in league_name.lower():
 
-            league_weight = 1.3
+            league_weight = 1.15
             break
 
     steam_score = (
@@ -248,7 +249,6 @@ def calculate_steam_score(
         min(100, steam_score),
         1
     )
-
 
 def get_strength_label(score):
 
