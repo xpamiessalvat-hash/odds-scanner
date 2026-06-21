@@ -302,9 +302,12 @@ while True:
         "\nLoop iniciat...\n",
         flush=True
     )
+    score_rejected = 0
+    trength_rejected = 0
     candidate_count = 0
     confirmed_count = 0
     telegram_count = 0
+    
     try:
 
         print(
