@@ -302,7 +302,9 @@ while True:
         "\nLoop iniciat...\n",
         flush=True
     )
-
+    candidate_count = 0
+    confirmed_count = 0
+    telegram_count = 0
     try:
 
         print(
@@ -665,7 +667,7 @@ while True:
                                     movement >= min_required
                                     and movement <= 25
                                 ):
-
+                                    candidate_count += 1
                                     if key not in pending_steam:
 
                                         pending_steam[key] = {
@@ -776,6 +778,8 @@ while True:
                                                     flush=True
                                                 )
 
+                                                confirmed_count += 1
+
                                                 message = (
                                                     f"🔥 STEAM CONFIRMAT 🔥\n\n"
                                                     f"🏆 {league_name}\n"
@@ -865,7 +869,15 @@ while True:
             f"ERROR API: {e}",
             flush=True
         )
-
+    print(
+        f"RESUM LOOP | "
+        f"Matchups={len(matchup_map)} | "
+        f"Candidats={candidate_count} | "
+        f"Confirmats={confirmed_count} | "
+        f"Telegram={telegram_count}",
+        flush=True
+    )
+    
     time.sleep(120)
 
 
