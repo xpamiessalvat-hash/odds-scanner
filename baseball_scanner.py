@@ -129,8 +129,9 @@ MIN_TOTAL_STEAM = 5
 
 def send_telegram(message):
 
-    try:
+    print("TELEGRAM ENVIAT", flush=True)
 
+    try:
         url = (
             f"https://api.telegram.org/"
             f"bot{BOT_TOKEN}/sendMessage"
@@ -156,9 +157,7 @@ def send_telegram(message):
             f"TELEGRAM RESPONSE: {response.text}",
             flush=True
         )
-
     except Exception as e:
-
         print(
             f"ERROR TELEGRAM: {e}",
             flush=True
@@ -841,7 +840,8 @@ while True:
                                                     f"{decimal_odd}\n",
                                                     flush=True
                                                 )
-
+                                                print("ENTRO AL BLOC D'ENVIAMENT", flush=True)
+                                                
                                                 message = (
                                                     f"⚾🔥 BASEBALL STEAM 🔥⚾\n\n"
                                                     f"🏆 {league_name}\n"
@@ -902,7 +902,8 @@ while True:
                                                     "points": points,
                                                     "side": side
                                                 })
-
+                                                print("SHEETS ENVIAT", flush=True)
+                                                
                                                 send_telegram(
                                                     message
                                                 )
