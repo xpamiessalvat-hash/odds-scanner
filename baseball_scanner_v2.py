@@ -20,6 +20,9 @@ from core.config import (
     CHAT_ID,
     BASE_URL
 )
+from core.telegram import send_telegram
+from core.sheets import save_to_sheets
+
 try:
     import requests
 except ImportError:
@@ -512,6 +515,31 @@ while True:
                                         "steam_level": steam_level,
                                         "steam_odd": american_odd
                                     }
+                                    message = (
+                                        f"⚾ STEAM DETECTAT ⚾\n\n"
+                                        f"🏟️ {data['match_name']}\n"
+                                        f"📈 {market['type']}\n"
+                                        f"🎯 {designation} {points}\n\n"
+                                        f"💰 {old_odd} → {american_odd}\n"
+                                        f"📊 Moviment: {movement_pct}%\n"
+                                        f"🔥 Steam: {steam_level}"
+                                    )
+
+                                    save_to_sheets({
+                                        "league": data["league"],
+                                        "match": data["match_name"],
+                                        "market": market["type"],
+                                        "selection": f"{designation} {points}",
+                                        "entry_odds": american_odd,
+                                        "steam_percent": movement_pct,
+                                        "steam_score": steam_level,
+                                        "strength": steam_level
+                                    })
+                                    send_telegram(message)
+                                    
+                                    print("SHEETS ENVIAT", flush=True)
+
+                                    print("TELEGRAM ENVIAT", flush=True)
 
                                     print(
                                         f"STEAM DETECTAT | Actius: {len(open_steams)}",
