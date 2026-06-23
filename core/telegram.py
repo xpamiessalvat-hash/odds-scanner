@@ -7,7 +7,6 @@ from core.config import (
 
 
 def send_telegram(message):
-
     url = (
         f"https://api.telegram.org/bot"
         f"{BOT_TOKEN}/sendMessage"
@@ -19,15 +18,18 @@ def send_telegram(message):
     }
 
     try:
-
-        requests.post(
+        response = requests.post(
             url,
             data=data,
             timeout=20
         )
 
-    except Exception as e:
+        print(
+            f"TELEGRAM -> {response.status_code} {response.text}",
+            flush=True
+        )
 
+    except Exception as e:
         print(
             f"ERROR TELEGRAM: {e}",
             flush=True
