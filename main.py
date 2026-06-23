@@ -401,6 +401,10 @@ while True:
 
                 matchups = response.json()
 
+                print(
+                    f"{league_name} -> {len(matchups)}",
+                    flush=True
+                )
                 for matchup in matchups:
 
                     try:
@@ -483,11 +487,34 @@ while True:
                             or away_team == "AWAY"
                         ):
                             continue
-
                         match_name = (
                             f"{home_team} vs "
                             f"{away_team}"
                         )
+
+                        # Eliminar mercats especials
+                        BLOCKED_MATCH_WORDS = [
+                            "(Corners)",
+                            "(Corner)",
+                            "(Bookings)",
+                            "(Booking)",
+                            "(Cards)",
+                            "(Card)",
+                            "(Throw-ins)",
+                            "(Throw In)",
+                            "(Offsides)",
+                            "(Offside)",
+                            "(Shots)",
+                            "(Shot)",
+                            "(Penalties)",
+                            "(Penalty)"
+                        ]
+
+                        if any(
+                            word.lower() in match_name.lower()
+                            for word in BLOCKED_MATCH_WORDS
+                        ):
+                            continue
 
                         matchup_map[matchup_id] = {
                             "match_name": match_name,
@@ -824,44 +851,61 @@ while True:
                                                     flush=True
                                                 )
 
-                                                save_to_sheets({
-                                                    "league": league_name,
-                                                    "match": match_name,
-                                                    "market": market_type,
-                                                    "selection": market_text,
-                                                    "entry_odds": decimal_odd,
-                                                    "value_limit": value_limit,
-                                                    "steam_percent": round(
-                                                        steam_data['movement'],
-                                                        2
-                                                    ),
-                                                    "steam_score": steam_score,
-                                                    "strength": strength,
-                                                    "kickoff_hours": round(
-                                                        hours_until_match,
-                                                        1
-                                                    ),
-                                                    "matchup_id": matchup_id,
-                                                    "market_type": market_type,
-                                                    "points": points,
-                                                    "side": side
-                                                })
-
-                                                send_telegram(
-                                                    message
+                                                alert_key = (
+                                                    f"{matchup_id}-"
+                                                    f"{market_type}-"
+                                                    f"{side}-"
+                                                    f"{points}"
                                                 )
 
-                                                del pending_steam[key]
+                                                last_alert = last_alerts.get(
+                                                    alert_key,
+                                                    0
+                                                )
 
+                                                if current_time - last_alert >= 900:
+
+                                                    save_to_sheets({
+                                                        "league": league_name,
+                                                        "match": match_name,
+                                                        "market": market_type,
+                                                        "selection": market_text,
+                                                        "entry_odds": decimal_odd,
+                                                        "value_limit": value_limit,
+                                                        "steam_percent": round(
+                                                            steam_data["movement"],
+                                                            2
+                                                        ),
+                                                        "steam_score": steam_score,
+                                                        "strength": strength,
+                                                        "kickoff_hours": round(
+                                                            hours_until_match,
+                                                            1
+                                                        ),
+                                                        "matchup_id": matchup_id,
+                                                        "market_type": market_type,
+                                                        "points": points,
+                                                        "side": side
+                                                    })
+
+                                                    send_telegram(
+                                                        message
+                                                    )
+
+                                                    telegram_count += 1
+
+                                                    last_alerts[
+                                                        alert_key
+                                                    ] = current_time
+
+                                                del pending_steam[key]
                                             else:
 
                                                 confirmation_failed += 1
                                                 del pending_steam[key]
                                                 continue
 
-                            previous_odds[key] = (
-                                decimal_odd
-                            )
+                            previous_odds[key] = decimal_odd
 
                     except Exception as e:
 
@@ -869,7 +913,7 @@ while True:
                             f"ERROR MARKET: {e}",
                             flush=True
                         )
-
+                        
             except Exception as e:
 
                 print(
