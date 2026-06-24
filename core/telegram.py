@@ -17,6 +17,8 @@ def send_telegram(message):
         "text": message
     }
 
+    print(f"BOT_TOKEN={BOT_TOKEN}", flush=True)
+    print(f"URL={url}", flush=True)
     try:
         response = requests.post(
             url,
