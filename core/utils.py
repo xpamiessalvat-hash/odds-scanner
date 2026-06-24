@@ -19,3 +19,33 @@ def get_steam_level(movement_pct):
 
 	return "BRONZE"
 
+def calculate_value_limit(
+    old_price,
+    steam_price,
+    movement
+):
+
+    if movement >= 20:
+
+        retention = 0.65
+
+    elif movement >= 15:
+
+        retention = 0.55
+
+    else:
+
+        retention = 0.45
+
+    value_limit = (
+        steam_price
+        + (
+            old_price
+            - steam_price
+        ) * retention
+    )
+
+    return round(
+        value_limit,
+        3
+    )

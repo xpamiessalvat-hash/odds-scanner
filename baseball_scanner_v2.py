@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 
 from core.utils import (
     american_to_decimal,
+    calculate_value_limit,
     get_steam_level
 )
 from core.config import (
@@ -22,7 +23,6 @@ from core.config import (
 )
 from core.telegram import send_telegram
 from core.sheets import save_to_sheets
-from core.utils import american_to_decimal
 
 try:
     import requests
@@ -96,31 +96,6 @@ if not os.path.exists(CSV_FILE):
 
     with open(
         CSV_FILE,
-        "w",
-        newline="",
-        encoding="utf-8"
-    ) as file:
-
-        writer = csv.writer(
-            file,
-            delimiter=";"
-        )
-
-        writer.writerow([
-            "timestamp",
-            "match",
-            "market",
-            "designation",
-            "points",
-            "old_odd",
-            "new_odd",
-            "movement_pct"
-        ])
-
-if not os.path.exists(STEAM_FILE):
-
-    with open(
-        STEAM_FILE,
         "w",
         newline="",
         encoding="utf-8"
@@ -516,15 +491,24 @@ while True:
                                         "steam_level": steam_level,
                                         "steam_odd": american_odd
                                     }
+
+                                    value_limit = calculate_value_limit(
+                                        american_to_decimal(old_odd),
+                                        american_to_decimal(american_odd),
+                                        movement_pct
+                                    )
+
                                     message = (
                                         f"⚾ STEAM DETECTAT ⚾\n\n"
                                         f"🏟️ {data['match_name']}\n"
                                         f"📈 {market['type']}\n"
                                         f"🎯 {designation} {points}\n\n"
-                                        f"💰 {american_to_decimal(old_odd):.3f} → {american_to_decimal(american_odd):.3f}\n"
-                                        f"📊 Moviment: {movement_pct}%\n"
+                                        f"💰 {american_to_decimal(old_odd):.3f} → {american_to_decimal(american_odd):.3f}\n\n"
+                                        f"✅ VALUE FINS:\n"
+                                        f"{value_limit:.3f}\n\n"
+                                        f"📊 Moviment: {movement_pct:.2f}%\n"
                                         f"🔥 Steam: {steam_level}"
-                                    )
+  )
 
                                     save_to_sheets({
                                         "league": data["league"],
