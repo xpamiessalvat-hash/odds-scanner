@@ -22,6 +22,7 @@ from core.config import (
 )
 from core.telegram import send_telegram
 from core.sheets import save_to_sheets
+from core.utils import american_to_decimal
 
 try:
     import requests
@@ -520,7 +521,7 @@ while True:
                                         f"🏟️ {data['match_name']}\n"
                                         f"📈 {market['type']}\n"
                                         f"🎯 {designation} {points}\n\n"
-                                        f"💰 {old_odd} → {american_odd}\n"
+                                        f"💰 {american_to_decimal(old_odd):.3f} → {american_to_decimal(american_odd):.3f}\n"
                                         f"📊 Moviment: {movement_pct}%\n"
                                         f"🔥 Steam: {steam_level}"
                                     )
@@ -536,7 +537,7 @@ while True:
                                         "strength": steam_level
                                     })
                                     send_telegram(message)
-                                    
+
                                     print("SHEETS ENVIAT", flush=True)
 
                                     print("TELEGRAM ENVIAT", flush=True)
