@@ -18,6 +18,7 @@ def send_telegram(message):
     }
 
     print(f"BOT_TOKEN={BOT_TOKEN}", flush=True)
+    print(f"CHAT_ID={CHAT_ID}", flush=True)
     print(f"URL={url}", flush=True)
     
     try:
