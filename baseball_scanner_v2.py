@@ -11,8 +11,10 @@ from datetime import datetime, timezone
 from core.utils import (
     american_to_decimal,
     calculate_value_limit,
+    calculate_baseball_steam_score,
     get_steam_level
 )
+
 from core.config import (
     CSV_FILE,
     STEAM_FILE,
@@ -288,9 +290,12 @@ def get_matchups():
 
                 matchup_id = matchup.get("id")
 
+                start_time = matchup.get("startTime")
+
                 matchup_map[matchup_id] = {
                     "match_name": f"{home} vs {away}",
-                    "league": league.get("name")
+                    "league": league.get("name"),
+                    "start_time": start_time
                 }
 
         except Exception as e:
@@ -314,7 +319,13 @@ while True:
         )
 
         for matchup_id, data in matchups.items():
+            start_time = datetime.fromisoformat(
+                data["start_time"].replace("Z", "+00:00")
+            )
 
+            hours_until_match = (
+                start_time - datetime.now(timezone.utc)
+            ).total_seconds() / 3600
             markets = get_markets(matchup_id)
 
             valids = 0
@@ -498,17 +509,25 @@ while True:
                                         movement_pct
                                     )
 
+                                    steam_score, strength = calculate_baseball_steam_score(
+                                        movement_pct,
+                                        market["type"],
+                                        hours_until_match
+                                    )
+
                                     message = (
-                                        f"⚾ STEAM DETECTAT ⚾\n\n"
-                                        f"🏟️ {data['match_name']}\n"
-                                        f"📈 {market['type']}\n"
-                                        f"🎯 {designation} {points}\n\n"
-                                        f"💰 {american_to_decimal(old_odd):.3f} → {american_to_decimal(american_odd):.3f}\n\n"
-                                        f"✅ VALUE FINS:\n"
-                                        f"{value_limit:.3f}\n\n"
-                                        f"📊 Moviment: {movement_pct:.2f}%\n"
-                                        f"🔥 Steam: {steam_level}"
-  )
+    f"⚾ STEAM DETECTAT ⚾\n\n"
+    f"🏟️ {data['match_name']}\n"
+    f"📈 {market['type']}\n"
+    f"🎯 {designation} {points}\n\n"
+    f"💰 {american_to_decimal(old_odd):.3f} → {american_to_decimal(american_odd):.3f}\n\n"
+    f"✅ VALUE FINS:\n"
+    f"{value_limit:.3f}\n\n"
+    f"📊 Moviment: {movement_pct:.2f}%\n"
+    f"⭐ Score: {steam_score:.1f}/100\n"
+    f"🔥 Strength: {strength}\n"
+    f"🕒 Kickoff: {hours_until_match:.1f}h"
+)
 
                                     save_to_sheets({
                                         "league": data["league"],

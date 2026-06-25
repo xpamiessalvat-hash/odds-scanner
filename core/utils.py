@@ -49,3 +49,65 @@ def calculate_value_limit(
         value_limit,
         3
     )
+
+
+def calculate_baseball_steam_score(
+    movement,
+    market_type,
+    hours_until_match
+):
+
+    movement_score = movement * 5
+
+    market_weight = {
+        "moneyline": 1.00,
+        "spread": 1.15,
+        "total": 1.10
+    }.get(
+        market_type,
+        1
+    )
+
+    if hours_until_match <= 1:
+
+        time_weight = 1.35
+
+    elif hours_until_match <= 2:
+
+        time_weight = 1.20
+
+    else:
+
+        time_weight = 1.00
+
+    score = round(
+        min(
+            100,
+            movement_score
+            * market_weight
+            * time_weight
+        ),
+        1
+    )
+
+    if score >= 85:
+
+        strength = "ELITE"
+
+    elif score >= 70:
+
+        strength = "HIGH"
+
+    elif score >= 55:
+
+        strength = "MEDIUM"
+
+    else:
+
+        strength = "LOW"
+
+    return score, strength
+    return round(
+        value_limit,
+        3
+    )
