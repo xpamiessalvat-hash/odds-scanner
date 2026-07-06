@@ -852,11 +852,12 @@ while True:
                                                 )
 
                                                 alert_key = (
-                                                    f"{matchup_id}-"
-                                                    f"{market_type}-"
-                                                    f"{side}-"
-                                                    f"{points}"
-                                                )
+    f"{matchup_id}-"
+    f"{market_type}-"
+    f"{side}-"
+    f"{points}-"
+    f"{round(decimal_odd, 3)}"
+)
 
                                                 last_alert = last_alerts.get(
                                                     alert_key,
