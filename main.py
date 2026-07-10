@@ -12,6 +12,7 @@ from datetime import (
 previous_odds = {}
 last_alerts = {}
 pending_steam = {}
+confirmed_steams = {}
 
 BOT_TOKEN = os.getenv(
     "BOT_TOKEN"
@@ -701,6 +702,11 @@ while True:
                                     and movement <= 25
                                 ):
                                     candidate_count += 1
+                                    if (
+                                        key in confirmed_steams
+                                        and confirmed_steams[key] == decimal_odd
+                                    ):
+                                        continue
                                     if key not in pending_steam:
 
                                         pending_steam[key] = {
@@ -889,15 +895,10 @@ while True:
                                                         "side": side
                                                     })
 
-                                                    send_telegram(
-                                                        message
-                                                    )
-
+                                                    send_telegram(message)
                                                     telegram_count += 1
-
-                                                    last_alerts[
-                                                        alert_key
-                                                    ] = current_time
+                                                    confirmed_steams[key] = decimal_odd
+                                                    last_alerts[alert_key] = current_time
 
                                                 del pending_steam[key]
                                             else:
@@ -914,7 +915,7 @@ while True:
                             f"ERROR MARKET: {e}",
                             flush=True
                         )
-                        
+
             except Exception as e:
 
                 print(
