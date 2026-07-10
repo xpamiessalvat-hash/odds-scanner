@@ -16,10 +16,6 @@ def send_telegram(message):
         "chat_id": CHAT_ID,
         "text": message
     }
-
-    print(f"BOT_TOKEN={BOT_TOKEN}", flush=True)
-    print(f"CHAT_ID={CHAT_ID}", flush=True)
-    print(f"URL={url}", flush=True)
     
     try:
         response = requests.post(

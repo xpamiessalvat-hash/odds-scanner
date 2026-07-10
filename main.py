@@ -861,8 +861,7 @@ while True:
     f"{matchup_id}-"
     f"{market_type}-"
     f"{side}-"
-    f"{points}-"
-    f"{round(decimal_odd, 3)}"
+    f"{points}"
 )
 
                                                 last_alert = last_alerts.get(

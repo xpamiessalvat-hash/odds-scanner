@@ -5,7 +5,52 @@ import os
 import urllib.request
 import urllib.error
 import traceback
+class MarketAnalyzer:
 
+    def __init__(self):
+
+        self.min_movement = 3.0
+        self.min_dominance = 70.0
+
+    def analyze(self, snapshot):
+
+        if len(snapshot["sides"]) != 2:
+            return None
+
+        side1 = snapshot["sides"][0]
+        side2 = snapshot["sides"][1]
+
+        if side1["movement"] >= side2["movement"]:
+            winner = side1
+            loser = side2
+        else:
+            winner = side2
+            loser = side1
+
+        total = (
+            winner["movement"]
+            + loser["movement"]
+        )
+
+        if total == 0:
+            return None
+
+        dominance = round(
+            winner["movement"] / total * 100,
+            1
+        )
+
+        if winner["movement"] < self.min_movement:
+            return None
+
+        if dominance < self.min_dominance:
+            return None
+
+        return {
+            "winner": winner,
+            "loser": loser,
+            "dominance": dominance
+        }
 from datetime import datetime, timezone
 
 from core.utils import (
@@ -47,6 +92,8 @@ session.headers.update(HEADERS)
 previous_odds = {}
 open_steams = {}
 last_steam = {}
+
+market_history = {}
 
 ALLOWED_LEAGUES = {
     246
@@ -195,6 +242,183 @@ def get_matchups():
     return matchup_map
 
 
+def update_market_history(history, key, new_decimal):
+    if key not in history:
+        history[key] = []
+
+    history[key].append({
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "value": new_decimal
+    })
+
+    return history[key]
+
+
+def build_market_snapshot(
+    matchup_id,
+    data,
+    market,
+    prices,
+    previous_odds
+):
+
+    snapshot = {
+        "matchup_id": matchup_id,
+        "match": data["match_name"],
+        "league": data["league"],
+        "market": market["type"],
+        "period": market["period"],
+        "points": prices[0].get("points", ""),
+        "sides": []
+    }
+
+    for price in prices:
+
+        designation = price.get("designation")
+        american = price.get("price")
+        points = price.get("points", "")
+
+        key = (
+            matchup_id,
+            market["type"],
+            designation,
+            points
+        )
+
+        if key not in previous_odds:
+            continue
+
+        old_american = previous_odds[key]
+
+        old_decimal = american_to_decimal(old_american)
+        new_decimal = american_to_decimal(american)
+
+        movement = round(
+            abs(new_decimal - old_decimal)
+            / old_decimal
+            * 100,
+            2
+        )
+
+        snapshot["sides"].append({
+            "designation": designation,
+            "points": points,
+            "old_american": old_american,
+            "new_american": american,
+            "old_decimal": old_decimal,
+            "new_decimal": new_decimal,
+            "movement": movement,
+            "key": key
+        })
+
+    return snapshot
+
+def analyze_market(snapshot):
+
+    sides = snapshot["sides"]
+
+    if len(sides) != 2:
+        return None
+
+    side1 = sides[0]
+    side2 = sides[1]
+
+    diff = abs(
+        side1["movement"] - side2["movement"]
+    )
+
+    # Si els dos costats es mouen gairebé igual,
+    # no hi ha direcció clara.
+    if diff < 2:
+        return None
+
+    if side1["movement"] > side2["movement"]:
+        winner = side1
+        loser = side2
+    else:
+        winner = side2
+        loser = side1
+
+    dominance = round(
+        winner["movement"] / (
+            winner["movement"] + loser["movement"]
+        ) * 100,
+        1
+    )
+
+    return {
+        "winner": winner,
+        "loser": loser,
+        "dominance": dominance,
+        "difference": diff,
+        "snapshot": snapshot
+    }
+
+def generate_steam(analyzed_market):
+
+    if analyzed_market is None:
+        return None
+
+    winner = analyzed_market["winner"]
+    snapshot = analyzed_market["snapshot"]
+
+    movement = winner["movement"]
+    dominance = analyzed_market["dominance"]
+
+    # Filtres mínims
+    if movement < 3:
+        return None
+
+    if dominance < 70:
+        return None
+
+    steam_score = round(
+        movement * 8 +
+        (dominance - 50),
+        1
+    )
+
+    steam_score = min(100, steam_score)
+
+    if steam_score >= 90:
+        strength = "ELITE"
+    elif steam_score >= 75:
+        strength = "HIGH"
+    elif steam_score >= 60:
+        strength = "MEDIUM"
+    else:
+        strength = "LOW"
+
+    return {
+        "matchup_id": snapshot["matchup_id"],
+        "match": snapshot["match"],
+        "league": snapshot["league"],
+        "market": snapshot["market"],
+        "points": snapshot["points"],
+        "designation": winner["designation"],
+        "old_decimal": winner["old_decimal"],
+        "new_decimal": winner["new_decimal"],
+        "movement": movement,
+        "dominance": dominance,
+        "steam_score": steam_score,
+        "strength": strength
+    }
+
+def is_continuous_steam(history):
+
+    if len(history) < 3:
+        return True
+
+    odds = [x["value"] for x in history]
+
+    # Comprovem que la quota continua baixant
+    decreasing = all(
+        odds[i] >= odds[i + 1]
+        for i in range(len(odds) - 1)
+    )
+
+    return decreasing
+
 while True:
 
     try:
@@ -287,6 +511,15 @@ while True:
                                 american_odd
                             )
 
+                            history = update_market_history(
+                                market_history,
+                                key,
+                                new_decimal
+                            )
+
+                            if not is_continuous_steam(history):
+                                continue
+
                             movement_pct = round(
                                 (
                                     abs(
@@ -297,22 +530,7 @@ while True:
                                 2
                             )
 
-                            market_key = (
-                                matchup_id,
-                                market["type"],
-                                points
-                            )
-
-                            if (
-                                market_key not in market_leaders
-                                or movement_pct > market_leaders[market_key]["movement"]
-                            ):
-
-                                market_leaders[market_key] = {
-                                    "designation": designation,
-                                    "movement": movement_pct
-                                }
-
+                           
                             print(
                                 f"MOVIMENT: "
                                 f"{data['match_name']} | "
@@ -370,19 +588,6 @@ while True:
 
                                 if should_write_steam:
 
-                                    market_key = (
-                                        matchup_id,
-                                        market["type"],
-                                        points
-                                    )
-
-                                    leader = market_leaders.get(market_key)
-
-                                    if leader is not None:
-
-                                        if leader["designation"] != designation:
-
-                                            continue
 
                                     steam_level = get_steam_level(
                                         movement_pct
