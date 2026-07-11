@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from core.models import (
     MarketSnapshot,
     MarketSignal,
@@ -12,42 +13,183 @@ class MarketEngine:
         self.min_movement = 3.0
         self.min_dominance = 70.0
 
+    def _calculate_movement(
+        self,
+        old_decimal,
+        new_decimal
+    ):
+
+        return round(
+            (
+                old_decimal - new_decimal
+            )
+            / old_decimal
+            * 100,
+            2
+        )
+
+    def _calculate_confidence(
+        self,
+        movement,
+        dominance
+    ):
+
+        confidence = (
+            movement * 10
+            + dominance
+        ) / 2
+
+        return round(
+            min(confidence, 100),
+            1
+        )
+
     def analyze(
         self,
         snapshot: MarketSnapshot
-    ) -> MarketSignal:
+    ) -> MarketSignal | None:
 
         if len(snapshot.sides) != 2:
             return None
 
-        side1 = snapshot.sides[0]
-        side2 = snapshot.sides[1]
+        movements = []
 
-        winner = (
-            side1
-            if side1.movement >= side2.movement
-            else side2
+        for side in snapshot.sides:
+
+            movement = self._calculate_movement(
+                side.old_decimal,
+                side.new_decimal
+            )
+
+            movements.append(
+                (
+                    side,
+                    movement
+                )
+            )
+
+        # Només considerem moviments favorables (quota baixant)
+        positive = [
+            (side, movement)
+            for side, movement in movements
+            if movement > 0
+        ]
+
+        if not positive:
+            return None
+
+        winner, winner_move = max(
+            positive,
+            key=lambda x: x[1]
         )
 
-        loser = (
-            side2
-            if winner is side1
-            else side1
+        loser = next(
+            side
+            for side in snapshot.sides
+            if side != winner
         )
 
-        total = (
-            winner.movement
-            + loser.movement
+        loser_move = self._calculate_movement(
+            loser.old_decimal,
+            loser.new_decimal
         )
 
-        if total == 0:
+        total = winner_move + max(
+            loser_move,
+            0
+        )
+
+        if total <= 0:
             return None
 
         dominance = round(
-            winner.movement
+            winner_move
             / total
             * 100,
             1
         )
 
-        return None
+        difference = round(
+            winner_move - max(
+                loser_move,
+                0
+            ),
+            2
+        )
+
+        if difference < 2:
+            return None
+
+        if winner_move < self.min_movement:
+            return None
+
+        if dominance < self.min_dominance:
+            return None
+
+        confidence = self._calculate_confidence(
+            winner_move,
+            dominance
+        )
+
+        if winner.designation.lower() in (
+            "over",
+            "under",
+            "home",
+            "away"
+        ):
+
+            direction = winner.designation.lower()
+
+        else:
+
+            direction = winner.designation
+
+        return MarketSignal(
+
+            state="CLEAR_STEAM",
+
+            direction=direction,
+
+            match=snapshot.match,
+
+            league=snapshot.league,
+
+            market=snapshot.market,
+
+            selection=winner.designation,
+
+            winner=winner,
+
+            loser=loser,
+
+            value_limit=None,
+
+            movement=winner_move,
+
+            dominance=dominance,
+
+            steam_score=round(
+                confidence
+            ),
+
+            strength="PENDING",
+
+            confidence=confidence
+
+        )
+
+
+@dataclass
+class MarketAnalysis:
+
+    winner: MarketSide
+
+    loser: MarketSide
+
+    movement: float
+
+    dominance: float
+
+    confidence: float
+
+    direction: str

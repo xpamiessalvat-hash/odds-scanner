@@ -1,3 +1,11 @@
+from core.snapshot_builder import (
+    build_snapshot
+)
+
+from core.market_engine import (
+    MarketEngine
+)
+
 import time
 import json
 import csv
@@ -5,6 +13,7 @@ import os
 import urllib.request
 import urllib.error
 import traceback
+
 class MarketAnalyzer:
 
     def __init__(self):
@@ -418,7 +427,7 @@ def is_continuous_steam(history):
     )
 
     return decreasing
-
+market_engine = MarketEngine()
 while True:
 
     try:
@@ -468,6 +477,50 @@ while True:
                     continue
 
                 valids += 1
+                snapshot = build_snapshot(
+                    matchup_id,
+                    data,
+                    market,
+                    prices,
+                    previous_odds
+                )
+
+                if snapshot is None:
+                    continue
+
+                signal = market_engine.analyze(
+                    snapshot
+                )
+
+                if signal is None:
+                    continue
+
+                print(
+                    f"SIGNAL -> "
+                    f"{signal.selection} | "
+                    f"Move={signal.movement:.2f}% | "
+                    f"Dom={signal.dominance:.1f}% | "
+                    f"Conf={signal.confidence:.1f}",
+                    flush=True
+                )
+
+                snapshot = build_market_snapshot(
+                    matchup_id,
+                    data,
+                    market,
+                    prices,
+                    previous_odds
+                )
+
+                if snapshot is None:
+                    continue
+
+                signal = analyze_market(
+                    snapshot
+                )
+
+                if signal is None:
+                    continue
 
                 for price in prices:
 
