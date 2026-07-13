@@ -430,11 +430,9 @@ while True:
                                         movement_pct
                                     )
 
-                                    steam_score, strength = calculate_baseball_steam_score(
-                                        movement_pct,
-                                        market["type"],
-                                        hours_until_match
-                                    )
+                                    steam_score = steam_level
+
+                                    strength = steam_level
 
                                     message = (
     f"⚾ STEAM DETECTAT ⚾\n\n"

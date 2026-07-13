@@ -9,15 +9,28 @@ from core.models import (
 class MarketEngine:
 
     def __init__(self):
-
         self.min_movement = 3.0
         self.min_dominance = 70.0
+        self.debug = True
+
+    def _debug(
+        self,
+        message
+    ):
+
+        if self.debug:
+
+            print(
+                message,
+                flush=True
+            )
 
     def _calculate_movement(
         self,
         old_decimal,
         new_decimal
     ):
+        ...
 
         return round(
             (
@@ -121,9 +134,28 @@ class MarketEngine:
             return None
 
         if winner_move < self.min_movement:
+            if winner_move >= 2.0:
+                self._debug(
+                    f"NEAR STEAM | "
+                    f"{snapshot.league} | "
+                    f"{snapshot.match} | "
+                    f"Movement={winner_move:.2f}% "
+                    f"(mínim {self.min_movement}%)"
+                )
             return None
 
         if dominance < self.min_dominance:
+
+            if dominance >= 60:
+
+                self._debug(
+                    f"NEAR STEAM | "
+                    f"{snapshot.league} | "
+                    f"{snapshot.match} | "
+                    f"Dominance={dominance:.1f}% "
+                    f"(mínim {self.min_dominance}%)"
+                )
+
             return None
 
         confidence = self._calculate_confidence(
@@ -143,6 +175,15 @@ class MarketEngine:
         else:
 
             direction = winner.designation
+
+        self._debug(
+            f"STEAM ACCEPTAT | "
+            f"{snapshot.league} | "
+            f"{snapshot.match} | "
+            f"{winner.designation} | "
+            f"Move={winner_move:.2f}% | "
+            f"Dom={dominance:.1f}%"
+        )
 
         return MarketSignal(
 

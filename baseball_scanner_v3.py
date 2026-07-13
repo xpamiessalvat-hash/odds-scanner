@@ -477,6 +477,7 @@ while True:
                     continue
 
                 valids += 1
+
                 snapshot = build_snapshot(
                     matchup_id,
                     data,
@@ -504,29 +505,12 @@ while True:
                     flush=True
                 )
 
-                snapshot = build_market_snapshot(
-                    matchup_id,
-                    data,
-                    market,
-                    prices,
-                    previous_odds
-                )
-
-                if snapshot is None:
-                    continue
-
-                signal = analyze_market(
-                    snapshot
-                )
-
-                if signal is None:
-                    continue
 
                 for price in prices:
+                    designation = price.get("designation")
 
-                    designation = price.get(
-                        "designation"
-                    )
+                    if designation != signal.selection:
+                        continue
 
                     points = price.get(
                         "points",
@@ -544,46 +528,26 @@ while True:
                         points
                     )
 
-                    key_data = {
-                        "match": data["match_name"],
-                        "market": market["type"],
-                        "designation": designation,
-                        "points": points
-                    }
 
                     if key in previous_odds:
                         old_odd = previous_odds[key]
 
                         if old_odd != american_odd:
 
-                            old_decimal = american_to_decimal(
-                                old_odd
-                            )
-
-                            new_decimal = american_to_decimal(
-                                american_odd
-                            )
+                            new_decimal = american_to_decimal(american_odd)
 
                             history = update_market_history(
-                                market_history,
-                                key,
+                                market_history,                              key,
                                 new_decimal
                             )
 
                             if not is_continuous_steam(history):
                                 continue
 
-                            movement_pct = round(
-                                (
-                                    abs(
-                                        new_decimal - old_decimal
-                                    )
-                                    / old_decimal
-                                ) * 100,
-                                2
-                            )
+                            movement_pct = signal.movement
+                            steam_score = signal.steam_score
+                            strength = signal.strength
 
-                           
                             print(
                                 f"MOVIMENT: "
                                 f"{data['match_name']} | "
@@ -617,8 +581,7 @@ while True:
                                     american_odd,
                                     movement_pct
                                 ])
-
-                            if movement_pct >= 3:
+                                
                                 steam_key = (
                                     matchup_id,
                                     market["type"],
@@ -640,12 +603,7 @@ while True:
                                         should_write_steam = False
 
                                 if should_write_steam:
-
-
-                                    steam_level = get_steam_level(
-                                        movement_pct
-                                    )
-
+                                    
                                     with open(
                                         STEAM_FILE,
                                         "a",
@@ -667,7 +625,7 @@ while True:
                                             old_odd,
                                             american_odd,
                                             movement_pct,
-                                            steam_level
+                                            strength
                                         ])
 
                                     last_steam[steam_key] = current_time
@@ -678,7 +636,7 @@ while True:
                                         "market": market["type"],
                                         "designation": designation,
                                         "points": points,
-                                        "steam_level": steam_level,
+                                        "steam_level": signal.strength,
                                         "steam_odd": american_odd
                                     }
 
@@ -687,26 +645,20 @@ while True:
                                         american_to_decimal(american_odd),
                                         movement_pct
                                     )
-
-                                    steam_score, strength = calculate_baseball_steam_score(
-                                        movement_pct,
-                                        market["type"],
-                                        hours_until_match
-                                    )
-
+                                    
                                     message = (
-    f"⚾ STEAM DETECTAT ⚾\n\n"
-    f"🏟️ {data['match_name']}\n"
-    f"📈 {market['type']}\n"
-    f"🎯 {designation} {points}\n\n"
-    f"💰 {american_to_decimal(old_odd):.3f} → {american_to_decimal(american_odd):.3f}\n\n"
-    f"✅ VALUE FINS:\n"
-    f"{value_limit:.3f}\n\n"
-    f"📊 Moviment: {movement_pct:.2f}%\n"
-    f"⭐ Score: {steam_score:.1f}/100\n"
-    f"🔥 Strength: {strength}\n"
-    f"🕒 Kickoff: {hours_until_match:.1f}h"
-)
+                                        f"⚾ STEAM DETECTAT ⚾\n\n"
+                                        f"🏟️ {data['match_name']}\n"
+                                        f"📈 {market['type']}\n"
+                                        f"🎯 {designation} {points}\n\n"
+                                        f"💰 {american_to_decimal(old_odd):.3f} → {american_to_decimal(american_odd):.3f}\n\n"
+                                        f"✅ VALUE FINS:\n"
+                                        f"{value_limit:.3f}\n\n"
+                                        f"📊 Moviment: {movement_pct:.2f}%\n"
+                                        f"⭐ Score: {steam_score:.1f}/100\n"
+                                        f"🔥 Strength: {strength}\n"
+                                        f"🕒 Kickoff: {hours_until_match:.1f}h"
+                                    )
 
                                     save_to_sheets({
                                         "league": data["league"],
@@ -715,8 +667,8 @@ while True:
                                         "selection": f"{designation} {points}",
                                         "entry_odds": american_odd,
                                         "steam_percent": movement_pct,
-                                        "steam_score": steam_level,
-                                        "strength": steam_level
+                                        "steam_score": steam_score,
+                                        "strength": strength
                                     })
                                     send_telegram(message)
 
@@ -743,4 +695,5 @@ while True:
             flush=True
         )
 
-    time.sleep(60)
+    finally:
+        time.sleep(60)
