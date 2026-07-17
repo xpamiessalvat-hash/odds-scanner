@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# VS Code
+.vscode/
+
+# Variables d'entorn
+.env
