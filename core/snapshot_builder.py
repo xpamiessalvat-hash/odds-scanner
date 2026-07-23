@@ -68,6 +68,28 @@ def build_snapshot(
         sides.append(side)
 
     if len(sides) != 2:
+        print(
+            f"SNAPSHOT DESCARTAT | {data['match_name']} | "
+            f"{market['type']} | sides={len(sides)}",
+            flush=True
+        )
+
+        for price in prices:
+            designation = price.get("designation")
+            points = price.get("points", "")
+
+            key = (
+                matchup_id,
+                market["type"],
+                designation,
+                points
+            )
+
+            print(
+                f"  {designation} {points} -> {'OK' if key in previous_odds else 'NO'}",
+                flush=True
+            )
+
         return None
 
     designations = {

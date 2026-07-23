@@ -22,6 +22,9 @@ class MarketAnalyzer:
         self.min_dominance = 70.0
 
     def analyze(self, snapshot):
+        self._debug(
+    f"ANALYZE -> {snapshot.match} | {snapshot.market} | {snapshot.period}"
+)
 
         if len(snapshot["sides"]) != 2:
             return None
@@ -450,11 +453,14 @@ while True:
                 start_time - datetime.now(timezone.utc)
             ).total_seconds() / 3600
             markets = get_markets(matchup_id)
-
+            print(f"{data['match_name']} -> markets={len(markets)}", flush=True)
             valids = 0
 
             for market in markets:
-
+                print(
+                    f"Market: {market.get('type')} period={market.get('period')} prices={len(market.get('prices', []))}",
+                    flush=True
+                )
                 prices = market.get("prices", [])
 
                 if len(prices) != 2:
@@ -478,6 +484,7 @@ while True:
 
                 valids += 1
 
+                print("ARRIBA A BUILD_SNAPSHOT", flush=True)
                 snapshot = build_snapshot(
                     matchup_id,
                     data,
@@ -487,6 +494,7 @@ while True:
                 )
 
                 if snapshot is None:
+                    print("SNAPSHOT = NONE", flush=True)
                     continue
 
                 signal = market_engine.analyze(
@@ -494,6 +502,10 @@ while True:
                 )
 
                 if signal is None:
+                    print(
+                        f"SIGNAL NONE -> {data['match_name']} | {market['type']}",
+                        flush=True
+                    )
                     continue
 
                 print(

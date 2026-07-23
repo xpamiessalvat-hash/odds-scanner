@@ -143,8 +143,15 @@ def get_matchups():
                 matchups_url,
                 timeout=30
             )
-
+            print(
+                f"LEAGUE {league_id} MATCHUPS STATUS: {r.status_code}",
+                flush=True
+            )
             if r.status_code != 200:
+                print(
+                    f"ERROR MATCHUPS {league_id}: {r.text[:200]}",
+                    flush=True
+                )
                 continue
 
             matchups = r.json()
