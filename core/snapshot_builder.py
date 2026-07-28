@@ -40,7 +40,44 @@ def build_snapshot(
             points
         )
 
+        print(
+            f"BUSCANT: {repr(key)}",
+            flush=True
+        )
+
         if key not in previous_odds:
+
+            print(
+                "NO TROBADA",
+                flush=True
+            )
+
+            if previous_odds:
+
+                coincidencies = [
+                    k
+                    for k in previous_odds.keys()
+                    if k[0] == matchup_id
+                ]
+
+                print(
+                    f"CLAUS PER MATCHUP {matchup_id}: {len(coincidencies)}",
+                    flush=True
+                )
+
+                if coincidencies:
+
+                    print(
+                        "CLAUS DEL MATCHUP:",
+                        flush=True
+                    )
+
+                    for k in coincidencies:
+                        print(
+                            f"   {repr(k)}",
+                            flush=True
+                        )
+
             continue
 
         old_american = previous_odds[key]
@@ -68,15 +105,25 @@ def build_snapshot(
         sides.append(side)
 
     if len(sides) != 2:
+
         print(
-            f"SNAPSHOT DESCARTAT | {data['match_name']} | "
-            f"{market['type']} | sides={len(sides)}",
+            f"SNAPSHOT DESCARTAT | "
+            f"{data['match_name']} | "
+            f"{market['type']} | "
+            f"sides={len(sides)}",
             flush=True
         )
 
         for price in prices:
-            designation = price.get("designation")
-            points = price.get("points", "")
+
+            designation = price.get(
+                "designation"
+            )
+
+            points = price.get(
+                "points",
+                ""
+            )
 
             key = (
                 matchup_id,
@@ -86,7 +133,8 @@ def build_snapshot(
             )
 
             print(
-                f"  {designation} {points} -> {'OK' if key in previous_odds else 'NO'}",
+                f"  {designation} {points} -> "
+                f"{'OK' if key in previous_odds else 'NO'}",
                 flush=True
             )
 

@@ -98,6 +98,11 @@ def get_matchups():
         timeout=30
     )
 
+    print(f"LEAGUES URL: {LEAGUES_URL}", flush=True)
+    print(f"STATUS LEAGUES: {response.status_code}", flush=True)
+    print(f"HEADERS: {dict(response.headers)}", flush=True)
+    print(f"BODY: {response.text[:500]}", flush=True)
+
     if response.status_code == 401:
         print(
             "PINNACLE BLOCK TEMPORAL - ESPERANT 5 MINUTS",

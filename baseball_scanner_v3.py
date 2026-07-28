@@ -297,7 +297,15 @@ def build_market_snapshot(
             points
         )
 
+        print(f"BUSCANT KEY: {key}")
+
         if key not in previous_odds:
+            print("NO TROBADA")
+
+            if previous_odds:
+                print("EXEMPLE KEY GUARDADA:")
+                print(next(iter(previous_odds.keys())))
+
             continue
 
         old_american = previous_odds[key]
@@ -485,6 +493,11 @@ while True:
                 valids += 1
 
                 print("ARRIBA A BUILD_SNAPSHOT", flush=True)
+                print(
+                    f"PREVIOUS_ODDS ABANS SNAPSHOT = {len(previous_odds)}",
+                    flush=True
+                )
+
                 snapshot = build_snapshot(
                     matchup_id,
                     data,
@@ -494,7 +507,30 @@ while True:
                 )
 
                 if snapshot is None:
+
                     print("SNAPSHOT = NONE", flush=True)
+
+                    # Primera passada: guardem les quotes
+                    for price in prices:
+
+                        designation = price.get("designation")
+                        points = price.get("points", "")
+                        american_odd = price.get("price")
+
+                        key = (
+                            matchup_id,
+                            market["type"],
+                            designation,
+                            points
+                        )
+
+                        previous_odds[key] = american_odd
+
+                    print(
+                        f"GUARDAT -> {market['type']} | {designation} | {points}",
+                        flush=True
+                    )
+
                     continue
 
                 signal = market_engine.analyze(
@@ -692,13 +728,17 @@ while True:
                                         f"STEAM DETECTAT | Actius: {len(open_steams)}",
                                         flush=True
                                     )
+                                    print(f"GUARDANT: {repr(key)}", flush=True)
+                                    previous_odds[key] = american_odd
 
-                    previous_odds[key] = american_odd
-
-                print(
-                    f"{data['match_name']} -> {valids}",
-                    flush=True
-                )
+                            print(
+                                f"GUARDANT {repr(key)}  TOTAL={len(previous_odds)}",
+                                flush=True
+                            )
+            print(
+                f"{data['match_name']} -> {valids}",
+                flush=True
+            )
 
     except Exception as e:
 

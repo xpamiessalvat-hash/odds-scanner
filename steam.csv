@@ -82,3 +82,774 @@ timestamp;match;market;designation;points;old_odd;new_odd;movement_pct;steam_lev
 2026-06-19T16:05:52.424173+00:00;Kansas City Royals vs St. Louis Cardinals;total;over;9.0;-108;-116;3.32;BRONZE
 2026-06-19T16:05:52.438042+00:00;Kansas City Royals vs St. Louis Cardinals;total;under;9.0;-104;103;3.49;BRONZE
 2026-06-19T16:05:52.438042+00:00;Kansas City Royals vs St. Louis Cardinals;total;under;9.0;-104;103;3.49;BRONZE
+2026-07-23T13:56:52.784542+00:00;St. Louis Cardinals vs Arizona Diamondbacks;total;over;7.5;-110;-103;3.24;BRONZE
+2026-07-23T13:58:53.316443+00:00;St. Louis Cardinals vs Arizona Diamondbacks;total;under;7.5;-102;-109;3.18;BRONZE
+2026-07-23T14:03:22.180873+00:00;St. Louis Cardinals vs Arizona Diamondbacks;total;over;7.5;-110;-103;3.24;BRONZE
+2026-07-23T14:05:22.627226+00:00;St. Louis Cardinals vs Arizona Diamondbacks;total;under;7.5;-102;-109;3.18;BRONZE
+2026-07-23T18:13:17.004862+00:00;St. Louis Cardinals vs Arizona Diamondbacks;moneyline;home;;-114;-107;3.06;BRONZE
+2026-07-23T18:13:33.535102+00:00;St. Louis Cardinals vs Arizona Diamondbacks;moneyline;away;;107;-101;3.86;PENDING
+2026-07-23T18:13:47.954518+00:00;St. Louis Cardinals vs Arizona Diamondbacks;moneyline;home;;-114;-107;3.06;BRONZE
+2026-07-23T18:14:17.115919+00:00;St. Louis Cardinals vs Arizona Diamondbacks;moneyline;away;;106;-101;3.39;BRONZE
+2026-07-23T18:14:48.070364+00:00;St. Louis Cardinals vs Arizona Diamondbacks;moneyline;away;;106;-101;3.39;BRONZE
+2026-07-23T18:28:19.075312+00:00;Toronto Blue Jays vs Tampa Bay Rays;total;over;8.5;-112;-103;4.12;BRONZE
+2026-07-23T18:28:42.475578+00:00;Toronto Blue Jays vs Tampa Bay Rays;total;under;8.5;-102;-109;3.18;PENDING
+2026-07-23T18:28:50.283801+00:00;Toronto Blue Jays vs Tampa Bay Rays;total;over;8.5;-112;-103;4.12;BRONZE
+2026-07-23T18:29:19.210229+00:00;Toronto Blue Jays vs Tampa Bay Rays;total;under;8.5;100;-109;4.13;BRONZE
+2026-07-23T18:29:50.437349+00:00;Toronto Blue Jays vs Tampa Bay Rays;total;under;8.5;100;-109;4.13;BRONZE
+2026-07-23T18:43:21.711699+00:00;St. Louis Cardinals vs Arizona Diamondbacks;total;over;7.5;100;-115;6.52;SILVER
+2026-07-23T18:43:49.278031+00:00;St. Louis Cardinals vs Arizona Diamondbacks;total;over;7.5;101;-115;6.99;PENDING
+2026-07-23T18:43:52.734265+00:00;St. Louis Cardinals vs Arizona Diamondbacks;total;over;7.5;100;-115;6.52;SILVER
+2026-07-23T18:44:21.879583+00:00;St. Louis Cardinals vs Arizona Diamondbacks;total;under;7.5;-113;102;7.16;SILVER
+2026-07-23T18:44:52.884706+00:00;St. Louis Cardinals vs Arizona Diamondbacks;total;under;7.5;-113;102;7.16;SILVER
+2026-07-23T20:29:06.140442+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;201;189;3.99;BRONZE
+2026-07-23T20:29:35.653523+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;201;189;3.99;BRONZE
+2026-07-23T22:29:27.032664+00:00;Detroit Tigers vs Kansas City Royals;spread;home;-1.5;-103;-112;3.96;PENDING
+2026-07-23T22:44:30.995492+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;195;186;3.05;BRONZE
+2026-07-23T22:44:35.219672+00:00;Detroit Tigers vs Kansas City Royals;total;under;8.5;-107;-116;3.75;PENDING
+2026-07-24T02:29:20.482536+00:00;Chicago White Sox vs Houston Astros;moneyline;away;;130;121;3.91;PENDING
+2026-07-24T03:47:04.196089+00:00;Chicago White Sox vs Houston Astros;spread;away;1.5;-163;-177;3.01;PENDING
+2026-07-24T03:50:11.092333+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;8.5;101;-106;3.31;PENDING
+2026-07-24T03:52:49.720521+00:00;Pittsburgh Pirates vs Chicago Cubs;total;over;8.0;-114;-104;4.49;BRONZE
+2026-07-24T03:53:17.672228+00:00;Pittsburgh Pirates vs Chicago Cubs;total;under;8.0;-100;-110;4.55;PENDING
+2026-07-24T03:53:33.078238+00:00;Pittsburgh Pirates vs Chicago Cubs;total;over;8.0;-114;-104;4.49;BRONZE
+2026-07-24T03:53:50.033280+00:00;Pittsburgh Pirates vs Chicago Cubs;total;under;8.0;-100;-110;4.55;BRONZE
+2026-07-24T03:54:33.281709+00:00;Pittsburgh Pirates vs Chicago Cubs;total;under;8.0;-100;-110;4.55;BRONZE
+2026-07-24T03:56:51.842078+00:00;Chicago White Sox vs Houston Astros;total;under;8.5;-101;105;3.01;BRONZE
+2026-07-24T03:57:24.624027+00:00;Chicago White Sox vs Houston Astros;total;over;8.5;-111;-120;3.55;PENDING
+2026-07-24T03:57:34.834136+00:00;Chicago White Sox vs Houston Astros;total;under;8.5;-101;105;3.01;BRONZE
+2026-07-24T04:00:29.931952+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;134;126;3.42;PENDING
+2026-07-24T04:35:45.525815+00:00;Milwaukee Brewers vs Colorado Rockies;spread;home;-1.5;-105;-112;3.05;PENDING
+2026-07-24T05:36:18.429246+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;8.5;-106;-114;3.41;PENDING
+2026-07-24T07:16:49.772571+00:00;Minnesota Twins vs Athletics;moneyline;home;;-145;-129;5.06;SILVER
+2026-07-24T07:17:11.010256+00:00;Minnesota Twins vs Athletics;moneyline;away;;125;117;3.56;PENDING
+2026-07-24T07:17:25.081132+00:00;Minnesota Twins vs Athletics;moneyline;home;;-145;-129;5.06;SILVER
+2026-07-24T07:17:50.575036+00:00;Minnesota Twins vs Athletics;moneyline;away;;131;117;6.06;SILVER
+2026-07-24T07:18:25.704117+00:00;Minnesota Twins vs Athletics;moneyline;away;;131;117;6.06;SILVER
+2026-07-24T07:24:51.776860+00:00;Minnesota Twins vs Athletics;spread;home;-1.5;139;150;4.6;BRONZE
+2026-07-24T07:25:26.828130+00:00;Minnesota Twins vs Athletics;spread;home;-1.5;139;150;4.6;BRONZE
+2026-07-24T07:25:52.362778+00:00;Minnesota Twins vs Athletics;spread;away;1.5;-157;-171;3.19;BRONZE
+2026-07-24T07:26:27.429557+00:00;Minnesota Twins vs Athletics;spread;away;1.5;-157;-171;3.19;BRONZE
+2026-07-24T11:40:37.539141+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;108;-101;4.32;PENDING
+2026-07-24T11:49:58.630081+00:00;Philadelphia Phillies vs New York Yankees;moneyline;away;;115;123;3.72;BRONZE
+2026-07-24T11:50:30.876967+00:00;Philadelphia Phillies vs New York Yankees;moneyline;away;;115;123;3.72;BRONZE
+2026-07-24T12:25:47.587572+00:00;Boston Red Sox vs Toronto Blue Jays;total;over;8.5;-105;-119;5.74;SILVER
+2026-07-24T12:26:07.729820+00:00;Boston Red Sox vs Toronto Blue Jays;total;over;8.5;-107;-119;4.87;PENDING
+2026-07-24T12:26:18.976416+00:00;Boston Red Sox vs Toronto Blue Jays;total;over;8.5;-105;-119;5.74;SILVER
+2026-07-24T12:26:48.004510+00:00;Boston Red Sox vs Toronto Blue Jays;total;under;8.5;-107;106;6.48;SILVER
+2026-07-24T12:27:19.353796+00:00;Boston Red Sox vs Toronto Blue Jays;total;under;8.5;-107;106;6.48;SILVER
+2026-07-24T12:47:59.303644+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;131;124;3.03;BRONZE
+2026-07-24T12:48:27.888207+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;131;124;3.03;BRONZE
+2026-07-24T12:50:22.609981+00:00;Philadelphia Phillies vs New York Yankees;total;under;7.5;101;-116;7.36;PENDING
+2026-07-24T12:50:28.693937+00:00;Philadelphia Phillies vs New York Yankees;total;over;7.5;-110;103;6.33;SILVER
+2026-07-24T12:51:00.659435+00:00;Philadelphia Phillies vs New York Yankees;total;over;7.5;-110;103;6.33;SILVER
+2026-07-24T12:52:29.492452+00:00;Philadelphia Phillies vs New York Yankees;total;under;7.5;-102;-116;5.97;SILVER
+2026-07-24T12:53:01.436196+00:00;Philadelphia Phillies vs New York Yankees;total;under;7.5;-102;-116;5.97;SILVER
+2026-07-24T13:05:35.786125+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.0;-100;-107;3.27;PENDING
+2026-07-24T13:05:37.705095+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.0;-114;-105;4.01;BRONZE
+2026-07-24T13:06:05.792409+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.0;-114;-105;4.01;BRONZE
+2026-07-24T13:37:20.395264+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;-104;-111;3.09;BRONZE
+2026-07-24T13:37:49.113461+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;-104;-111;3.09;BRONZE
+2026-07-24T13:37:53.060627+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;126;118;3.54;PENDING
+2026-07-24T13:37:57.214710+00:00;New York Mets vs Los Angeles Dodgers;spread;home;1.5;-124;-135;3.64;PENDING
+2026-07-24T13:38:01.020337+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;-101;-111;4.48;PENDING
+2026-07-24T13:38:04.935861+00:00;St. Louis Cardinals vs Cincinnati Reds;moneyline;away;;142;133;3.72;PENDING
+2026-07-24T13:38:20.862287+00:00;St. Louis Cardinals vs Cincinnati Reds;moneyline;home;;-159;-145;3.73;BRONZE
+2026-07-24T13:38:49.594803+00:00;St. Louis Cardinals vs Cincinnati Reds;moneyline;home;;-159;-145;3.73;BRONZE
+2026-07-24T13:39:21.279094+00:00;St. Louis Cardinals vs Cincinnati Reds;moneyline;away;;146;133;5.28;SILVER
+2026-07-24T13:39:50.085761+00:00;St. Louis Cardinals vs Cincinnati Reds;moneyline;away;;146;133;5.28;SILVER
+2026-07-24T13:40:21.695085+00:00;St. Louis Cardinals vs Cincinnati Reds;spread;home;-1.5;133;146;5.58;SILVER
+2026-07-24T13:40:50.689954+00:00;St. Louis Cardinals vs Cincinnati Reds;spread;home;-1.5;133;146;5.58;SILVER
+2026-07-24T13:41:22.120986+00:00;St. Louis Cardinals vs Cincinnati Reds;spread;away;1.5;-147;-162;3.75;BRONZE
+2026-07-24T13:41:51.192797+00:00;St. Louis Cardinals vs Cincinnati Reds;spread;away;1.5;-147;-162;3.75;BRONZE
+2026-07-24T13:53:27.931553+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-137;-126;3.68;BRONZE
+2026-07-24T13:53:58.004040+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-137;-126;3.68;BRONZE
+2026-07-24T13:54:28.214345+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;127;116;4.85;BRONZE
+2026-07-24T13:54:58.292198+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;127;116;4.85;BRONZE
+2026-07-24T13:55:28.505218+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;157;172;5.84;SILVER
+2026-07-24T13:55:58.619942+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;157;172;5.84;SILVER
+2026-07-24T13:56:28.801918+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;away;1.5;-175;-193;3.39;BRONZE
+2026-07-24T13:56:58.921702+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;away;1.5;-175;-193;3.39;BRONZE
+2026-07-24T13:57:24.716530+00:00;Washington Nationals vs Arizona Diamondbacks;moneyline;away;;-113;-121;3.1;PENDING
+2026-07-24T13:57:28.662251+00:00;Washington Nationals vs Arizona Diamondbacks;total;over;9.5;101;-106;3.31;PENDING
+2026-07-24T14:14:09.878143+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;150;140;4.0;BRONZE
+2026-07-24T14:14:35.683964+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;150;140;4.0;BRONZE
+2026-07-24T14:15:10.285720+00:00;San Francisco Giants vs Los Angeles Angels;spread;home;-1.5;129;136;3.06;BRONZE
+2026-07-24T14:15:36.025655+00:00;San Francisco Giants vs Los Angeles Angels;spread;home;-1.5;129;136;3.06;BRONZE
+2026-07-24T14:24:12.362775+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;217;238;6.62;SILVER
+2026-07-24T14:24:37.954034+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;217;238;6.62;SILVER
+2026-07-24T14:24:45.131024+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;home;;-230;-266;4.1;PENDING
+2026-07-24T14:24:49.581191+00:00;Milwaukee Brewers vs Colorado Rockies;spread;home;-1.5;-112;-121;3.51;PENDING
+2026-07-24T14:27:55.479687+00:00;Washington Nationals vs Arizona Diamondbacks;spread;away;-1.5;139;131;3.35;PENDING
+2026-07-24T14:40:04.760621+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;120;111;4.09;PENDING
+2026-07-24T14:40:09.291151+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;away;1.5;-184;-202;3.14;PENDING
+2026-07-24T14:41:14.133737+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;250;230;5.71;PENDING
+2026-07-24T14:41:18.809282+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;254;230;6.78;SILVER
+2026-07-24T14:41:44.945546+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;254;230;6.78;SILVER
+2026-07-24T14:42:19.349352+00:00;Detroit Tigers vs Kansas City Royals;spread;home;-1.5;-123;-115;3.12;BRONZE
+2026-07-24T14:42:45.451574+00:00;Detroit Tigers vs Kansas City Royals;spread;home;-1.5;-123;-115;3.12;BRONZE
+2026-07-24T14:56:34.050901+00:00;Detroit Tigers vs Kansas City Royals;spread;away;1.5;110;103;3.33;PENDING
+2026-07-24T15:11:46.554278+00:00;Pittsburgh Pirates vs Chicago Cubs;spread;away;1.5;-198;-218;3.08;PENDING
+2026-07-24T15:24:04.652019+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;229;243;4.26;BRONZE
+2026-07-24T15:24:41.392702+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;229;243;4.26;BRONZE
+2026-07-24T16:44:25.668943+00:00;Tampa Bay Rays vs Cleveland Guardians;total;over;7.5;-104;109;6.55;SILVER
+2026-07-24T16:44:40.927822+00:00;Tampa Bay Rays vs Cleveland Guardians;total;over;7.5;-104;109;6.55;SILVER
+2026-07-24T16:44:42.787413+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.5;-113;-122;3.46;PENDING
+2026-07-24T16:46:26.751487+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.5;-108;-122;5.52;SILVER
+2026-07-24T16:46:42.030023+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.5;-108;-122;5.52;SILVER
+2026-07-24T17:55:00.279672+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;249;234;4.3;BRONZE
+2026-07-24T17:55:19.530542+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;249;234;4.3;BRONZE
+2026-07-24T18:28:50.261532+00:00;Washington Nationals vs Arizona Diamondbacks;total;over;9.5;-106;-114;3.41;PENDING
+2026-07-24T18:47:06.204733+00:00;Chicago White Sox vs Houston Astros;moneyline;away;;121;114;3.17;PENDING
+2026-07-24T19:04:55.586842+00:00;Baltimore Orioles vs Atlanta Braves;moneyline;home;;-112;-122;3.87;BRONZE
+2026-07-24T19:05:42.379678+00:00;Baltimore Orioles vs Atlanta Braves;moneyline;home;;-112;-122;3.87;BRONZE
+2026-07-24T19:05:55.735371+00:00;Baltimore Orioles vs Atlanta Braves;moneyline;away;;104;112;3.92;BRONZE
+2026-07-24T19:06:42.537889+00:00;Baltimore Orioles vs Atlanta Braves;moneyline;away;;104;112;3.92;BRONZE
+2026-07-24T19:06:55.877212+00:00;Baltimore Orioles vs Atlanta Braves;spread;home;-1.5;177;167;3.61;BRONZE
+2026-07-24T19:07:24.422185+00:00;St. Louis Cardinals vs Cincinnati Reds;spread;away;1.5;-151;-164;3.16;PENDING
+2026-07-24T19:07:42.724918+00:00;Baltimore Orioles vs Atlanta Braves;spread;home;-1.5;177;167;3.61;BRONZE
+2026-07-24T19:19:32.861385+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;145;132;5.31;PENDING
+2026-07-24T19:19:46.398108+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;141;132;3.73;BRONZE
+2026-07-24T19:19:59.995380+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;141;132;3.73;BRONZE
+2026-07-24T19:25:40.598218+00:00;Milwaukee Brewers vs Colorado Rockies;spread;home;-1.5;-121;-130;3.13;PENDING
+2026-07-24T19:25:49.678409+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;113;120;3.29;BRONZE
+2026-07-24T19:26:02.988675+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;113;120;3.29;BRONZE
+2026-07-24T19:29:52.018964+00:00;Washington Nationals vs Arizona Diamondbacks;total;over;9.5;-114;-103;4.99;BRONZE
+2026-07-24T19:30:04.975883+00:00;Washington Nationals vs Arizona Diamondbacks;total;over;9.5;-114;-103;4.99;BRONZE
+2026-07-24T19:31:53.426208+00:00;Washington Nationals vs Arizona Diamondbacks;total;under;9.5;101;-109;4.61;BRONZE
+2026-07-24T19:32:06.301512+00:00;Washington Nationals vs Arizona Diamondbacks;total;under;9.5;101;-109;4.61;BRONZE
+2026-07-24T19:50:06.015241+00:00;Baltimore Orioles vs Atlanta Braves;spread;home;-1.5;167;155;4.49;BRONZE
+2026-07-24T19:50:17.455758+00:00;Baltimore Orioles vs Atlanta Braves;spread;home;-1.5;167;155;4.49;BRONZE
+2026-07-24T19:51:03.103670+00:00;Baltimore Orioles vs Atlanta Braves;moneyline;home;;-115;-128;4.72;PENDING
+2026-07-24T19:51:06.225334+00:00;Baltimore Orioles vs Atlanta Braves;spread;away;1.5;-187;-172;3.04;BRONZE
+2026-07-24T19:51:07.011383+00:00;Baltimore Orioles vs Atlanta Braves;spread;home;-1.5;172;155;6.25;PENDING
+2026-07-24T19:51:17.610821+00:00;Baltimore Orioles vs Atlanta Braves;spread;away;1.5;-187;-172;3.04;BRONZE
+2026-07-24T20:11:15.452243+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;8.5;-113;-103;4.56;BRONZE
+2026-07-24T20:11:25.855894+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;8.5;-113;-103;4.56;BRONZE
+2026-07-24T20:12:15.665557+00:00;Milwaukee Brewers vs Colorado Rockies;total;under;8.5;101;-109;4.61;BRONZE
+2026-07-24T20:12:26.042133+00:00;Milwaukee Brewers vs Colorado Rockies;total;under;8.5;101;-109;4.61;BRONZE
+2026-07-24T20:13:15.856798+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;231;221;3.02;BRONZE
+2026-07-24T20:13:26.221061+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;231;221;3.02;BRONZE
+2026-07-24T20:20:28.420515+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;118;110;3.67;PENDING
+2026-07-24T20:20:29.655563+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;118;110;3.67;BRONZE
+2026-07-24T20:21:19.760067+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;118;110;3.67;BRONZE
+2026-07-24T20:21:29.811000+00:00;New York Mets vs Los Angeles Dodgers;spread;away;-1.5;121;128;3.17;BRONZE
+2026-07-24T20:22:19.943724+00:00;New York Mets vs Los Angeles Dodgers;spread;away;-1.5;121;128;3.17;BRONZE
+2026-07-24T20:22:29.956013+00:00;New York Mets vs Los Angeles Dodgers;moneyline;away;;-128;-119;3.32;BRONZE
+2026-07-24T20:23:20.505182+00:00;New York Mets vs Los Angeles Dodgers;moneyline;away;;-128;-119;3.32;BRONZE
+2026-07-24T20:27:22.304854+00:00;Miami Marlins vs San Diego Padres;moneyline;home;;-129;-120;3.28;BRONZE
+2026-07-24T20:27:32.188829+00:00;Miami Marlins vs San Diego Padres;moneyline;home;;-129;-120;3.28;BRONZE
+2026-07-24T20:27:37.384513+00:00;Miami Marlins vs San Diego Padres;moneyline;away;;121;111;4.52;PENDING
+2026-07-24T20:28:22.481252+00:00;Miami Marlins vs San Diego Padres;moneyline;away;;119;111;3.65;BRONZE
+2026-07-24T20:28:32.427623+00:00;Miami Marlins vs San Diego Padres;moneyline;away;;119;111;3.65;BRONZE
+2026-07-24T20:29:22.689509+00:00;Miami Marlins vs San Diego Padres;spread;home;-1.5;155;163;3.14;BRONZE
+2026-07-24T20:29:32.663683+00:00;Miami Marlins vs San Diego Padres;spread;home;-1.5;155;163;3.14;BRONZE
+2026-07-24T20:37:24.677191+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;-113;-100;6.1;SILVER
+2026-07-24T20:37:34.224083+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;-113;-100;6.1;SILVER
+2026-07-24T20:39:26.223002+00:00;New York Mets vs Los Angeles Dodgers;total;under;9.0;101;-112;5.83;SILVER
+2026-07-24T20:39:35.033361+00:00;New York Mets vs Los Angeles Dodgers;total;under;9.0;101;-112;5.83;SILVER
+2026-07-24T22:06:57.592598+00:00;New York Mets vs Los Angeles Dodgers;spread;home;1.5;-135;-148;3.74;PENDING
+2026-07-24T22:41:31.181344+00:00;Minnesota Twins vs Athletics;total;over;9.5;-106;-113;3.01;PENDING
+2026-07-24T22:43:37.379963+00:00;Miami Marlins vs San Diego Padres;spread;away;1.5;-173;-191;3.45;PENDING
+2026-07-24T22:44:13.266400+00:00;Detroit Tigers vs Kansas City Royals;moneyline;home;;-262;-321;5.08;SILVER
+2026-07-24T22:44:14.595306+00:00;Detroit Tigers vs Kansas City Royals;moneyline;home;;-262;-321;5.08;SILVER
+2026-07-24T22:44:41.622167+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-119;-134;5.11;PENDING
+2026-07-24T22:44:45.150475+00:00;Pittsburgh Pirates vs Chicago Cubs;total;under;7.5;102;-110;5.49;PENDING
+2026-07-24T22:45:13.881692+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-104;-134;10.97;GOLD
+2026-07-24T22:45:15.355131+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-104;-134;10.97;GOLD
+2026-07-24T22:46:14.479235+00:00;Pittsburgh Pirates vs Chicago Cubs;total;under;7.5;103;-110;5.96;SILVER
+2026-07-24T22:46:16.007640+00:00;Pittsburgh Pirates vs Chicago Cubs;total;under;7.5;103;-110;5.96;SILVER
+2026-07-24T22:54:01.810537+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;-127;-169;10.95;PENDING
+2026-07-24T22:54:06.507079+00:00;St. Louis Cardinals vs Cincinnati Reds;moneyline;away;;133;124;3.86;PENDING
+2026-07-24T22:58:14.701573+00:00;Miami Marlins vs San Diego Padres;total;over;9.0;102;-106;3.79;PENDING
+2026-07-24T22:58:29.681740+00:00;Miami Marlins vs San Diego Padres;total;over;9.0;103;-106;4.27;BRONZE
+2026-07-24T22:58:29.963719+00:00;Miami Marlins vs San Diego Padres;total;over;9.0;103;-106;4.27;BRONZE
+2026-07-24T23:00:31.275884+00:00;Miami Marlins vs San Diego Padres;total;under;9.0;-115;-106;3.95;BRONZE
+2026-07-24T23:00:31.836344+00:00;Miami Marlins vs San Diego Padres;total;under;9.0;-115;-106;3.95;BRONZE
+2026-07-24T23:11:35.669937+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.0;108;101;3.37;PENDING
+2026-07-24T23:11:39.375775+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-133;-151;5.12;PENDING
+2026-07-24T23:12:37.556246+00:00;Tampa Bay Rays vs Cleveland Guardians;total;over;7.0;-122;-114;3.16;BRONZE
+2026-07-24T23:12:37.942417+00:00;Tampa Bay Rays vs Cleveland Guardians;total;over;7.0;-122;-114;3.16;BRONZE
+2026-07-24T23:13:37.856305+00:00;Miami Marlins vs San Diego Padres;moneyline;home;;-118;-137;6.36;SILVER
+2026-07-24T23:13:38.091274+00:00;Miami Marlins vs San Diego Padres;moneyline;home;;-118;-137;6.36;SILVER
+2026-07-24T23:14:38.396998+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.0;108;101;3.37;BRONZE
+2026-07-24T23:14:38.601707+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.0;108;101;3.37;BRONZE
+2026-07-24T23:15:38.988762+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-131;-151;5.73;SILVER
+2026-07-24T23:15:39.193561+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-131;-151;5.73;SILVER
+2026-07-24T23:21:46.185118+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;115;-109;10.82;GOLD
+2026-07-24T23:21:57.719880+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;110;-109;8.69;PENDING
+2026-07-24T23:49:04.200573+00:00;Chicago White Sox vs Houston Astros;moneyline;home;;-130;-191;13.89;PLATINUM
+2026-07-24T23:49:29.947360+00:00;Chicago White Sox vs Houston Astros;moneyline;home;;-144;-191;10.08;PENDING
+2026-07-24T23:49:33.869248+00:00;Chicago White Sox vs Houston Astros;spread;home;-1.5;143;106;15.23;PENDING
+2026-07-24T23:50:04.740384+00:00;Chicago White Sox vs Houston Astros;moneyline;away;;120;156;16.36;PLATINUM
+2026-07-24T23:50:04.814512+00:00;Chicago White Sox vs Houston Astros;moneyline;away;;120;156;16.36;PLATINUM
+2026-07-24T23:51:05.411958+00:00;Chicago White Sox vs Houston Astros;spread;home;-1.5;152;106;18.25;PLATINUM
+2026-07-24T23:51:05.457173+00:00;Chicago White Sox vs Houston Astros;spread;home;-1.5;152;106;18.25;PLATINUM
+2026-07-24T23:52:06.008759+00:00;Chicago White Sox vs Houston Astros;spread;away;1.5;-170;-128;12.15;PLATINUM
+2026-07-24T23:52:06.130079+00:00;Chicago White Sox vs Houston Astros;spread;away;1.5;-170;-128;12.15;PLATINUM
+2026-07-24T23:53:06.582860+00:00;Chicago White Sox vs Houston Astros;total;under;8.5;103;-105;3.82;BRONZE
+2026-07-24T23:53:06.753640+00:00;Chicago White Sox vs Houston Astros;total;under;8.5;103;-105;3.82;BRONZE
+2026-07-25T00:15:17.845345+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.0;-105;-114;3.85;BRONZE
+2026-07-25T00:15:20.074636+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.0;-105;-114;3.85;BRONZE
+2026-07-25T00:16:18.500392+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.0;-107;101;3.9;BRONZE
+2026-07-25T00:16:20.680670+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.0;-107;101;3.9;BRONZE
+2026-07-25T00:23:04.672977+00:00;Minnesota Twins vs Athletics;moneyline;home;;-139;-155;4.32;PENDING
+2026-07-25T00:23:23.633803+00:00;Minnesota Twins vs Athletics;moneyline;home;;-131;-155;6.7;SILVER
+2026-07-25T00:23:26.824977+00:00;Minnesota Twins vs Athletics;moneyline;home;;-131;-155;6.7;SILVER
+2026-07-25T02:18:51.936750+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;home;;-152;-113;13.7;PLATINUM
+2026-07-25T02:18:52.671029+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;home;;-152;-113;13.7;PLATINUM
+2026-07-25T02:19:34.245146+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;132;-107;16.61;PENDING
+2026-07-25T02:19:52.796257+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;139;-107;19.06;PLATINUM
+2026-07-25T02:19:53.174569+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;139;-107;19.06;PLATINUM
+2026-07-25T02:50:55.259179+00:00;New York Mets vs Los Angeles Dodgers;moneyline;away;;-146;-158;3.09;PENDING
+2026-07-25T05:26:13.150751+00:00;New York Mets vs Los Angeles Dodgers;total;under;8.0;-102;-109;3.18;PENDING
+2026-07-25T05:29:18.921154+00:00;Washington Nationals vs Arizona Diamondbacks;spread;home;-1.5;155;146;3.53;PENDING
+2026-07-25T05:31:17.919269+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-123;-132;3.06;BRONZE
+2026-07-25T05:31:18.242877+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-123;-132;3.06;BRONZE
+2026-07-25T05:32:18.076216+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;112;119;3.3;BRONZE
+2026-07-25T05:32:18.410406+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;112;119;3.3;BRONZE
+2026-07-25T05:41:26.556769+00:00;New York Mets vs Los Angeles Dodgers;spread;away;-1.5;117;109;3.69;PENDING
+2026-07-25T05:44:31.690472+00:00;Washington Nationals vs Arizona Diamondbacks;moneyline;home;;-128;-139;3.47;PENDING
+2026-07-25T08:09:36.369697+00:00;Texas Rangers vs Seattle Mariners;total;over;7.5;-107;100;3.38;BRONZE
+2026-07-25T08:09:36.384140+00:00;Texas Rangers vs Seattle Mariners;total;over;7.5;-107;100;3.38;BRONZE
+2026-07-25T08:09:58.802153+00:00;Texas Rangers vs Seattle Mariners;total;under;7.5;-102;-115;5.6;PENDING
+2026-07-25T08:11:37.175136+00:00;Texas Rangers vs Seattle Mariners;total;under;7.5;-107;-115;3.36;BRONZE
+2026-07-25T08:11:37.175721+00:00;Texas Rangers vs Seattle Mariners;total;under;7.5;-107;-115;3.36;BRONZE
+2026-07-25T08:32:12.941780+00:00;Boston Red Sox vs Toronto Blue Jays;total;under;7.5;-103;-110;3.13;PENDING
+2026-07-25T08:34:52.334473+00:00;Chicago White Sox vs Houston Astros;total;over;8.5;101;-107;3.75;BRONZE
+2026-07-25T08:34:52.334713+00:00;Chicago White Sox vs Houston Astros;total;over;8.5;101;-107;3.75;BRONZE
+2026-07-25T08:35:18.964575+00:00;Chicago White Sox vs Houston Astros;total;over;8.5;101;-107;3.75;PENDING
+2026-07-25T08:35:52.891178+00:00;Chicago White Sox vs Houston Astros;total;under;8.5;-116;-107;3.89;BRONZE
+2026-07-25T08:35:52.929119+00:00;Chicago White Sox vs Houston Astros;total;under;8.5;-116;-107;3.89;BRONZE
+2026-07-25T09:06:43.678838+00:00;New York Mets vs Los Angeles Dodgers;total;under;8.0;-109;-117;3.27;PENDING
+2026-07-25T10:45:44.138466+00:00;Washington Nationals vs Arizona Diamondbacks;spread;home;-1.5;146;138;3.25;PENDING
+2026-07-25T11:20:09.563955+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;8.5;-112;-120;3.14;PENDING
+2026-07-25T11:54:46.936191+00:00;San Francisco Giants vs Los Angeles Angels;spread;home;-1.5;167;159;3.0;PENDING
+2026-07-25T12:37:13.542928+00:00;New York Mets vs Los Angeles Dodgers;total;under;7.5;102;-113;6.69;PENDING
+2026-07-25T12:41:00.884053+00:00;New York Mets vs Los Angeles Dodgers;total;over;7.5;-115;101;7.51;SILVER
+2026-07-25T12:41:00.909151+00:00;New York Mets vs Los Angeles Dodgers;total;over;7.5;-115;101;7.51;SILVER
+2026-07-25T12:43:01.774421+00:00;New York Mets vs Los Angeles Dodgers;total;under;7.5;102;-113;6.69;SILVER
+2026-07-25T12:43:01.780235+00:00;New York Mets vs Los Angeles Dodgers;total;under;7.5;102;-113;6.69;SILVER
+2026-07-25T12:51:06.368973+00:00;Chicago White Sox vs Houston Astros;total;over;8.5;-106;-113;3.01;BRONZE
+2026-07-25T12:51:06.380415+00:00;Chicago White Sox vs Houston Astros;total;over;8.5;-106;-113;3.01;BRONZE
+2026-07-25T12:56:08.746809+00:00;San Francisco Giants vs Los Angeles Angels;total;over;9.0;104;-115;8.35;GOLD
+2026-07-25T12:56:09.054320+00:00;San Francisco Giants vs Los Angeles Angels;total;over;9.0;104;-115;8.35;GOLD
+2026-07-25T12:56:27.309292+00:00;San Francisco Giants vs Los Angeles Angels;total;over;9.0;-101;-115;6.06;PENDING
+2026-07-25T12:57:09.013148+00:00;San Francisco Giants vs Los Angeles Angels;total;under;9.0;-117;102;8.91;GOLD
+2026-07-25T12:57:09.307434+00:00;San Francisco Giants vs Los Angeles Angels;total;under;9.0;-117;102;8.91;GOLD
+2026-07-25T12:58:09.131480+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;away;;108;101;3.37;BRONZE
+2026-07-25T12:58:09.445750+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;away;;108;101;3.37;BRONZE
+2026-07-25T12:59:09.593856+00:00;Baltimore Orioles vs Atlanta Braves;total;over;9.0;-103;-110;3.13;BRONZE
+2026-07-25T12:59:09.908413+00:00;Baltimore Orioles vs Atlanta Braves;total;over;9.0;-103;-110;3.13;BRONZE
+2026-07-25T13:00:10.008890+00:00;Baltimore Orioles vs Atlanta Braves;total;under;9.0;-109;-102;3.28;BRONZE
+2026-07-25T13:00:10.348686+00:00;Baltimore Orioles vs Atlanta Braves;total;under;9.0;-109;-102;3.28;BRONZE
+2026-07-25T13:20:48.428913+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;9.0;106;-103;4.33;PENDING
+2026-07-25T13:21:21.979057+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;9.0;106;-103;4.33;BRONZE
+2026-07-25T13:21:22.190307+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;9.0;106;-103;4.33;BRONZE
+2026-07-25T13:23:22.884953+00:00;Milwaukee Brewers vs Colorado Rockies;total;under;9.0;-119;-109;4.19;BRONZE
+2026-07-25T13:23:23.064567+00:00;Milwaukee Brewers vs Colorado Rockies;total;under;9.0;-119;-109;4.19;BRONZE
+2026-07-25T13:27:24.840773+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;home;;-111;-104;3.19;BRONZE
+2026-07-25T13:27:24.954850+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;home;;-111;-104;3.19;BRONZE
+2026-07-25T13:27:57.417514+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;away;;104;-104;3.85;PENDING
+2026-07-25T13:34:28.205301+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-130;-120;3.62;BRONZE
+2026-07-25T13:34:28.429676+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-130;-120;3.62;BRONZE
+2026-07-25T13:35:28.399933+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;120;111;4.09;BRONZE
+2026-07-25T13:35:28.638286+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;120;111;4.09;BRONZE
+2026-07-25T13:36:28.768981+00:00;Pittsburgh Pirates vs Chicago Cubs;spread;home;-1.5;163;171;3.04;BRONZE
+2026-07-25T13:36:29.025114+00:00;Pittsburgh Pirates vs Chicago Cubs;spread;home;-1.5;163;171;3.04;BRONZE
+2026-07-25T13:46:10.320488+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;116;107;4.17;PENDING
+2026-07-25T13:46:31.438876+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-130;-115;5.67;SILVER
+2026-07-25T13:46:32.144437+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-130;-115;5.67;SILVER
+2026-07-25T13:47:31.565790+00:00;Washington Nationals vs Arizona Diamondbacks;moneyline;away;;135;127;3.4;BRONZE
+2026-07-25T13:47:32.257837+00:00;Washington Nationals vs Arizona Diamondbacks;moneyline;away;;135;127;3.4;BRONZE
+2026-07-25T13:48:31.922550+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;120;107;5.91;SILVER
+2026-07-25T13:48:32.587231+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;120;107;5.91;SILVER
+2026-07-25T13:49:32.314831+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;158;172;5.43;SILVER
+2026-07-25T13:49:32.905326+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;158;172;5.43;SILVER
+2026-07-25T13:53:34.488643+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;152;131;8.33;GOLD
+2026-07-25T13:53:34.886814+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;152;131;8.33;GOLD
+2026-07-25T13:54:35.270463+00:00;New York Mets vs Los Angeles Dodgers;spread;home;1.5;-115;-129;5.05;SILVER
+2026-07-25T13:54:35.362254+00:00;New York Mets vs Los Angeles Dodgers;spread;home;1.5;-115;-129;5.05;SILVER
+2026-07-25T13:55:35.867643+00:00;New York Mets vs Los Angeles Dodgers;moneyline;away;;-166;-142;6.35;SILVER
+2026-07-25T13:55:35.893503+00:00;New York Mets vs Los Angeles Dodgers;moneyline;away;;-166;-142;6.35;SILVER
+2026-07-25T13:56:36.433821+00:00;New York Mets vs Los Angeles Dodgers;spread;away;-1.5;104;117;6.37;SILVER
+2026-07-25T13:56:36.435114+00:00;New York Mets vs Los Angeles Dodgers;spread;away;-1.5;104;117;6.37;SILVER
+2026-07-25T14:14:29.325990+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;154;141;5.12;PENDING
+2026-07-25T14:14:33.114055+00:00;Detroit Tigers vs Kansas City Royals;total;under;8.0;-103;-115;5.14;PENDING
+2026-07-25T14:14:43.909077+00:00;Detroit Tigers vs Kansas City Royals;moneyline;home;;-174;-154;4.74;BRONZE
+2026-07-25T14:14:44.232908+00:00;Detroit Tigers vs Kansas City Royals;moneyline;home;;-174;-154;4.74;BRONZE
+2026-07-25T14:15:44.162601+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;159;141;6.95;SILVER
+2026-07-25T14:15:44.457215+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;159;141;6.95;SILVER
+2026-07-25T14:16:44.392553+00:00;Detroit Tigers vs Kansas City Royals;spread;home;-1.5;123;135;5.38;SILVER
+2026-07-25T14:16:44.672483+00:00;Detroit Tigers vs Kansas City Royals;spread;home;-1.5;123;135;5.38;SILVER
+2026-07-25T14:17:44.656884+00:00;Detroit Tigers vs Kansas City Royals;spread;away;1.5;-136;-150;3.95;BRONZE
+2026-07-25T14:17:44.952144+00:00;Detroit Tigers vs Kansas City Royals;spread;away;1.5;-136;-150;3.95;BRONZE
+2026-07-25T14:18:44.896428+00:00;Detroit Tigers vs Kansas City Royals;total;over;8.0;-111;102;6.27;SILVER
+2026-07-25T14:18:45.169053+00:00;Detroit Tigers vs Kansas City Royals;total;over;8.0;-111;102;6.27;SILVER
+2026-07-25T14:19:39.932493+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;116;104;5.56;PENDING
+2026-07-25T14:19:45.612460+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-121;-113;3.2;BRONZE
+2026-07-25T14:19:45.626215+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-121;-113;3.2;BRONZE
+2026-07-25T14:20:45.846356+00:00;Detroit Tigers vs Kansas City Royals;total;under;8.0;-101;-115;6.06;SILVER
+2026-07-25T14:20:45.855700+00:00;Detroit Tigers vs Kansas City Royals;total;under;8.0;-101;-115;6.06;SILVER
+2026-07-25T14:21:46.309859+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;112;104;3.77;BRONZE
+2026-07-25T14:21:46.341873+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;112;104;3.77;BRONZE
+2026-07-25T15:17:09.336218+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-117;-109;3.38;BRONZE
+2026-07-25T15:17:10.300874+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-117;-109;3.38;BRONZE
+2026-07-25T15:18:09.509434+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;170;179;3.33;BRONZE
+2026-07-25T15:18:10.506410+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;170;179;3.33;BRONZE
+2026-07-25T15:19:09.685851+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;108;101;3.37;BRONZE
+2026-07-25T15:19:10.709700+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;108;101;3.37;BRONZE
+2026-07-25T15:32:20.233177+00:00;Philadelphia Phillies vs New York Yankees;moneyline;away;;-112;-121;3.51;PENDING
+2026-07-25T15:32:24.256750+00:00;Philadelphia Phillies vs New York Yankees;spread;away;-1.5;144;135;3.69;PENDING
+2026-07-25T15:32:27.915934+00:00;Philadelphia Phillies vs New York Yankees;total;over;9.0;-101;-108;3.22;PENDING
+2026-07-25T15:33:15.067815+00:00;Washington Nationals vs Arizona Diamondbacks;moneyline;away;;128;120;3.51;BRONZE
+2026-07-25T15:33:15.664045+00:00;Washington Nationals vs Arizona Diamondbacks;moneyline;away;;128;120;3.51;BRONZE
+2026-07-25T16:42:25.823394+00:00;St. Louis Cardinals vs Cincinnati Reds;moneyline;away;;105;-103;3.86;PENDING
+2026-07-25T16:52:37.233029+00:00;Milwaukee Brewers vs Colorado Rockies;spread;home;-1.5;103;-104;3.37;PENDING
+2026-07-25T17:11:53.608710+00:00;Detroit Tigers vs Kansas City Royals;moneyline;home;;-171;-188;3.34;PENDING
+2026-07-25T17:11:57.366410+00:00;Detroit Tigers vs Kansas City Royals;total;under;7.5;103;-107;4.7;PENDING
+2026-07-25T17:12:05.016854+00:00;San Francisco Giants vs Los Angeles Angels;total;over;9.0;-112;-105;3.14;BRONZE
+2026-07-25T17:12:05.023065+00:00;San Francisco Giants vs Los Angeles Angels;total;over;9.0;-112;-105;3.14;BRONZE
+2026-07-25T17:13:05.200250+00:00;San Francisco Giants vs Los Angeles Angels;total;under;9.0;-100;-107;3.27;BRONZE
+2026-07-25T17:14:05.713059+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;147;155;3.24;BRONZE
+2026-07-25T17:14:05.716381+00:00;Detroit Tigers vs Kansas City Royals;moneyline;away;;147;155;3.24;BRONZE
+2026-07-25T17:15:06.195268+00:00;Detroit Tigers vs Kansas City Royals;moneyline;home;;-170;-188;3.55;BRONZE
+2026-07-25T17:15:06.209364+00:00;Detroit Tigers vs Kansas City Royals;moneyline;home;;-170;-188;3.55;BRONZE
+2026-07-25T17:16:06.687668+00:00;Detroit Tigers vs Kansas City Royals;total;under;7.5;102;-107;4.23;BRONZE
+2026-07-25T17:16:06.713036+00:00;Detroit Tigers vs Kansas City Royals;total;under;7.5;102;-107;4.23;BRONZE
+2026-07-25T17:28:12.409103+00:00;Texas Rangers vs Seattle Mariners;total;under;7.5;-115;-108;3.01;BRONZE
+2026-07-25T17:28:12.488085+00:00;Texas Rangers vs Seattle Mariners;total;under;7.5;-115;-108;3.01;BRONZE
+2026-07-25T17:44:20.397667+00:00;Boston Red Sox vs Toronto Blue Jays;total;over;7.0;-122;-107;6.31;SILVER
+2026-07-25T17:44:20.644950+00:00;Boston Red Sox vs Toronto Blue Jays;total;under;7.0;108;-105;6.14;PENDING
+2026-07-25T17:44:20.654605+00:00;Boston Red Sox vs Toronto Blue Jays;total;over;7.0;-122;-107;6.31;SILVER
+2026-07-25T17:46:21.268965+00:00;Boston Red Sox vs Toronto Blue Jays;total;under;7.0;108;-105;6.14;SILVER
+2026-07-25T17:46:21.414993+00:00;Boston Red Sox vs Toronto Blue Jays;total;under;7.0;108;-105;6.14;SILVER
+2026-07-25T18:09:39.969835+00:00;Minnesota Twins vs Athletics;moneyline;away;;144;134;4.1;PENDING
+2026-07-25T18:34:45.097416+00:00;Miami Marlins vs San Diego Padres;moneyline;away;;122;130;3.6;BRONZE
+2026-07-25T18:34:45.104660+00:00;Miami Marlins vs San Diego Padres;moneyline;away;;122;130;3.6;BRONZE
+2026-07-25T18:34:59.306648+00:00;Miami Marlins vs San Diego Padres;spread;home;-1.5;157;149;3.11;PENDING
+2026-07-25T19:10:21.460066+00:00;New York Mets vs Los Angeles Dodgers;total;under;7.5;-113;-121;3.1;PENDING
+2026-07-25T19:59:51.531493+00:00;Boston Red Sox vs Toronto Blue Jays;spread;away;1.5;-210;-233;3.18;PENDING
+2026-07-25T20:13:03.203669+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;home;;-119;-129;3.54;PENDING
+2026-07-25T20:13:07.970785+00:00;San Francisco Giants vs Los Angeles Angels;total;under;8.5;104;-108;5.59;PENDING
+2026-07-25T20:13:11.574218+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.0;-102;-111;4.01;PENDING
+2026-07-25T20:13:28.866040+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;home;;-129;-165;9.53;GOLD
+2026-07-25T20:13:32.264200+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;home;;-129;-165;9.53;GOLD
+2026-07-25T20:14:29.253823+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;119;141;10.05;GOLD
+2026-07-25T20:14:32.618688+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;119;141;10.05;GOLD
+2026-07-25T20:15:15.872922+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;home;;-115;-124;3.38;PENDING
+2026-07-25T20:15:29.565894+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;home;;-100;-124;9.68;GOLD
+2026-07-25T20:15:32.946038+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;home;;-100;-124;9.68;GOLD
+2026-07-25T20:16:29.959277+00:00;San Francisco Giants vs Los Angeles Angels;total;over;8.5;-119;-108;4.65;BRONZE
+2026-07-25T20:16:33.322155+00:00;San Francisco Giants vs Los Angeles Angels;total;over;8.5;-119;-108;4.65;BRONZE
+2026-07-25T20:17:30.291302+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;away;;-108;106;6.96;SILVER
+2026-07-25T20:17:33.625133+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;away;;-108;106;6.96;SILVER
+2026-07-25T20:18:30.506650+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.0;-108;-101;3.33;BRONZE
+2026-07-25T20:18:33.838194+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.0;-108;-101;3.33;BRONZE
+2026-07-25T20:20:31.172162+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.0;-104;-111;3.09;BRONZE
+2026-07-25T20:20:34.453120+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.0;-104;-111;3.09;BRONZE
+2026-07-25T22:16:09.088331+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;102;-134;13.55;PENDING
+2026-07-25T22:16:09.262521+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;112;-134;17.63;PLATINUM
+2026-07-25T22:16:13.130748+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;112;-134;17.63;PLATINUM
+2026-07-25T22:17:09.501343+00:00;Philadelphia Phillies vs New York Yankees;total;under;9.0;-106;-113;3.01;BRONZE
+2026-07-25T22:17:13.367956+00:00;Philadelphia Phillies vs New York Yankees;total;under;9.0;-106;-113;3.01;BRONZE
+2026-07-25T22:30:15.805924+00:00;Texas Rangers vs Seattle Mariners;total;over;7.5;-104;104;4.0;BRONZE
+2026-07-25T22:30:19.446148+00:00;Texas Rangers vs Seattle Mariners;total;over;7.5;-104;104;4.0;BRONZE
+2026-07-25T22:32:16.621267+00:00;Texas Rangers vs Seattle Mariners;total;under;7.5;-109;-117;3.27;BRONZE
+2026-07-25T22:32:20.235827+00:00;Texas Rangers vs Seattle Mariners;total;under;7.5;-109;-117;3.27;BRONZE
+2026-07-25T22:39:27.758120+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;9.0;-103;-115;5.14;PENDING
+2026-07-25T23:09:41.713896+00:00;Chicago White Sox vs Houston Astros;total;over;8.5;-114;-105;4.01;BRONZE
+2026-07-25T23:09:43.689938+00:00;Chicago White Sox vs Houston Astros;total;over;8.5;-114;-105;4.01;BRONZE
+2026-07-25T23:10:41.927495+00:00;Chicago White Sox vs Houston Astros;total;under;8.5;102;-107;4.23;BRONZE
+2026-07-25T23:10:43.866410+00:00;Chicago White Sox vs Houston Astros;total;under;8.5;102;-107;4.23;BRONZE
+2026-07-25T23:11:42.595972+00:00;Minnesota Twins vs Athletics;total;over;10.0;-109;-101;3.79;BRONZE
+2026-07-25T23:11:44.352151+00:00;Minnesota Twins vs Athletics;total;over;10.0;-109;-101;3.79;BRONZE
+2026-07-25T23:13:56.761603+00:00;St. Louis Cardinals vs Cincinnati Reds;moneyline;away;;-103;-110;3.13;PENDING
+2026-07-25T23:14:00.608259+00:00;St. Louis Cardinals vs Cincinnati Reds;spread;away;1.5;-202;-226;3.52;PENDING
+2026-07-25T23:15:04.779468+00:00;Baltimore Orioles vs Atlanta Braves;moneyline;home;;-106;-142;12.31;PENDING
+2026-07-25T23:18:43.842106+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;204;193;3.62;BRONZE
+2026-07-25T23:18:45.624201+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;204;193;3.62;BRONZE
+2026-07-25T23:49:57.371820+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;7.5;-103;-113;4.36;BRONZE
+2026-07-25T23:49:58.942780+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;7.5;-103;-113;4.36;BRONZE
+2026-07-25T23:50:26.949696+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;7.5;-104;-113;3.9;PENDING
+2026-07-25T23:50:57.508229+00:00;Milwaukee Brewers vs Colorado Rockies;total;under;7.5;-111;-101;4.69;BRONZE
+2026-07-25T23:50:59.067998+00:00;Milwaukee Brewers vs Colorado Rockies;total;under;7.5;-111;-101;4.69;BRONZE
+2026-07-26T00:40:09.684967+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.0;100;-107;3.27;PENDING
+2026-07-26T00:40:26.015400+00:00;Tampa Bay Rays vs Cleveland Guardians;total;over;7.0;-115;-107;3.48;BRONZE
+2026-07-26T00:40:27.525070+00:00;Tampa Bay Rays vs Cleveland Guardians;total;over;7.0;-115;-107;3.48;BRONZE
+2026-07-26T00:42:27.183513+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.0;100;-107;3.27;BRONZE
+2026-07-26T00:42:28.987108+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.0;100;-107;3.27;BRONZE
+2026-07-26T02:20:30.451277+00:00;San Francisco Giants vs Los Angeles Angels;total;over;8.0;100;-107;3.27;BRONZE
+2026-07-26T02:20:32.757536+00:00;San Francisco Giants vs Los Angeles Angels;total;over;8.0;100;-107;3.27;PENDING
+2026-07-26T02:21:30.783330+00:00;San Francisco Giants vs Los Angeles Angels;total;under;8.0;-115;-107;3.48;BRONZE
+2026-07-26T02:24:38.924757+00:00;San Francisco Giants vs Los Angeles Angels;total;over;8.0;100;-107;3.27;BRONZE
+2026-07-26T02:25:39.135637+00:00;San Francisco Giants vs Los Angeles Angels;total;under;8.0;-115;-107;3.48;BRONZE
+2026-07-26T04:06:24.559689+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;257;271;3.92;BRONZE
+2026-07-26T04:06:27.911691+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;257;271;3.92;BRONZE
+2026-07-26T04:06:42.087271+00:00;Milwaukee Brewers vs Colorado Rockies;spread;home;-1.5;-128;-143;4.6;PENDING
+2026-07-26T04:13:25.648069+00:00;Milwaukee Brewers vs Colorado Rockies;spread;home;-1.5;-132;-143;3.32;BRONZE
+2026-07-26T04:13:28.896468+00:00;Milwaukee Brewers vs Colorado Rockies;spread;home;-1.5;-132;-143;3.32;BRONZE
+2026-07-26T04:14:25.968269+00:00;Milwaukee Brewers vs Colorado Rockies;spread;away;1.5;117;126;4.15;BRONZE
+2026-07-26T04:14:29.303837+00:00;Milwaukee Brewers vs Colorado Rockies;spread;away;1.5;117;126;4.15;BRONZE
+2026-07-26T04:21:52.018750+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;-155;-169;3.25;PENDING
+2026-07-26T07:10:42.291262+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-134;-124;3.45;BRONZE
+2026-07-26T07:10:47.912828+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-134;-124;3.45;BRONZE
+2026-07-26T07:11:23.654596+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;120;113;3.18;PENDING
+2026-07-26T07:11:42.811812+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;121;113;3.62;BRONZE
+2026-07-26T07:11:48.398192+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;121;113;3.62;BRONZE
+2026-07-26T07:12:43.401813+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;164;172;3.03;BRONZE
+2026-07-26T07:12:48.929517+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;164;172;3.03;BRONZE
+2026-07-26T07:25:51.516918+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.5;-117;-101;7.3;SILVER
+2026-07-26T07:25:53.363048+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.5;-117;-101;7.3;SILVER
+2026-07-26T07:26:40.928636+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.5;104;-114;7.98;PENDING
+2026-07-26T07:27:52.377667+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.5;102;-114;7.07;SILVER
+2026-07-26T07:27:54.257257+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.5;102;-114;7.07;SILVER
+2026-07-26T07:28:46.304709+00:00;Detroit Tigers vs Kansas City Royals;total;under;9.0;103;-108;5.13;PENDING
+2026-07-26T07:28:52.727322+00:00;Minnesota Twins vs Athletics;total;over;10.0;-113;-103;4.56;BRONZE
+2026-07-26T07:28:54.633226+00:00;Minnesota Twins vs Athletics;total;over;10.0;-113;-103;4.56;BRONZE
+2026-07-26T07:29:53.199845+00:00;Detroit Tigers vs Kansas City Royals;total;over;9.0;-117;-106;4.78;BRONZE
+2026-07-26T07:29:55.204696+00:00;Detroit Tigers vs Kansas City Royals;total;over;9.0;-117;-106;4.78;BRONZE
+2026-07-26T07:30:53.521548+00:00;Minnesota Twins vs Athletics;total;under;10.0;-101;-111;4.48;BRONZE
+2026-07-26T07:30:55.583752+00:00;Minnesota Twins vs Athletics;total;under;10.0;-101;-111;4.48;BRONZE
+2026-07-26T07:31:51.919736+00:00;Baltimore Orioles vs Atlanta Braves;total;under;8.5;103;-104;3.37;PENDING
+2026-07-26T07:31:53.760660+00:00;Baltimore Orioles vs Atlanta Braves;total;over;8.5;-119;-110;3.74;BRONZE
+2026-07-26T07:31:55.862798+00:00;Baltimore Orioles vs Atlanta Braves;total;over;8.5;-119;-110;3.74;BRONZE
+2026-07-26T07:33:54.591612+00:00;Baltimore Orioles vs Atlanta Braves;total;under;8.5;103;-104;3.37;BRONZE
+2026-07-26T07:33:56.995231+00:00;Baltimore Orioles vs Atlanta Braves;total;under;8.5;103;-104;3.37;BRONZE
+2026-07-26T07:34:55.102387+00:00;Detroit Tigers vs Kansas City Royals;total;under;9.0;102;-108;4.66;BRONZE
+2026-07-26T07:34:57.574457+00:00;Detroit Tigers vs Kansas City Royals;total;under;9.0;102;-108;4.66;BRONZE
+2026-07-26T09:53:21.227110+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;home;;-290;-329;3.04;PENDING
+2026-07-26T10:44:47.446337+00:00;Boston Red Sox vs Toronto Blue Jays;moneyline;home;;-131;-142;3.35;PENDING
+2026-07-26T10:44:51.681710+00:00;Boston Red Sox vs Toronto Blue Jays;spread;home;-1.5;157;149;3.11;PENDING
+2026-07-26T11:51:36.605877+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;-112;-120;3.14;PENDING
+2026-07-26T12:13:07.771669+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.5;-108;-101;3.33;BRONZE
+2026-07-26T12:13:14.966169+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.5;-108;-101;3.33;BRONZE
+2026-07-26T12:24:20.284735+00:00;Philadelphia Phillies vs New York Yankees;moneyline;away;;153;162;3.56;BRONZE
+2026-07-26T12:31:05.230236+00:00;Philadelphia Phillies vs New York Yankees;spread;home;-1.5;136;126;4.24;PENDING
+2026-07-26T12:31:09.479438+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.0;-107;-116;3.75;PENDING
+2026-07-26T12:31:14.272676+00:00;Philadelphia Phillies vs New York Yankees;moneyline;away;;153;162;3.56;BRONZE
+2026-07-26T12:52:26.350934+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;-118;102;9.34;GOLD
+2026-07-26T12:52:26.789630+00:00;New York Mets vs Los Angeles Dodgers;total;under;9.0;-102;-115;5.6;PENDING
+2026-07-26T12:52:33.506357+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;-118;102;9.34;GOLD
+2026-07-26T12:54:27.367014+00:00;New York Mets vs Los Angeles Dodgers;total;under;9.0;105;-115;8.8;GOLD
+2026-07-26T12:54:34.521835+00:00;New York Mets vs Los Angeles Dodgers;total;under;9.0;105;-115;8.8;GOLD
+2026-07-26T13:13:35.828454+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-135;-122;4.53;BRONZE
+2026-07-26T13:13:42.508497+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;home;;-135;-122;4.53;BRONZE
+2026-07-26T13:14:36.378476+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;124;113;4.91;BRONZE
+2026-07-26T13:14:42.903591+00:00;Tampa Bay Rays vs Cleveland Guardians;moneyline;away;;124;113;4.91;BRONZE
+2026-07-26T13:15:36.922884+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;163;175;4.56;BRONZE
+2026-07-26T13:15:43.343669+00:00;Tampa Bay Rays vs Cleveland Guardians;spread;home;-1.5;163;175;4.56;BRONZE
+2026-07-26T13:16:37.276432+00:00;Minnesota Twins vs Athletics;moneyline;home;;-135;-148;3.74;BRONZE
+2026-07-26T13:16:43.723443+00:00;Minnesota Twins vs Athletics;moneyline;home;;-135;-148;3.74;BRONZE
+2026-07-26T13:16:43.828345+00:00;Minnesota Twins vs Athletics;spread;home;-1.5;142;134;3.31;PENDING
+2026-07-26T13:17:37.648403+00:00;Minnesota Twins vs Athletics;moneyline;away;;125;136;4.89;BRONZE
+2026-07-26T13:17:44.069361+00:00;Minnesota Twins vs Athletics;moneyline;away;;125;136;4.89;BRONZE
+2026-07-26T13:18:37.975264+00:00;Minnesota Twins vs Athletics;spread;home;-1.5;143;134;3.7;BRONZE
+2026-07-26T13:18:44.734402+00:00;Minnesota Twins vs Athletics;spread;home;-1.5;143;134;3.7;BRONZE
+2026-07-26T13:54:56.855354+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;297;282;3.78;BRONZE
+2026-07-26T13:55:02.902992+00:00;Milwaukee Brewers vs Colorado Rockies;moneyline;away;;297;282;3.78;BRONZE
+2026-07-26T14:08:01.793837+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;100;106;3.0;BRONZE
+2026-07-26T14:08:07.506386+00:00;Miami Marlins vs San Diego Padres;total;over;8.5;-118;-109;3.79;BRONZE
+2026-07-26T14:08:12.073271+00:00;Miami Marlins vs San Diego Padres;total;under;8.5;105;-103;3.86;PENDING
+2026-07-26T14:09:02.070361+00:00;Miami Marlins vs San Diego Padres;total;over;8.5;-118;-109;3.79;BRONZE
+2026-07-26T14:09:07.844735+00:00;Miami Marlins vs San Diego Padres;total;under;8.5;105;-103;3.86;BRONZE
+2026-07-26T14:10:02.386605+00:00;Miami Marlins vs San Diego Padres;total;under;8.5;105;-103;3.86;BRONZE
+2026-07-26T14:10:08.332551+00:00;New York Mets vs Los Angeles Dodgers;total;over;9.0;100;106;3.0;BRONZE
+2026-07-26T14:20:20.721135+00:00;Minnesota Twins vs Athletics;moneyline;home;;-138;-154;4.37;PENDING
+2026-07-26T14:36:17.171887+00:00;Washington Nationals vs Arizona Diamondbacks;total;over;10.0;-112;-105;3.14;BRONZE
+2026-07-26T14:36:19.580400+00:00;Washington Nationals vs Arizona Diamondbacks;total;over;10.0;-112;-105;3.14;BRONZE
+2026-07-26T14:37:17.390702+00:00;Washington Nationals vs Arizona Diamondbacks;total;under;10.0;-100;-107;3.27;BRONZE
+2026-07-26T14:37:19.820419+00:00;Washington Nationals vs Arizona Diamondbacks;total;under;10.0;-100;-107;3.27;BRONZE
+2026-07-26T14:51:45.141930+00:00;Chicago White Sox vs Houston Astros;moneyline;away;;-101;-108;3.22;PENDING
+2026-07-26T14:51:48.946000+00:00;Baltimore Orioles vs Atlanta Braves;moneyline;away;;-101;-108;3.22;PENDING
+2026-07-26T15:07:28.578026+00:00;Texas Rangers vs Seattle Mariners;total;over;7.0;-113;-121;3.1;BRONZE
+2026-07-26T15:07:29.875455+00:00;Texas Rangers vs Seattle Mariners;total;over;7.0;-113;-121;3.1;BRONZE
+2026-07-26T15:08:29.104709+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;139;130;3.77;BRONZE
+2026-07-26T15:08:30.391947+00:00;New York Mets vs Los Angeles Dodgers;moneyline;home;;139;130;3.77;BRONZE
+2026-07-26T15:09:29.301550+00:00;Miami Marlins vs San Diego Padres;total;under;8.5;-100;106;3.0;BRONZE
+2026-07-26T15:09:30.597219+00:00;Miami Marlins vs San Diego Padres;total;under;8.5;-100;106;3.0;BRONZE
+2026-07-26T15:10:29.837826+00:00;New York Mets vs Los Angeles Dodgers;spread;away;-1.5;108;115;3.37;BRONZE
+2026-07-26T15:10:31.068590+00:00;New York Mets vs Los Angeles Dodgers;spread;away;-1.5;108;115;3.37;BRONZE
+2026-07-26T15:23:06.219002+00:00;Minnesota Twins vs Athletics;total;under;10.0;-105;-112;3.05;PENDING
+2026-07-26T15:28:37.049548+00:00;Tampa Bay Rays vs Cleveland Guardians;total;over;7.0;-105;102;3.46;BRONZE
+2026-07-26T15:28:38.122677+00:00;Tampa Bay Rays vs Cleveland Guardians;total;over;7.0;-105;102;3.46;BRONZE
+2026-07-26T15:38:39.882776+00:00;Chicago White Sox vs Houston Astros;moneyline;home;;-101;-109;3.65;BRONZE
+2026-07-26T15:38:40.794734+00:00;Chicago White Sox vs Houston Astros;moneyline;home;;-101;-109;3.65;BRONZE
+2026-07-26T15:39:40.634466+00:00;Chicago White Sox vs Houston Astros;spread;home;-1.5;189;180;3.11;BRONZE
+2026-07-26T15:39:41.346096+00:00;Chicago White Sox vs Houston Astros;spread;home;-1.5;189;180;3.11;BRONZE
+2026-07-26T15:40:41.384664+00:00;Chicago White Sox vs Houston Astros;moneyline;away;;-107;100;3.38;BRONZE
+2026-07-26T15:40:41.885479+00:00;Chicago White Sox vs Houston Astros;moneyline;away;;-107;100;3.38;BRONZE
+2026-07-26T15:41:19.696221+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;-169;-186;3.4;PENDING
+2026-07-26T15:58:52.771529+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.0;-113;-121;3.1;BRONZE
+2026-07-26T15:58:53.989512+00:00;Tampa Bay Rays vs Cleveland Guardians;total;under;7.0;-113;-121;3.1;BRONZE
+2026-07-26T16:00:54.672584+00:00;Boston Red Sox vs Toronto Blue Jays;total;over;7.5;-109;-102;3.28;BRONZE
+2026-07-26T16:00:55.048813+00:00;Boston Red Sox vs Toronto Blue Jays;total;over;7.5;-109;-102;3.28;BRONZE
+2026-07-26T16:01:37.639235+00:00;Boston Red Sox vs Toronto Blue Jays;total;under;7.5;-102;-110;3.6;PENDING
+2026-07-26T16:02:55.588526+00:00;Boston Red Sox vs Toronto Blue Jays;total;under;7.5;-103;-110;3.13;BRONZE
+2026-07-26T16:02:55.982013+00:00;Boston Red Sox vs Toronto Blue Jays;total;under;7.5;-103;-110;3.13;BRONZE
+2026-07-26T16:25:54.936614+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;8.0;101;-107;3.75;PENDING
+2026-07-26T16:26:09.540240+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;8.0;100;-107;3.27;BRONZE
+2026-07-26T16:26:12.546517+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;8.0;100;-107;3.27;BRONZE
+2026-07-26T16:27:10.166153+00:00;Milwaukee Brewers vs Colorado Rockies;total;under;8.0;-113;-105;3.58;BRONZE
+2026-07-26T16:27:12.937271+00:00;Milwaukee Brewers vs Colorado Rockies;total;under;8.0;-113;-105;3.58;BRONZE
+2026-07-26T16:40:08.728592+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;101;-106;3.31;PENDING
+2026-07-26T16:59:23.858419+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.5;-110;-103;3.24;BRONZE
+2026-07-26T16:59:27.726383+00:00;St. Louis Cardinals vs Cincinnati Reds;total;over;8.5;-110;-103;3.24;BRONZE
+2026-07-26T17:01:24.701105+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.5;-102;-109;3.18;BRONZE
+2026-07-26T17:01:28.863058+00:00;St. Louis Cardinals vs Cincinnati Reds;total;under;8.5;-102;-109;3.18;BRONZE
+2026-07-26T17:07:27.502399+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;116;123;3.24;BRONZE
+2026-07-26T17:07:30.693393+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;home;;-121;-134;4.39;PENDING
+2026-07-26T17:07:31.528646+00:00;Pittsburgh Pirates vs Chicago Cubs;moneyline;away;;116;123;3.24;BRONZE
+2026-07-26T17:07:34.657974+00:00;Pittsburgh Pirates vs Chicago Cubs;spread;home;-1.5;167;155;4.49;PENDING
+2026-07-26T17:08:28.058558+00:00;New York Mets vs Los Angeles Dodgers;total;over;8.5;-117;-109;3.38;BRONZE
+2026-07-26T17:08:32.019617+00:00;New York Mets vs Los Angeles Dodgers;total;over;8.5;-117;-109;3.38;BRONZE
+2026-07-26T17:09:28.558215+00:00;New York Mets vs Los Angeles Dodgers;total;under;8.5;105;-103;3.86;BRONZE
+2026-07-26T17:09:32.476546+00:00;New York Mets vs Los Angeles Dodgers;total;under;8.5;105;-103;3.86;BRONZE
+2026-07-26T17:24:49.941762+00:00;Miami Marlins vs San Diego Padres;moneyline;away;;113;104;4.23;PENDING
+2026-07-26T18:04:10.616878+00:00;Chicago White Sox vs Houston Astros;moneyline;home;;-109;-117;3.27;PENDING
+2026-07-26T18:11:16.772031+00:00;Milwaukee Brewers vs Colorado Rockies;total;over;8.0;-107;-115;3.36;PENDING
+2026-07-26T18:34:57.467205+00:00;Texas Rangers vs Seattle Mariners;total;over;7.0;-119;-106;5.6;SILVER
+2026-07-26T18:34:58.559693+00:00;Texas Rangers vs Seattle Mariners;total;over;7.0;-119;-106;5.6;SILVER
+2026-07-26T18:35:27.438610+00:00;Texas Rangers vs Seattle Mariners;total;under;7.0;106;-106;5.66;PENDING
+2026-07-26T18:35:57.601744+00:00;Texas Rangers vs Seattle Mariners;total;under;7.0;106;-106;5.66;SILVER
+2026-07-26T18:35:58.680195+00:00;Texas Rangers vs Seattle Mariners;total;under;7.0;106;-106;5.66;SILVER
+2026-07-26T19:31:41.649277+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;away;;-106;-116;4.18;PENDING
+2026-07-26T19:31:46.862560+00:00;Philadelphia Phillies vs New York Yankees;spread;home;-1.5;126;117;3.98;PENDING
+2026-07-26T20:12:12.674412+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;home;;111;140;13.74;PLATINUM
+2026-07-26T20:12:12.675503+00:00;San Francisco Giants vs Los Angeles Angels;moneyline;home;;111;140;13.74;PLATINUM
+2026-07-26T20:13:12.840137+00:00;San Francisco Giants vs Los Angeles Angels;spread;home;1.5;-160;-123;11.57;GOLD
+2026-07-26T20:13:12.842003+00:00;San Francisco Giants vs Los Angeles Angels;spread;home;1.5;-160;-123;11.57;GOLD
+2026-07-26T20:57:26.518731+00:00;Philadelphia Phillies vs New York Yankees;total;over;8.0;-104;-112;3.5;BRONZE
+2026-07-26T20:58:26.714529+00:00;Philadelphia Phillies vs New York Yankees;total;under;8.0;-108;-100;3.85;BRONZE
+2026-07-26T20:58:26.714749+00:00;Philadelphia Phillies vs New York Yankees;total;under;8.0;-108;-100;3.85;BRONZE
+2026-07-26T22:28:48.466939+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;-186;-206;3.39;PENDING
+2026-07-26T22:28:52.393106+00:00;Philadelphia Phillies vs New York Yankees;spread;home;-1.5;117;110;3.23;PENDING
+2026-07-26T23:28:15.258653+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;-206;-248;5.53;PENDING
+2026-07-26T23:28:19.163069+00:00;Philadelphia Phillies vs New York Yankees;spread;home;-1.5;110;-111;9.48;PENDING
+2026-07-26T23:29:12.836736+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;-208;-248;5.24;SILVER
+2026-07-26T23:29:12.837246+00:00;Philadelphia Phillies vs New York Yankees;moneyline;home;;-208;-248;5.24;SILVER
+2026-07-27T04:41:30.313772+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;moneyline;away;;113;105;3.76;PENDING
+2026-07-27T06:17:12.194412+00:00;Chicago White Sox vs New York Yankees;moneyline;away;;-131;-141;3.07;PENDING
+2026-07-27T06:17:16.308710+00:00;Chicago White Sox vs New York Yankees;spread;away;-1.5;125;118;3.11;PENDING
+2026-07-27T06:21:21.763469+00:00;Athletics vs Boston Red Sox;spread;away;-1.5;101;-107;3.75;PENDING
+2026-07-27T06:56:40.770188+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;spread;away;1.5;-185;-204;3.27;PENDING
+2026-07-27T06:59:45.930260+00:00;New York Mets vs Atlanta Braves;total;over;8.5;101;-111;5.43;PENDING
+2026-07-27T06:59:47.786026+00:00;New York Mets vs Atlanta Braves;total;over;8.5;-104;-111;3.09;BRONZE
+2026-07-27T06:59:48.520187+00:00;New York Mets vs Atlanta Braves;total;over;8.5;-104;-111;3.09;BRONZE
+2026-07-27T07:47:06.497606+00:00;Detroit Tigers vs Baltimore Orioles;total;over;8.5;-109;101;4.83;BRONZE
+2026-07-27T07:47:06.515549+00:00;Detroit Tigers vs Baltimore Orioles;total;over;8.5;-109;101;4.83;BRONZE
+2026-07-27T07:47:12.046233+00:00;Detroit Tigers vs Baltimore Orioles;total;under;8.5;-106;-116;4.18;PENDING
+2026-07-27T07:49:07.471302+00:00;Detroit Tigers vs Baltimore Orioles;total;under;8.5;-105;-116;4.63;BRONZE
+2026-07-27T07:49:07.492962+00:00;Detroit Tigers vs Baltimore Orioles;total;under;8.5;-105;-116;4.63;BRONZE
+2026-07-27T08:01:22.257414+00:00;Texas Rangers vs Seattle Mariners;moneyline;away;;-123;-132;3.06;PENDING
+2026-07-27T10:32:39.526092+00:00;Texas Rangers vs Seattle Mariners;spread;away;-1.5;136;128;3.39;PENDING
+2026-07-27T11:33:13.767070+00:00;Cincinnati Reds vs Cleveland Guardians;total;under;8.5;-100;-112;5.36;PENDING
+2026-07-27T11:33:46.486144+00:00;Cincinnati Reds vs Cleveland Guardians;total;over;8.5;-114;-102;5.5;SILVER
+2026-07-27T11:33:47.975452+00:00;Cincinnati Reds vs Cleveland Guardians;total;over;8.5;-114;-102;5.5;SILVER
+2026-07-27T11:35:47.330409+00:00;Cincinnati Reds vs Cleveland Guardians;total;under;8.5;-100;-112;5.36;SILVER
+2026-07-27T11:35:49.112339+00:00;Cincinnati Reds vs Cleveland Guardians;total;under;8.5;-100;-112;5.36;SILVER
+2026-07-27T11:47:52.261121+00:00;Washington Nationals vs Toronto Blue Jays;total;over;10.0;-103;-110;3.13;BRONZE
+2026-07-27T11:47:55.621273+00:00;Washington Nationals vs Toronto Blue Jays;total;over;10.0;-103;-110;3.13;BRONZE
+2026-07-27T11:48:52.442678+00:00;Washington Nationals vs Toronto Blue Jays;total;under;10.0;-111;-104;3.19;BRONZE
+2026-07-27T11:48:55.880344+00:00;Washington Nationals vs Toronto Blue Jays;total;under;10.0;-111;-104;3.19;BRONZE
+2026-07-27T11:49:24.014526+00:00;Washington Nationals vs Toronto Blue Jays;spread;home;-1.5;158;149;3.49;PENDING
+2026-07-27T11:49:28.857802+00:00;Washington Nationals vs Toronto Blue Jays;total;over;10.0;-101;-110;4.07;PENDING
+2026-07-27T12:04:57.498318+00:00;Cincinnati Reds vs Cleveland Guardians;moneyline;home;;-170;-157;3.07;BRONZE
+2026-07-27T12:05:01.850785+00:00;Cincinnati Reds vs Cleveland Guardians;moneyline;home;;-170;-157;3.07;BRONZE
+2026-07-27T12:05:37.594189+00:00;Cincinnati Reds vs Cleveland Guardians;moneyline;away;;152;144;3.17;PENDING
+2026-07-27T12:05:57.705314+00:00;Cincinnati Reds vs Cleveland Guardians;moneyline;away;;153;144;3.56;BRONZE
+2026-07-27T12:06:02.033207+00:00;Cincinnati Reds vs Cleveland Guardians;moneyline;away;;153;144;3.56;BRONZE
+2026-07-27T12:06:57.916531+00:00;Cincinnati Reds vs Cleveland Guardians;spread;home;-1.5;126;133;3.1;BRONZE
+2026-07-27T12:07:02.215006+00:00;Cincinnati Reds vs Cleveland Guardians;spread;home;-1.5;126;133;3.1;BRONZE
+2026-07-27T12:07:58.158504+00:00;Texas Rangers vs Seattle Mariners;spread;away;-1.5;126;133;3.1;BRONZE
+2026-07-27T12:08:02.454812+00:00;Texas Rangers vs Seattle Mariners;spread;away;-1.5;126;133;3.1;BRONZE
+2026-07-27T12:59:09.540687+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.0;100;-115;6.52;PENDING
+2026-07-27T12:59:22.950683+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.0;100;-115;6.52;SILVER
+2026-07-27T12:59:25.216348+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.0;100;-115;6.52;SILVER
+2026-07-27T13:00:23.472819+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;under;9.0;-113;103;7.69;SILVER
+2026-07-27T13:00:25.599999+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;under;9.0;-113;103;7.69;SILVER
+2026-07-27T13:20:25.803631+00:00;Miami Marlins vs Philadelphia Phillies;moneyline;away;;-166;-185;3.86;PENDING
+2026-07-27T13:20:30.131612+00:00;Miami Marlins vs Philadelphia Phillies;spread;away;-1.5;105;-105;4.76;PENDING
+2026-07-27T13:53:50.037277+00:00;Washington Nationals vs Toronto Blue Jays;moneyline;away;;112;105;3.3;PENDING
+2026-07-27T13:53:55.232205+00:00;Washington Nationals vs Toronto Blue Jays;moneyline;home;;-129;-114;5.75;SILVER
+2026-07-27T13:53:56.417068+00:00;Washington Nationals vs Toronto Blue Jays;moneyline;home;;-129;-114;5.75;SILVER
+2026-07-27T13:54:55.394998+00:00;Washington Nationals vs Toronto Blue Jays;moneyline;away;;119;105;6.39;SILVER
+2026-07-27T13:54:56.587309+00:00;Washington Nationals vs Toronto Blue Jays;moneyline;away;;119;105;6.39;SILVER
+2026-07-27T13:55:55.573651+00:00;Washington Nationals vs Toronto Blue Jays;spread;home;-1.5;152;166;5.56;SILVER
+2026-07-27T13:55:56.744298+00:00;Washington Nationals vs Toronto Blue Jays;spread;home;-1.5;152;166;5.56;SILVER
+2026-07-27T13:56:55.733180+00:00;Washington Nationals vs Toronto Blue Jays;spread;away;1.5;-169;-186;3.4;BRONZE
+2026-07-27T13:56:56.901615+00:00;Washington Nationals vs Toronto Blue Jays;spread;away;1.5;-169;-186;3.4;BRONZE
+2026-07-27T13:57:55.897603+00:00;Washington Nationals vs Toronto Blue Jays;total;over;10.0;-109;102;5.35;SILVER
+2026-07-27T13:57:57.067007+00:00;Washington Nationals vs Toronto Blue Jays;total;over;10.0;-109;102;5.35;SILVER
+2026-07-27T13:59:56.568330+00:00;Washington Nationals vs Toronto Blue Jays;total;under;10.0;-103;-114;4.75;BRONZE
+2026-07-27T13:59:57.716531+00:00;Washington Nationals vs Toronto Blue Jays;total;under;10.0;-103;-114;4.75;BRONZE
+2026-07-27T14:04:01.267655+00:00;St. Louis Cardinals vs Chicago Cubs;total;under;9.5;-102;-109;3.18;PENDING
+2026-07-27T14:18:06.497846+00:00;Texas Rangers vs Seattle Mariners;moneyline;home;;122;111;4.95;BRONZE
+2026-07-27T14:18:06.503602+00:00;Texas Rangers vs Seattle Mariners;moneyline;home;;122;111;4.95;BRONZE
+2026-07-27T14:25:07.751176+00:00;Texas Rangers vs Seattle Mariners;spread;away;-1.5;132;140;3.45;BRONZE
+2026-07-27T14:25:07.807324+00:00;Texas Rangers vs Seattle Mariners;spread;away;-1.5;132;140;3.45;BRONZE
+2026-07-27T14:37:13.562616+00:00;Los Angeles Angels vs Houston Astros;total;over;8.5;101;-110;5.02;SILVER
+2026-07-27T14:37:13.562634+00:00;Los Angeles Angels vs Houston Astros;total;over;8.5;101;-110;5.02;SILVER
+2026-07-27T14:37:24.894444+00:00;Los Angeles Angels vs Houston Astros;total;over;8.5;100;-110;4.55;PENDING
+2026-07-27T14:38:13.821090+00:00;Los Angeles Angels vs Houston Astros;total;under;8.5;-113;-102;5.06;SILVER
+2026-07-27T14:38:13.828701+00:00;Los Angeles Angels vs Houston Astros;total;under;8.5;-113;-102;5.06;SILVER
+2026-07-27T14:39:30.129327+00:00;Athletics vs Boston Red Sox;moneyline;away;;-158;-172;3.15;PENDING
+2026-07-27T15:32:37.858179+00:00;New York Mets vs Atlanta Braves;moneyline;home;;105;-105;4.76;BRONZE
+2026-07-27T15:32:37.900244+00:00;New York Mets vs Atlanta Braves;moneyline;home;;105;-105;4.76;BRONZE
+2026-07-27T15:33:38.006501+00:00;New York Mets vs Atlanta Braves;moneyline;away;;-114;-103;4.99;BRONZE
+2026-07-27T15:33:38.044156+00:00;New York Mets vs Atlanta Braves;moneyline;away;;-114;-103;4.99;BRONZE
+2026-07-27T15:34:38.193704+00:00;New York Mets vs Atlanta Braves;spread;home;1.5;-163;-177;3.01;BRONZE
+2026-07-27T15:34:38.217313+00:00;New York Mets vs Atlanta Braves;spread;home;1.5;-163;-177;3.01;BRONZE
+2026-07-27T15:35:38.343570+00:00;New York Mets vs Atlanta Braves;spread;away;-1.5;146;158;4.88;BRONZE
+2026-07-27T15:35:38.355795+00:00;New York Mets vs Atlanta Braves;spread;away;-1.5;146;158;4.88;BRONZE
+2026-07-27T17:35:28.903901+00:00;Cincinnati Reds vs Cleveland Guardians;moneyline;away;;146;138;3.25;BRONZE
+2026-07-27T17:35:29.402560+00:00;Cincinnati Reds vs Cleveland Guardians;moneyline;away;;146;138;3.25;BRONZE
+2026-07-27T17:47:32.154961+00:00;San Francisco Giants vs Milwaukee Brewers;total;over;8.5;-102;-109;3.18;BRONZE
+2026-07-27T17:47:33.131824+00:00;San Francisco Giants vs Milwaukee Brewers;total;over;8.5;-102;-109;3.18;BRONZE
+2026-07-27T17:48:08.563980+00:00;San Francisco Giants vs Milwaukee Brewers;total;over;8.5;-100;-109;4.13;PENDING
+2026-07-27T17:48:32.385379+00:00;San Francisco Giants vs Milwaukee Brewers;total;under;8.5;-110;-103;3.24;BRONZE
+2026-07-27T17:48:33.332123+00:00;San Francisco Giants vs Milwaukee Brewers;total;under;8.5;-110;-103;3.24;BRONZE
+2026-07-27T18:33:39.962932+00:00;New York Mets vs Atlanta Braves;total;over;8.5;-111;-120;3.55;PENDING
+2026-07-27T18:34:45.650708+00:00;Texas Rangers vs Seattle Mariners;total;over;8.0;-102;-113;4.82;PENDING
+2026-07-27T18:34:49.426692+00:00;Texas Rangers vs Seattle Mariners;total;over;8.0;-106;-113;3.01;BRONZE
+2026-07-27T18:34:49.432081+00:00;Texas Rangers vs Seattle Mariners;total;over;8.0;-106;-113;3.01;BRONZE
+2026-07-27T18:35:49.773771+00:00;Texas Rangers vs Seattle Mariners;total;under;8.0;-106;101;3.43;BRONZE
+2026-07-27T18:35:49.773795+00:00;Texas Rangers vs Seattle Mariners;total;under;8.0;-106;101;3.43;BRONZE
+2026-07-27T18:49:55.813660+00:00;Texas Rangers vs Seattle Mariners;moneyline;home;;114;-156;23.32;PLATINUM
+2026-07-27T18:49:55.920535+00:00;Texas Rangers vs Seattle Mariners;moneyline;home;;114;-156;23.32;PLATINUM
+2026-07-27T18:49:58.914462+00:00;Texas Rangers vs Seattle Mariners;moneyline;home;;112;-156;22.59;PENDING
+2026-07-27T18:50:56.101510+00:00;Texas Rangers vs Seattle Mariners;moneyline;away;;-124;129;26.77;PLATINUM
+2026-07-27T18:50:56.200162+00:00;Texas Rangers vs Seattle Mariners;moneyline;away;;-124;129;26.77;PLATINUM
+2026-07-27T19:06:03.104115+00:00;Cincinnati Reds vs Cleveland Guardians;total;over;8.5;-104;-114;4.3;BRONZE
+2026-07-27T19:06:03.105277+00:00;Cincinnati Reds vs Cleveland Guardians;total;over;8.5;-104;-114;4.3;BRONZE
+2026-07-27T19:07:03.535175+00:00;Cincinnati Reds vs Cleveland Guardians;total;under;8.5;-108;102;4.88;BRONZE
+2026-07-27T19:07:03.545682+00:00;Cincinnati Reds vs Cleveland Guardians;total;under;8.5;-108;102;4.88;BRONZE
+2026-07-27T19:22:08.455549+00:00;Miami Marlins vs Philadelphia Phillies;moneyline;home;;167;157;3.75;BRONZE
+2026-07-27T19:22:08.574745+00:00;Miami Marlins vs Philadelphia Phillies;moneyline;home;;167;157;3.75;BRONZE
+2026-07-27T20:16:42.973617+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.5;105;-102;3.4;PENDING
+2026-07-27T21:18:56.176326+00:00;San Francisco Giants vs Milwaukee Brewers;total;over;8.5;-108;-116;3.32;BRONZE
+2026-07-27T21:18:56.676907+00:00;San Francisco Giants vs Milwaukee Brewers;total;over;8.5;-108;-116;3.32;BRONZE
+2026-07-27T21:19:56.375238+00:00;San Francisco Giants vs Milwaukee Brewers;total;under;8.5;-104;103;3.49;BRONZE
+2026-07-27T21:19:56.865582+00:00;San Francisco Giants vs Milwaukee Brewers;total;under;8.5;-104;103;3.49;BRONZE
+2026-07-27T21:51:09.335864+00:00;Washington Nationals vs Toronto Blue Jays;total;over;10.0;-102;-110;3.6;BRONZE
+2026-07-27T21:51:09.605985+00:00;Washington Nationals vs Toronto Blue Jays;total;over;10.0;-102;-110;3.6;BRONZE
+2026-07-27T21:53:10.153654+00:00;Washington Nationals vs Toronto Blue Jays;total;under;10.0;-110;-103;3.24;BRONZE
+2026-07-27T21:53:10.429875+00:00;Washington Nationals vs Toronto Blue Jays;total;under;10.0;-110;-103;3.24;BRONZE
+2026-07-27T21:56:12.234347+00:00;Athletics vs Boston Red Sox;moneyline;home;;158;166;3.1;BRONZE
+2026-07-27T21:56:12.414313+00:00;Athletics vs Boston Red Sox;moneyline;home;;158;166;3.1;BRONZE
+2026-07-27T21:57:12.836888+00:00;Athletics vs Boston Red Sox;total;over;9.5;-111;101;5.74;SILVER
+2026-07-27T21:57:13.021720+00:00;Athletics vs Boston Red Sox;total;over;9.5;-111;101;5.74;SILVER
+2026-07-27T21:59:14.208066+00:00;Athletics vs Boston Red Sox;total;under;9.5;-101;-113;5.28;SILVER
+2026-07-27T21:59:14.349730+00:00;Athletics vs Boston Red Sox;total;under;9.5;-101;-113;5.28;SILVER
+2026-07-27T22:19:49.722828+00:00;New York Mets vs Atlanta Braves;moneyline;home;;-102;-109;3.18;PENDING
+2026-07-27T22:32:03.520478+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.5;-102;-113;4.82;PENDING
+2026-07-27T22:32:34.053216+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.5;-104;-113;3.9;BRONZE
+2026-07-27T22:32:34.106080+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.5;-104;-113;3.9;BRONZE
+2026-07-27T22:34:34.814308+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;under;9.5;-108;100;3.85;BRONZE
+2026-07-27T22:34:34.821023+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;under;9.5;-108;100;3.85;BRONZE
+2026-07-27T22:42:12.412550+00:00;Detroit Tigers vs Baltimore Orioles;moneyline;home;;-111;-124;4.97;PENDING
+2026-07-27T22:42:16.424756+00:00;Detroit Tigers vs Baltimore Orioles;spread;home;-1.5;179;167;4.3;PENDING
+2026-07-27T22:42:19.778896+00:00;Athletics vs Boston Red Sox;spread;away;-1.5;-107;-115;3.36;PENDING
+2026-07-27T22:42:23.030437+00:00;Miami Marlins vs Philadelphia Phillies;spread;away;-1.5;-105;-112;3.05;PENDING
+2026-07-27T22:42:36.826698+00:00;Athletics vs Boston Red Sox;total;under;9.5;-113;-106;3.1;BRONZE
+2026-07-27T22:42:36.850561+00:00;Athletics vs Boston Red Sox;total;under;9.5;-113;-106;3.1;BRONZE
+2026-07-27T22:47:30.522618+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;moneyline;home;;-125;-135;3.29;PENDING
+2026-07-27T22:47:40.017612+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;moneyline;home;;-109;-135;9.21;GOLD
+2026-07-27T22:47:40.055209+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;moneyline;home;;-109;-135;9.21;GOLD
+2026-07-27T22:49:41.072182+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;moneyline;away;;101;112;5.47;SILVER
+2026-07-27T22:49:41.140175+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;moneyline;away;;101;112;5.47;SILVER
+2026-07-27T23:09:45.386354+00:00;Los Angeles Angels vs Houston Astros;moneyline;home;;103;-106;4.27;PENDING
+2026-07-27T23:20:54.647710+00:00;New York Mets vs Atlanta Braves;moneyline;home;;-108;109;8.52;GOLD
+2026-07-27T23:20:55.290065+00:00;New York Mets vs Atlanta Braves;moneyline;home;;-108;109;8.52;GOLD
+2026-07-27T23:20:57.390615+00:00;New York Mets vs Atlanta Braves;moneyline;away;;-108;-127;7.19;PENDING
+2026-07-27T23:21:01.916664+00:00;New York Mets vs Atlanta Braves;total;over;9.0;107;-109;7.37;PENDING
+2026-07-27T23:21:55.116384+00:00;New York Mets vs Atlanta Braves;moneyline;away;;100;-127;10.63;GOLD
+2026-07-27T23:21:55.752690+00:00;New York Mets vs Atlanta Braves;moneyline;away;;100;-127;10.63;GOLD
+2026-07-27T23:22:55.260243+00:00;St. Louis Cardinals vs Chicago Cubs;total;over;9.5;-103;106;4.52;BRONZE
+2026-07-27T23:22:55.860795+00:00;St. Louis Cardinals vs Chicago Cubs;total;over;9.5;-103;106;4.52;BRONZE
+2026-07-27T23:23:06.091530+00:00;St. Louis Cardinals vs Chicago Cubs;total;under;9.5;-109;-119;4.02;PENDING
+2026-07-27T23:24:56.034626+00:00;St. Louis Cardinals vs Chicago Cubs;total;under;9.5;-109;-119;4.02;BRONZE
+2026-07-27T23:24:56.540834+00:00;St. Louis Cardinals vs Chicago Cubs;total;under;9.5;-109;-119;4.02;BRONZE
+2026-07-28T00:08:29.937481+00:00;Chicago White Sox vs New York Yankees;moneyline;home;;118;104;6.42;PENDING
+2026-07-28T01:13:01.655772+00:00;Athletics vs Boston Red Sox;moneyline;away;;-172;-188;3.13;PENDING
+2026-07-28T01:38:17.109202+00:00;St. Louis Cardinals vs Chicago Cubs;moneyline;away;;-117;-199;18.99;PENDING
+2026-07-28T01:38:21.207781+00:00;St. Louis Cardinals vs Chicago Cubs;spread;away;-1.5;132;-122;21.57;PENDING
+2026-07-28T01:38:48.134725+00:00;St. Louis Cardinals vs Chicago Cubs;moneyline;home;;108;162;25.96;PLATINUM
+2026-07-28T01:38:50.739566+00:00;St. Louis Cardinals vs Chicago Cubs;moneyline;home;;108;162;25.96;PLATINUM
+2026-07-28T01:42:49.814353+00:00;Athletics vs Boston Red Sox;moneyline;home;;172;184;4.41;BRONZE
+2026-07-28T01:42:52.294513+00:00;Athletics vs Boston Red Sox;moneyline;home;;172;184;4.41;BRONZE
+2026-07-28T01:43:27.088047+00:00;Athletics vs Boston Red Sox;moneyline;away;;-188;-228;6.09;PENDING
+2026-07-28T01:43:50.017449+00:00;Athletics vs Boston Red Sox;moneyline;away;;-188;-228;6.09;SILVER
+2026-07-28T01:43:52.496101+00:00;Athletics vs Boston Red Sox;moneyline;away;;-188;-228;6.09;SILVER
+2026-07-28T01:50:34.453328+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;home;;117;-101;8.29;PENDING
+2026-07-28T01:50:53.174552+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;home;;123;-101;10.76;GOLD
+2026-07-28T01:50:55.474753+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;home;;123;-101;10.76;GOLD
+2026-07-28T01:52:53.910570+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;away;;-134;-120;4.99;BRONZE
+2026-07-28T01:52:57.548823+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;away;;-134;-120;4.99;BRONZE
+2026-07-28T05:18:02.160568+00:00;San Francisco Giants vs Milwaukee Brewers;total;under;7.5;-101;-113;5.28;PENDING
+2026-07-28T08:01:12.606212+00:00;Washington Nationals vs Toronto Blue Jays;total;over;8.5;-116;-108;3.43;BRONZE
+2026-07-28T08:01:12.635318+00:00;Washington Nationals vs Toronto Blue Jays;total;over;8.5;-116;-108;3.43;BRONZE
+2026-07-28T08:01:23.708197+00:00;Washington Nationals vs Toronto Blue Jays;total;under;8.5;101;-106;3.31;PENDING
+2026-07-28T08:03:13.365968+00:00;Washington Nationals vs Toronto Blue Jays;total;under;8.5;101;-106;3.31;BRONZE
+2026-07-28T08:03:13.421520+00:00;Washington Nationals vs Toronto Blue Jays;total;under;8.5;101;-106;3.31;BRONZE
+2026-07-28T08:04:13.628630+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;home;;121;131;4.52;BRONZE
+2026-07-28T08:04:13.687197+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;home;;121;131;4.52;BRONZE
+2026-07-28T08:05:13.867849+00:00;San Francisco Giants vs Milwaukee Brewers;total;over;7.5;-102;104;3.01;BRONZE
+2026-07-28T08:05:13.958497+00:00;San Francisco Giants vs Milwaukee Brewers;total;over;7.5;-102;104;3.01;BRONZE
+2026-07-28T08:06:14.142869+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;away;;-134;-145;3.24;BRONZE
+2026-07-28T08:06:14.237679+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;away;;-134;-145;3.24;BRONZE
+2026-07-28T08:49:28.958278+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;home;;130;137;3.04;BRONZE
+2026-07-28T08:49:28.963308+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;home;;130;137;3.04;BRONZE
+2026-07-28T08:49:43.542574+00:00;San Francisco Giants vs Milwaukee Brewers;moneyline;away;;-138;-152;3.87;PENDING
+2026-07-28T13:33:02.801918+00:00;Chicago White Sox vs New York Yankees;total;under;8.0;-103;-112;3.96;PENDING
+2026-07-28T13:33:27.083538+00:00;Chicago White Sox vs New York Yankees;total;over;8.0;-112;-101;5.14;SILVER
+2026-07-28T13:33:28.981289+00:00;Chicago White Sox vs New York Yankees;total;over;8.0;-112;-101;5.14;SILVER
+2026-07-28T13:34:27.511046+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;under;9.0;-106;101;3.43;BRONZE
+2026-07-28T13:34:29.434777+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;under;9.0;-106;101;3.43;BRONZE
+2026-07-28T13:35:27.686170+00:00;Chicago White Sox vs New York Yankees;total;under;8.0;-103;-112;3.96;BRONZE
+2026-07-28T13:35:29.618894+00:00;Chicago White Sox vs New York Yankees;total;under;8.0;-103;-112;3.96;BRONZE
+2026-07-28T13:57:23.243643+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;under;9.0;-104;-111;3.09;PENDING
+2026-07-28T13:57:37.973164+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.0;-114;-101;6.01;SILVER
+2026-07-28T13:57:40.330311+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.0;-114;-101;6.01;SILVER
+2026-07-28T14:12:36.786367+00:00;Athletics vs Boston Red Sox;spread;away;-1.5;111;104;3.32;PENDING
+2026-07-28T14:12:40.968604+00:00;Chicago White Sox vs New York Yankees;moneyline;home;;122;115;3.15;PENDING
+2026-07-28T14:27:54.359514+00:00;Chicago White Sox vs New York Yankees;spread;home;1.5;-138;-150;3.36;PENDING
+2026-07-28T14:27:56.244393+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.0;-101;-109;3.65;BRONZE
+2026-07-28T14:28:01.041096+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.0;-101;-109;3.65;BRONZE
+2026-07-28T14:28:56.536620+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;under;9.0;-111;-103;3.68;BRONZE
+2026-07-28T14:35:01.906662+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;under;9.0;-111;-103;3.68;BRONZE
+2026-07-28T14:58:16.982178+00:00;G1 Cincinnati Reds vs G1 Cleveland Guardians;spread;home;-1.5;131;124;3.03;PENDING
+2026-07-28T15:13:16.294585+00:00;Athletics vs Boston Red Sox;moneyline;home;;136;128;3.39;BRONZE
+2026-07-28T15:13:17.017310+00:00;Athletics vs Boston Red Sox;moneyline;home;;136;128;3.39;BRONZE
+2026-07-28T15:14:16.753532+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.0;-106;-113;3.01;BRONZE
+2026-07-28T15:14:17.446717+00:00;Pittsburgh Pirates vs Arizona Diamondbacks;total;over;9.0;-106;-113;3.01;BRONZE
+2026-07-28T15:28:24.146979+00:00;San Diego Padres vs Colorado Rockies;moneyline;away;;173;185;4.4;BRONZE
+2026-07-28T15:28:24.696976+00:00;San Diego Padres vs Colorado Rockies;moneyline;away;;173;185;4.4;BRONZE
+2026-07-28T15:28:37.433989+00:00;San Diego Padres vs Colorado Rockies;moneyline;home;;-179;-204;4.39;PENDING
+2026-07-28T15:28:40.961135+00:00;San Diego Padres vs Colorado Rockies;spread;home;-1.5;119;108;5.02;PENDING
+2026-07-28T15:42:52.942619+00:00;Minnesota Twins vs Kansas City Royals;moneyline;home;;-148;-168;4.8;PENDING
+2026-07-28T15:43:07.709854+00:00;Minnesota Twins vs Kansas City Royals;spread;home;-1.5;138;127;4.62;PENDING
+2026-07-28T15:43:29.810605+00:00;Minnesota Twins vs Kansas City Royals;moneyline;away;;144;154;4.1;BRONZE
+2026-07-28T15:43:31.786317+00:00;Minnesota Twins vs Kansas City Royals;moneyline;away;;144;154;4.1;BRONZE
+2026-07-28T15:58:38.596347+00:00;G1 Cincinnati Reds vs G1 Cleveland Guardians;total;under;9.0;-103;103;3.0;BRONZE
+2026-07-28T15:58:44.300702+00:00;G1 Cincinnati Reds vs G1 Cleveland Guardians;total;under;9.0;-103;103;3.0;BRONZE
+2026-07-28T15:59:39.007382+00:00;Tampa Bay Rays vs Texas Rangers;total;over;8.0;-106;-113;3.01;BRONZE
+2026-07-28T15:59:44.883149+00:00;Tampa Bay Rays vs Texas Rangers;total;over;8.0;-106;-113;3.01;BRONZE
+2026-07-28T16:00:39.436223+00:00;Tampa Bay Rays vs Texas Rangers;total;under;8.0;-106;101;3.43;BRONZE
+2026-07-28T16:00:45.381909+00:00;Tampa Bay Rays vs Texas Rangers;total;under;8.0;-106;101;3.43;BRONZE
+2026-07-28T16:13:43.700464+00:00;Chicago White Sox vs New York Yankees;moneyline;home;;113;106;3.29;BRONZE
+2026-07-28T16:13:49.465634+00:00;Chicago White Sox vs New York Yankees;moneyline;home;;115;106;4.19;PENDING
+2026-07-28T16:13:50.227653+00:00;Chicago White Sox vs New York Yankees;moneyline;home;;113;106;3.29;BRONZE
+2026-07-28T16:14:43.936534+00:00;Chicago White Sox vs New York Yankees;spread;home;1.5;-147;-160;3.29;BRONZE
+2026-07-28T16:14:50.504026+00:00;Chicago White Sox vs New York Yankees;spread;home;1.5;-147;-160;3.29;BRONZE
+2026-07-28T16:15:44.167699+00:00;Chicago White Sox vs New York Yankees;spread;away;-1.5;133;144;4.72;BRONZE
+2026-07-28T16:15:50.780090+00:00;Chicago White Sox vs New York Yankees;spread;away;-1.5;133;144;4.72;BRONZE
+2026-07-28T16:28:50.803805+00:00;G1 Cincinnati Reds vs G1 Cleveland Guardians;total;over;9.0;-115;-104;4.92;BRONZE
+2026-07-28T16:28:55.126366+00:00;G1 Cincinnati Reds vs G1 Cleveland Guardians;total;over;9.0;-115;-104;4.92;BRONZE
+2026-07-28T16:29:02.932484+00:00;G1 Cincinnati Reds vs G1 Cleveland Guardians;total;under;9.0;-101;-108;3.22;PENDING
+2026-07-28T16:29:51.043472+00:00;Tampa Bay Rays vs Texas Rangers;moneyline;away;;160;151;3.46;BRONZE
+2026-07-28T16:29:55.359905+00:00;Tampa Bay Rays vs Texas Rangers;moneyline;away;;160;151;3.46;BRONZE
+2026-07-28T16:30:51.223391+00:00;G1 Cincinnati Reds vs G1 Cleveland Guardians;total;under;9.0;102;-108;4.66;BRONZE
+2026-07-28T16:30:55.571222+00:00;G1 Cincinnati Reds vs G1 Cleveland Guardians;total;under;9.0;102;-108;4.66;BRONZE
+2026-07-28T16:43:15.815875+00:00;Minnesota Twins vs Kansas City Royals;spread;home;-1.5;127;119;3.52;PENDING
+2026-07-28T16:43:57.892651+00:00;Minnesota Twins vs Kansas City Royals;spread;home;-1.5;127;119;3.52;BRONZE
+2026-07-28T16:44:03.505531+00:00;Minnesota Twins vs Kansas City Royals;spread;home;-1.5;127;119;3.52;BRONZE
