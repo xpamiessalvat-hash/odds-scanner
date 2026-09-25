@@ -663,11 +663,6 @@ while True:
                                 "points"
                             )
 
-                            period = market.get(
-                                "period",
-                                0
-                            )
-
                             if (
                                 market_type
                                 == "spread"
@@ -699,7 +694,6 @@ while True:
                             key = (
                                 f"{match_name}-"
                                 f"{market_type}-"
-                                f"{period}-"
                                 f"{side}-"
                                 f"{points}"
                             )
@@ -718,8 +712,6 @@ while True:
                                         - decimal_odd
                                     ) / old_odd
                                 ) * 100
-
-                                previous_odds[key] = decimal_odd
 
                                 min_required = (
                                     MIN_TOTAL_STEAM
@@ -742,12 +734,12 @@ while True:
                                     and movement <= 25
                                 ):
                                     candidate_count += 1
-
+    
                                     movement_signature = (
                                         old_odd,
                                         decimal_odd
                                     )
-
+    
                                     if (
                                         decimal_odd != old_odd
                                         and last_logged_movements.get(
@@ -769,7 +761,7 @@ while True:
                                             "hours_until_match": hours_until_match,
                                             "matchup_id": matchup_id
                                         })
-
+    
                                         last_logged_movements[key] = movement_signature
 
                                 if (

@@ -1,0 +1,17 @@
+[1mdiff --git a/Dockerfile b/Dockerfile[m
+[1mindex c28531b..08361a5 100644[m
+[1m--- a/Dockerfile[m
+[1m+++ b/Dockerfile[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-FROM python:3.12-slim[m
+[32m+[m[32m﻿FROM python:3.12-slim[m
+ [m
+ WORKDIR /app[m
+ [m
+[36m@@ -10,4 +10,4 @@[m [mRUN python -m playwright install chromium[m
+ [m
+ COPY . .[m
+ [m
+[31m-CMD ["python", "baseball_scanner_v2.py"][m
+\ No newline at end of file[m
+[32m+[m[32mCMD ["python", "baseball_scanner_v4.py"][m

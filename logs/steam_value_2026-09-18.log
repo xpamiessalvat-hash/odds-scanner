@@ -1,0 +1,576 @@
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V12 - 5 LEAGUES | STEAM + VALUE | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILE: TOTAL / OVER / STEAM 4.0-5.0 / STRENGTH 70.0-80.0
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM SENSE CREDENCIALS / NO GOOGLE SHEETS
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+  INIT | Washington Nationals @ St. Louis Cardinals | OVER 7.5 | 1.8772
+  INIT | Washington Nationals @ St. Louis Cardinals | UNDER 7.5 | 2.0
+  INIT | New York Yankees @ Arizona Diamondbacks | OVER 7.5 | 1.8772
+  INIT | New York Yankees @ Arizona Diamondbacks | UNDER 7.5 | 1.9901
+  INIT | Toronto Blue Jays @ Texas Rangers | OVER 7.5 | 1.8621
+  INIT | Toronto Blue Jays @ Texas Rangers | UNDER 7.5 | 2.01
+  INIT | San Francisco Giants @ Los Angeles Dodgers | OVER 8.0 | 1.9009
+  INIT | San Francisco Giants @ Los Angeles Dodgers | UNDER 8.0 | 1.9615
+  INIT | Miami Marlins @ San Diego Padres | OVER 7.5 | 1.9091
+  INIT | Miami Marlins @ San Diego Padres | UNDER 7.5 | 1.9615
+  INIT | Kansas City Royals @ Pittsburgh Pirates | OVER 8.0 | 1.9709
+  INIT | Kansas City Royals @ Pittsburgh Pirates | UNDER 8.0 | 1.9009
+  INIT | Boston Red Sox @ Tampa Bay Rays | OVER 7.5 | 2.06
+  INIT | Boston Red Sox @ Tampa Bay Rays | UNDER 7.5 | 1.8197
+  INIT | Chicago Cubs @ Cincinnati Reds | OVER 9.0 | 2.04
+  INIT | Chicago Cubs @ Cincinnati Reds | UNDER 9.0 | 1.8403
+  INIT | Athletics @ Cleveland Guardians | OVER 8.5 | 1.9009
+  INIT | Athletics @ Cleveland Guardians | UNDER 8.5 | 1.9709
+  INIT | Atlanta Braves @ Houston Astros | OVER 8.0 | 1.8772
+  INIT | Atlanta Braves @ Houston Astros | UNDER 8.0 | 1.9901
+  INIT | Minnesota Twins @ Los Angeles Angels | OVER 8.5 | 1.9615
+  INIT | Minnesota Twins @ Los Angeles Angels | UNDER 8.5 | 1.9091
+  INIT | Detroit Tigers @ Chicago White Sox | OVER 8.5 | 1.9091
+  INIT | Detroit Tigers @ Chicago White Sox | UNDER 8.5 | 1.9615
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+ERROR LEAGUE [Mexican League] 244: HTTPError: 401 Client Error: Unauthorized for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR INFORME SETMANAL: NameError: name 'Path' is not defined
+ERROR RESOLUCIÓ RESULTATS: NameError: name 'Path' is not defined
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V12 - 5 LEAGUES | STEAM + VALUE | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILE: TOTAL / OVER / STEAM 4.0-5.0 / STRENGTH 70.0-80.0
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM ACTIU / NO GOOGLE SHEETS
+PINNACLE API KEY: CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+  INIT | Miami Marlins @ San Diego Padres | OVER 7.5 | 1.9091
+  INIT | Miami Marlins @ San Diego Padres | UNDER 7.5 | 1.9615
+  INIT | Washington Nationals @ St. Louis Cardinals | OVER 7.5 | 1.8772
+  INIT | Washington Nationals @ St. Louis Cardinals | UNDER 7.5 | 2.0
+  INIT | Chicago Cubs @ Cincinnati Reds | OVER 9.0 | 2.04
+  INIT | Chicago Cubs @ Cincinnati Reds | UNDER 9.0 | 1.8403
+  INIT | Toronto Blue Jays @ Texas Rangers | OVER 7.5 | 1.8621
+  INIT | Toronto Blue Jays @ Texas Rangers | UNDER 7.5 | 2.01
+  INIT | Atlanta Braves @ Houston Astros | OVER 8.0 | 1.8772
+  INIT | Atlanta Braves @ Houston Astros | UNDER 8.0 | 1.9901
+  INIT | Minnesota Twins @ Los Angeles Angels | OVER 8.5 | 1.9615
+  INIT | Minnesota Twins @ Los Angeles Angels | UNDER 8.5 | 1.9091
+  INIT | Detroit Tigers @ Chicago White Sox | OVER 8.5 | 1.9091
+  INIT | Detroit Tigers @ Chicago White Sox | UNDER 8.5 | 1.9615
+  INIT | New York Yankees @ Arizona Diamondbacks | OVER 7.5 | 1.8772
+  INIT | New York Yankees @ Arizona Diamondbacks | UNDER 7.5 | 1.9901
+  INIT | Athletics @ Cleveland Guardians | OVER 8.5 | 1.9009
+  INIT | Athletics @ Cleveland Guardians | UNDER 8.5 | 1.9709
+  INIT | Kansas City Royals @ Pittsburgh Pirates | OVER 8.0 | 1.9709
+  INIT | Kansas City Royals @ Pittsburgh Pirates | UNDER 8.0 | 1.9009
+  INIT | Boston Red Sox @ Tampa Bay Rays | OVER 7.5 | 2.06
+  INIT | Boston Red Sox @ Tampa Bay Rays | UNDER 7.5 | 1.8197
+  INIT | San Francisco Giants @ Los Angeles Dodgers | OVER 8.0 | 1.9009
+  INIT | San Francisco Giants @ Los Angeles Dodgers | UNDER 8.0 | 1.9615
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR MARKET [MLB] 1636401339: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/matchups/1636401339/markets/related/straight
+ERROR MARKET [MLB] 1636401369: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/matchups/1636401369/markets/related/straight
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR MARKET [MLB] 1636401339: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/matchups/1636401339/markets/related/straight
+ERROR MARKET [MLB] 1636401369: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/matchups/1636401369/markets/related/straight
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+ERROR LEAGUE [Mexican League] 244: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/leagues/244/matchups
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V17 - 5 LEAGUES | STEAM + VALUE | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILE: TOTAL / OVER / STEAM 4.0-5.0 / STRENGTH 70.0-80.0
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM ACTIU / NO GOOGLE SHEETS
+PINNACLE API KEY: CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+ERROR MARKET [MLB] 1636408818: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/matchups/1636408818/markets/related/straight
+ERROR MARKET [MLB] 1636401324: HTTPError: 403 Client Error: Forbidden for url: https://guest.api.arcadia.pinnacle.com/0.1/matchups/1636401324/markets/related/straight
+
+Interromput per l'usuari.
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V18 - 5 LEAGUES | STEAM + VALUE | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILE: TOTAL / OVER / STEAM 4.0-5.0 / STRENGTH 70.0-80.0
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM ACTIU / NO GOOGLE SHEETS
+PINNACLE API KEY: CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V19 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILE: TOTAL / OVER / STEAM 4.0-5.0 / STRENGTH 70.0-80.0
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM ACTIU / NO GOOGLE SHEETS
+PINNACLE API KEY: CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V20 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILE: TOTAL / OVER / STEAM 4.0-5.0 / STRENGTH 70.0-80.0
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM ACTIU / NO GOOGLE SHEETS
+PINNACLE API KEY: CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+
+Interromput per l'usuari.
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V21 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILES: ML S5-6/STR70-80 | RUN LINE S3-4/STR60-70 | TOTAL S4-5/STR70-80
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM ACTIU / NO GOOGLE SHEETS
+PINNACLE API KEY: CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+💓 HEARTBEAT | cycle=60 | matches=12 | 14:06:58
+💓 HEARTBEAT | cycle=120 | matches=12 | 14:12:25
+💓 HEARTBEAT | cycle=180 | matches=12 | 14:17:53
+💓 HEARTBEAT | cycle=240 | matches=12 | 14:23:21
+💓 HEARTBEAT | cycle=300 | matches=12 | 14:28:49
+💓 HEARTBEAT | cycle=360 | matches=12 | 14:34:14
+💓 HEARTBEAT | cycle=420 | matches=12 | 14:39:39
+💓 HEARTBEAT | cycle=480 | matches=12 | 14:45:05
+💓 HEARTBEAT | cycle=540 | matches=12 | 14:50:34
+💓 HEARTBEAT | cycle=600 | matches=12 | 14:56:02
+💓 HEARTBEAT | cycle=660 | matches=12 | 15:01:27
+💓 HEARTBEAT | cycle=720 | matches=12 | 15:06:52
+💓 HEARTBEAT | cycle=780 | matches=12 | 15:12:21
+💓 HEARTBEAT | cycle=840 | matches=12 | 15:17:51
+💓 HEARTBEAT | cycle=900 | matches=12 | 15:23:18
+💓 HEARTBEAT | cycle=960 | matches=12 | 15:28:46
+
+  ============================================================================
+  🎯 STEAM CONFIRMAT
+  League:      MLB
+  Match:       Kansas City Royals @ Pittsburgh Pirates
+  Market:      TOTAL
+  Selection:   OVER 8
+  Odds:        1.9709 → 1.8772
+  Steam Score: 4.75
+  Strength:    73.8
+  Profile:     S4-5/STR70-80
+  Bet365:      PENDENT — no es crea aposta
+  ============================================================================
+
+  ============================================================================
+  🎯 STEAM CONFIRMAT
+  League:      MLB
+  Match:       Boston Red Sox @ Tampa Bay Rays
+  Market:      RUN LINE
+  Selection:   HOME -1.5
+  Odds:        2.78 → 2.69
+  Steam Score: 3.24
+  Strength:    66.2
+  Profile:     S3-4/STR60-70
+  Bet365:      PENDENT — no es crea aposta
+  ============================================================================
+💓 HEARTBEAT | cycle=1020 | matches=12 | 15:34:16
+💓 HEARTBEAT | cycle=1080 | matches=12 | 15:39:42
+💓 HEARTBEAT | cycle=1140 | matches=12 | 15:45:10
+💓 HEARTBEAT | cycle=1200 | matches=12 | 15:50:40
+💓 HEARTBEAT | cycle=1260 | matches=12 | 15:56:06
+💓 HEARTBEAT | cycle=1320 | matches=12 | 16:01:34
+💓 HEARTBEAT | cycle=1380 | matches=18 | 16:07:05
+💓 HEARTBEAT | cycle=1440 | matches=18 | 16:12:35
+💓 HEARTBEAT | cycle=1500 | matches=22 | 16:18:06
+💓 HEARTBEAT | cycle=1560 | matches=23 | 16:23:38
+💓 HEARTBEAT | cycle=1620 | matches=23 | 16:29:11
+💓 HEARTBEAT | cycle=1680 | matches=23 | 16:34:46
+💓 HEARTBEAT | cycle=1740 | matches=23 | 16:40:17
+💓 HEARTBEAT | cycle=1800 | matches=23 | 16:45:48
+
+  ============================================================================
+  🎯 STEAM CONFIRMAT
+  League:      MLB
+  Match:       Athletics @ Cleveland Guardians
+  Market:      RUN LINE
+  Selection:   HOME -1.5
+  Odds:        2.05 → 1.9804
+  Steam Score: 3.40
+  Strength:    67.0
+  Profile:     S3-4/STR60-70
+  Bet365:      PENDENT — no es crea aposta
+  ============================================================================
+💓 HEARTBEAT | cycle=1860 | matches=24 | 16:51:17
+💓 HEARTBEAT | cycle=1920 | matches=24 | 16:56:44
+💓 HEARTBEAT | cycle=1980 | matches=24 | 17:02:13
+💓 HEARTBEAT | cycle=2040 | matches=25 | 17:07:43
+💓 HEARTBEAT | cycle=2100 | matches=25 | 17:13:14
+💓 HEARTBEAT | cycle=2160 | matches=25 | 17:18:44
+💓 HEARTBEAT | cycle=2220 | matches=25 | 17:24:15
+💓 HEARTBEAT | cycle=2280 | matches=25 | 17:29:49
+💓 HEARTBEAT | cycle=2340 | matches=25 | 17:35:41
+💓 HEARTBEAT | cycle=2400 | matches=25 | 17:41:44
+💓 HEARTBEAT | cycle=2460 | matches=25 | 17:47:19
+💓 HEARTBEAT | cycle=2520 | matches=25 | 17:52:55
+💓 HEARTBEAT | cycle=2580 | matches=25 | 17:58:24
+💓 HEARTBEAT | cycle=2640 | matches=25 | 18:03:55
+💓 HEARTBEAT | cycle=2700 | matches=25 | 18:09:26
+💓 HEARTBEAT | cycle=2760 | matches=25 | 18:15:00
+💓 HEARTBEAT | cycle=2820 | matches=26 | 18:20:32
+💓 HEARTBEAT | cycle=2880 | matches=26 | 18:26:04
+💓 HEARTBEAT | cycle=2940 | matches=26 | 18:31:37
+💓 HEARTBEAT | cycle=3000 | matches=25 | 18:37:13
+💓 HEARTBEAT | cycle=3060 | matches=25 | 18:42:42
+💓 HEARTBEAT | cycle=3120 | matches=25 | 18:48:13
+💓 HEARTBEAT | cycle=3180 | matches=26 | 18:53:45
+💓 HEARTBEAT | cycle=3240 | matches=26 | 18:59:19
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V21 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILES: ML S5-6/STR70-80 | RUN LINE S3-4/STR60-70 | TOTAL S4-5/STR70-80
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM ACTIU / NO GOOGLE SHEETS
+PINNACLE API KEY: CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V21 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILES: ML S5-6/STR70-80 | RUN LINE S3-4/STR60-70 | TOTAL S4-5/STR70-80
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM SENSE CREDENCIALS / NO GOOGLE SHEETS
+PINNACLE API KEY: NO CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V21 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILES: ML S5-6/STR70-80 | RUN LINE S3-4/STR60-70 | TOTAL S4-5/STR70-80
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM SENSE CREDENCIALS / NO GOOGLE SHEETS
+PINNACLE API KEY: NO CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+💓 HEARTBEAT | cycle=60 | matches=26 | 19:06:09
+💓 HEARTBEAT | cycle=60 | matches=26 | 19:09:09
+💓 HEARTBEAT | cycle=120 | matches=26 | 19:11:44
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V21 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILES: ML S5-6/STR70-80 | RUN LINE S3-4/STR60-70 | TOTAL S4-5/STR70-80
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM SENSE CREDENCIALS / NO GOOGLE SHEETS
+PINNACLE API KEY: NO CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+💓 HEARTBEAT | cycle=120 | matches=26 | 19:14:43
+💓 HEARTBEAT | cycle=180 | matches=26 | 19:17:14
+💓 HEARTBEAT | cycle=60 | matches=26 | 19:18:27
+💓 HEARTBEAT | cycle=180 | matches=26 | 19:20:13
+📝 STEAM/VALUE TEST LOG: logs\steam_value_2026-09-18.log
+⚾ BASEBALL STEAM V21 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾
+LEAGUES: 244=Mexican League | 246=MLB | 6227=KBO | 187703=NPB | 208753=Chinese Taipei Professional League
+PROFILES: ML S5-6/STR70-80 | RUN LINE S3-4/STR60-70 | TOTAL S4-5/STR70-80
+VALUE: P=55.00% | MIN EDGE=5.00% | MIN ODDS=1.909
+CONFIRMATION=60s | POLL=5s
+PAPER TEST | NO APOSTES REALS | TELEGRAM SENSE CREDENCIALS / NO GOOGLE SHEETS
+PINNACLE API KEY: CONFIGURADA
+BANKROLL: 1000.00 € | STAKE: 3.0% del bank per aposta VALUE
+RESULTATS: resolució automàtica preparada; no es resol cap aposta sense marcador verificat.
+MODE AUTÒNOM: només mostra esdeveniments significatius.
+
+💓 HEARTBEAT | cycle=240 | matches=26 | 19:22:47
+💓 HEARTBEAT | cycle=240 | matches=26 | 19:25:43
+💓 HEARTBEAT | cycle=60 | matches=26 | 19:26:22
+💓 HEARTBEAT | cycle=300 | matches=26 | 19:28:17
+💓 HEARTBEAT | cycle=300 | matches=26 | 19:31:12
+💓 HEARTBEAT | cycle=120 | matches=26 | 19:31:54
+💓 HEARTBEAT | cycle=360 | matches=26 | 19:33:53
+💓 HEARTBEAT | cycle=360 | matches=26 | 19:36:45
+💓 HEARTBEAT | cycle=180 | matches=26 | 19:37:27
+💓 HEARTBEAT | cycle=420 | matches=26 | 19:39:27
+💓 HEARTBEAT | cycle=420 | matches=26 | 19:42:15
+💓 HEARTBEAT | cycle=240 | matches=26 | 19:43:01
+💓 HEARTBEAT | cycle=480 | matches=26 | 19:45:01
+💓 HEARTBEAT | cycle=480 | matches=26 | 19:47:47
+💓 HEARTBEAT | cycle=300 | matches=26 | 19:48:35
+💓 HEARTBEAT | cycle=540 | matches=26 | 19:50:40
+💓 HEARTBEAT | cycle=540 | matches=26 | 19:53:20
+💓 HEARTBEAT | cycle=360 | matches=26 | 19:54:13
+💓 HEARTBEAT | cycle=600 | matches=26 | 19:56:17
+💓 HEARTBEAT | cycle=600 | matches=26 | 19:58:52
+💓 HEARTBEAT | cycle=420 | matches=26 | 19:59:50
+💓 HEARTBEAT | cycle=660 | matches=26 | 20:01:53
+💓 HEARTBEAT | cycle=660 | matches=26 | 20:04:26
+💓 HEARTBEAT | cycle=480 | matches=26 | 20:05:23
+💓 HEARTBEAT | cycle=720 | matches=26 | 20:07:27
+💓 HEARTBEAT | cycle=720 | matches=26 | 20:09:57
+💓 HEARTBEAT | cycle=540 | matches=26 | 20:10:55
+💓 HEARTBEAT | cycle=780 | matches=26 | 20:12:55
+💓 HEARTBEAT | cycle=780 | matches=26 | 20:15:28
+💓 HEARTBEAT | cycle=600 | matches=26 | 20:16:23
+💓 HEARTBEAT | cycle=840 | matches=26 | 20:18:24
+💓 HEARTBEAT | cycle=840 | matches=26 | 20:20:57
+💓 HEARTBEAT | cycle=660 | matches=26 | 20:21:56
+💓 HEARTBEAT | cycle=900 | matches=26 | 20:23:54
+💓 HEARTBEAT | cycle=900 | matches=26 | 20:26:25
+💓 HEARTBEAT | cycle=720 | matches=26 | 20:27:27
+💓 HEARTBEAT | cycle=960 | matches=26 | 20:29:22
+💓 HEARTBEAT | cycle=960 | matches=26 | 20:31:58
+💓 HEARTBEAT | cycle=780 | matches=26 | 20:32:56
+💓 HEARTBEAT | cycle=1020 | matches=26 | 20:34:54
+💓 HEARTBEAT | cycle=1020 | matches=26 | 20:37:30
+💓 HEARTBEAT | cycle=840 | matches=26 | 20:38:28
+💓 HEARTBEAT | cycle=1080 | matches=26 | 20:40:28
+💓 HEARTBEAT | cycle=1080 | matches=26 | 20:43:02
+💓 HEARTBEAT | cycle=900 | matches=26 | 20:44:04
+💓 HEARTBEAT | cycle=1140 | matches=26 | 20:45:58
+💓 HEARTBEAT | cycle=1140 | matches=26 | 20:48:31
+💓 HEARTBEAT | cycle=960 | matches=26 | 20:49:36
+💓 HEARTBEAT | cycle=1200 | matches=26 | 20:51:25
+💓 HEARTBEAT | cycle=1200 | matches=26 | 20:53:58
+💓 HEARTBEAT | cycle=1020 | matches=26 | 20:55:04
+💓 HEARTBEAT | cycle=1260 | matches=26 | 20:56:53
+💓 HEARTBEAT | cycle=1260 | matches=26 | 20:59:26
+💓 HEARTBEAT | cycle=1080 | matches=26 | 21:00:32
+💓 HEARTBEAT | cycle=1320 | matches=26 | 21:02:21
+💓 HEARTBEAT | cycle=1320 | matches=26 | 21:04:57
+💓 HEARTBEAT | cycle=1140 | matches=26 | 21:05:58
+💓 HEARTBEAT | cycle=1380 | matches=26 | 21:07:50
+💓 HEARTBEAT | cycle=1380 | matches=26 | 21:10:27
+💓 HEARTBEAT | cycle=1200 | matches=26 | 21:11:28
+💓 HEARTBEAT | cycle=1440 | matches=26 | 21:13:21
+💓 HEARTBEAT | cycle=1440 | matches=26 | 21:15:57
+💓 HEARTBEAT | cycle=1260 | matches=26 | 21:16:57
+💓 HEARTBEAT | cycle=1500 | matches=26 | 21:18:47
+💓 HEARTBEAT | cycle=1500 | matches=26 | 21:21:24
+💓 HEARTBEAT | cycle=1320 | matches=26 | 21:22:28
+💓 HEARTBEAT | cycle=1560 | matches=26 | 21:24:21
+💓 HEARTBEAT | cycle=1560 | matches=26 | 21:26:55
+ERROR LEAGUE [Mexican League] 244: ReadTimeout: HTTPSConnectionPool(host='guest.api.arcadia.pinnacle.com', port=443): Read timed out. (read timeout=30)
+ERROR LEAGUE [Mexican League] 244: ReadTimeout: HTTPSConnectionPool(host='guest.api.arcadia.pinnacle.com', port=443): Read timed out. (read timeout=30)
+ERROR LEAGUE [Mexican League] 244: ReadTimeout: HTTPSConnectionPool(host='guest.api.arcadia.pinnacle.com', port=443): Read timed out. (read timeout=30)
+💓 HEARTBEAT | cycle=1380 | matches=26 | 21:28:33
+💓 HEARTBEAT | cycle=1620 | matches=26 | 21:30:22
+💓 HEARTBEAT | cycle=1620 | matches=26 | 21:32:56
+💓 HEARTBEAT | cycle=1440 | matches=26 | 21:34:08
+💓 HEARTBEAT | cycle=1680 | matches=26 | 21:35:53
+💓 HEARTBEAT | cycle=1680 | matches=26 | 21:38:24
+💓 HEARTBEAT | cycle=1500 | matches=26 | 21:39:41
+💓 HEARTBEAT | cycle=1740 | matches=26 | 21:41:21
+💓 HEARTBEAT | cycle=1740 | matches=26 | 21:43:53
+💓 HEARTBEAT | cycle=1560 | matches=26 | 21:45:13
+💓 HEARTBEAT | cycle=1800 | matches=26 | 21:46:50
+💓 HEARTBEAT | cycle=1800 | matches=26 | 21:49:23
+💓 HEARTBEAT | cycle=1620 | matches=26 | 21:50:44
+💓 HEARTBEAT | cycle=1860 | matches=26 | 21:52:24
+💓 HEARTBEAT | cycle=1860 | matches=26 | 21:54:54
+💓 HEARTBEAT | cycle=1680 | matches=26 | 21:56:12
+💓 HEARTBEAT | cycle=1920 | matches=26 | 21:57:55
+💓 HEARTBEAT | cycle=1920 | matches=26 | 22:00:23
+💓 HEARTBEAT | cycle=1740 | matches=26 | 22:01:42
+💓 HEARTBEAT | cycle=1980 | matches=26 | 22:03:23
+💓 HEARTBEAT | cycle=1980 | matches=26 | 22:05:54
+💓 HEARTBEAT | cycle=1800 | matches=26 | 22:07:15
+💓 HEARTBEAT | cycle=2040 | matches=26 | 22:08:54
+💓 HEARTBEAT | cycle=2040 | matches=26 | 22:11:31
+💓 HEARTBEAT | cycle=1860 | matches=26 | 22:12:44
+💓 HEARTBEAT | cycle=2100 | matches=26 | 22:14:23
+💓 HEARTBEAT | cycle=2100 | matches=26 | 22:17:03
+💓 HEARTBEAT | cycle=1920 | matches=26 | 22:18:14
+💓 HEARTBEAT | cycle=2160 | matches=26 | 22:19:49
+💓 HEARTBEAT | cycle=2160 | matches=26 | 22:22:30
+💓 HEARTBEAT | cycle=1980 | matches=26 | 22:23:44
+💓 HEARTBEAT | cycle=2220 | matches=26 | 22:25:18
+💓 HEARTBEAT | cycle=2220 | matches=26 | 22:27:59
+💓 HEARTBEAT | cycle=2040 | matches=26 | 22:29:10
+💓 HEARTBEAT | cycle=2280 | matches=26 | 22:30:44
+💓 HEARTBEAT | cycle=2280 | matches=26 | 22:33:29
+💓 HEARTBEAT | cycle=2100 | matches=26 | 22:34:36
+💓 HEARTBEAT | cycle=2340 | matches=26 | 22:36:11
+💓 HEARTBEAT | cycle=2340 | matches=27 | 22:38:53
+💓 HEARTBEAT | cycle=2160 | matches=27 | 22:40:03
+💓 HEARTBEAT | cycle=2400 | matches=27 | 22:41:35
+💓 HEARTBEAT | cycle=2400 | matches=27 | 22:44:20
+💓 HEARTBEAT | cycle=2220 | matches=27 | 22:45:31
+💓 HEARTBEAT | cycle=2460 | matches=27 | 22:47:03
+💓 HEARTBEAT | cycle=2460 | matches=27 | 22:49:47
+💓 HEARTBEAT | cycle=2280 | matches=27 | 22:51:04
+💓 HEARTBEAT | cycle=2520 | matches=27 | 22:52:33
+💓 HEARTBEAT | cycle=2520 | matches=27 | 22:55:24
+💓 HEARTBEAT | cycle=2340 | matches=27 | 22:56:38
+💓 HEARTBEAT | cycle=2580 | matches=27 | 22:58:01
+💓 HEARTBEAT | cycle=2580 | matches=27 | 23:01:00
+💓 HEARTBEAT | cycle=2400 | matches=27 | 23:02:12
+💓 HEARTBEAT | cycle=2640 | matches=27 | 23:03:34
+💓 HEARTBEAT | cycle=2640 | matches=27 | 23:06:30
+💓 HEARTBEAT | cycle=2460 | matches=27 | 23:07:45
+💓 HEARTBEAT | cycle=2700 | matches=27 | 23:09:10
+💓 HEARTBEAT | cycle=2700 | matches=27 | 23:12:03
+💓 HEARTBEAT | cycle=2520 | matches=27 | 23:13:19
+💓 HEARTBEAT | cycle=2760 | matches=27 | 23:14:40
+💓 HEARTBEAT | cycle=2760 | matches=27 | 23:17:38
+💓 HEARTBEAT | cycle=2580 | matches=27 | 23:18:49
+💓 HEARTBEAT | cycle=2820 | matches=27 | 23:20:10
+💓 HEARTBEAT | cycle=2820 | matches=27 | 23:23:07
+💓 HEARTBEAT | cycle=2640 | matches=27 | 23:24:19
+💓 HEARTBEAT | cycle=2880 | matches=27 | 23:25:38
+💓 HEARTBEAT | cycle=2880 | matches=27 | 23:28:36
+💓 HEARTBEAT | cycle=2700 | matches=27 | 23:29:48
+💓 HEARTBEAT | cycle=2940 | matches=27 | 23:31:08
+💓 HEARTBEAT | cycle=2940 | matches=27 | 23:34:05
+💓 HEARTBEAT | cycle=2760 | matches=27 | 23:35:16
+💓 HEARTBEAT | cycle=3000 | matches=27 | 23:36:39
+💓 HEARTBEAT | cycle=3000 | matches=27 | 23:39:35
+💓 HEARTBEAT | cycle=2820 | matches=27 | 23:40:44
+💓 HEARTBEAT | cycle=3060 | matches=27 | 23:42:13
+💓 HEARTBEAT | cycle=3060 | matches=27 | 23:45:04
+💓 HEARTBEAT | cycle=2880 | matches=27 | 23:46:13
+💓 HEARTBEAT | cycle=3120 | matches=27 | 23:47:44
+💓 HEARTBEAT | cycle=3120 | matches=27 | 23:51:06
+💓 HEARTBEAT | cycle=2940 | matches=27 | 23:51:44
+💓 HEARTBEAT | cycle=3180 | matches=27 | 23:53:15
+💓 HEARTBEAT | cycle=3180 | matches=27 | 23:57:04
+💓 HEARTBEAT | cycle=3000 | matches=27 | 23:57:15
+💓 HEARTBEAT | cycle=3240 | matches=27 | 23:58:44
+💓 HEARTBEAT | cycle=3240 | matches=27 | 00:02:37
+💓 HEARTBEAT | cycle=3060 | matches=27 | 00:02:49
+💓 HEARTBEAT | cycle=3300 | matches=27 | 00:04:16
+💓 HEARTBEAT | cycle=3300 | matches=27 | 00:08:13
+💓 HEARTBEAT | cycle=3120 | matches=27 | 00:08:27
+💓 HEARTBEAT | cycle=3360 | matches=27 | 00:09:53
+💓 HEARTBEAT | cycle=3360 | matches=28 | 00:13:41
+💓 HEARTBEAT | cycle=3180 | matches=28 | 00:14:00
+💓 HEARTBEAT | cycle=3420 | matches=28 | 00:15:26
+💓 HEARTBEAT | cycle=3420 | matches=28 | 00:19:09
+💓 HEARTBEAT | cycle=3240 | matches=28 | 00:19:25
+💓 HEARTBEAT | cycle=3480 | matches=28 | 00:20:53
+💓 HEARTBEAT | cycle=3480 | matches=28 | 00:24:40
+💓 HEARTBEAT | cycle=3300 | matches=28 | 00:24:55
+💓 HEARTBEAT | cycle=3540 | matches=28 | 00:26:24
+💓 HEARTBEAT | cycle=3540 | matches=28 | 00:30:09
+💓 HEARTBEAT | cycle=3360 | matches=28 | 00:30:24
+💓 HEARTBEAT | cycle=3600 | matches=28 | 00:31:56
+💓 HEARTBEAT | cycle=3600 | matches=28 | 00:35:37
+💓 HEARTBEAT | cycle=3420 | matches=28 | 00:35:54
+💓 HEARTBEAT | cycle=3660 | matches=28 | 00:37:31
+💓 HEARTBEAT | cycle=3660 | matches=27 | 00:41:04
+💓 HEARTBEAT | cycle=3480 | matches=27 | 00:41:24
+💓 HEARTBEAT | cycle=3720 | matches=27 | 00:43:04
+💓 HEARTBEAT | cycle=3720 | matches=27 | 00:46:36
+💓 HEARTBEAT | cycle=3540 | matches=27 | 00:46:50
+💓 HEARTBEAT | cycle=3780 | matches=27 | 00:48:30
+💓 HEARTBEAT | cycle=3780 | matches=27 | 00:52:03
+💓 HEARTBEAT | cycle=3600 | matches=27 | 00:52:19
+💓 HEARTBEAT | cycle=3840 | matches=27 | 00:53:58
+💓 HEARTBEAT | cycle=3840 | matches=27 | 00:57:33

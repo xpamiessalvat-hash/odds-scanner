@@ -436,7 +436,100 @@ def is_continuous_steam(history):
     )
 
     return decreasing
-market_engine = MarketEngine()
+
+
+class BaseballScanner:
+
+    def __init__(self):
+
+        self.market_engine = MarketEngine()
+
+    def run(self):
+        pass
+
+    def scan(self):
+
+        matchups = get_matchups()
+
+        print(
+            f"MATCHUPS: {len(matchups)}",
+            flush=True
+        )
+
+    def process_matchup(self, matchup_id, data):
+
+        start_time = datetime.fromisoformat(
+            data["start_time"].replace("Z", "+00:00")
+        )
+
+        hours_until_match = (
+            start_time - datetime.now(timezone.utc)
+        ).total_seconds() / 3600
+
+        markets = get_markets(matchup_id)
+        print(
+            "ENTRO A PROCESS_MATCHUP",
+            flush=True
+        )
+        print(
+            f"PROCESS MATCHUP: {data['match_name']} -> markets={len(markets)}",
+            flush=True
+        )
+        return markets, hours_until_match
+
+    
+    def process_market(
+        self,
+        matchup_id,
+        data,
+        market,
+        hours_until_match,
+        previous_odds
+    ):
+
+        prices = market.get("prices", [])
+
+        if len(prices) != 2:
+            return False, [], None, None
+
+        if "designation" not in prices[0]:
+            return False, [], None, None
+
+        if market.get("type") not in [
+            "moneyline",
+            "spread",
+            "total"
+        ]:
+            return False, [], None, None
+
+        if market.get("period") != 0:
+            return False, [], None, None
+
+        if market.get("isAlternate", False):
+            return False, [], None, None
+
+        snapshot = build_snapshot(
+            matchup_id,
+            data,
+            market,
+            prices,
+            previous_odds
+        )
+
+        if snapshot is None:
+            return True, prices, None, None
+
+        signal = self.market_engine.analyze(
+    snapshot
+)
+
+        return True, prices, snapshot, signal
+        
+    
+scanner = BaseballScanner()
+
+market_engine = scanner.market_engine
+
 while True:
 
     try:
@@ -451,58 +544,33 @@ while True:
         market_leaders = {}
 
         for matchup_id, data in matchups.items():
-            start_time = datetime.fromisoformat(
-                data["start_time"].replace("Z", "+00:00")
-            )
 
-            hours_until_match = (
-                start_time - datetime.now(timezone.utc)
-            ).total_seconds() / 3600
-            markets = get_markets(matchup_id)
-            print(f"{data['match_name']} -> markets={len(markets)}", flush=True)
             valids = 0
 
+            markets, hours_until_match = scanner.process_matchup(
+                matchup_id,
+                data
+            )
+
             for market in markets:
+
+                is_valid, prices, snapshot, signal = scanner.process_market(
+                    matchup_id,
+                    data,
+                    market,
+                    hours_until_match,
+                    previous_odds
+                )
+
+                if not is_valid:
+                    continue
+
                 print(
                     f"Market: {market.get('type')} period={market.get('period')} prices={len(market.get('prices', []))}",
                     flush=True
                 )
-                prices = market.get("prices", [])
-
-                if len(prices) != 2:
-                    continue
-
-                if "designation" not in prices[0]:
-                    continue
-
-                if market.get("type") not in [
-                    "moneyline",
-                    "spread",
-                    "total"
-                ]:
-                    continue
-
-                if market.get("period") != 0:
-                    continue
-
-                if market.get("isAlternate", False):
-                    continue
 
                 valids += 1
-
-                print("ARRIBA A BUILD_SNAPSHOT", flush=True)
-                print(
-                    f"PREVIOUS_ODDS ABANS SNAPSHOT = {len(previous_odds)}",
-                    flush=True
-                )
-
-                snapshot = build_snapshot(
-                    matchup_id,
-                    data,
-                    market,
-                    prices,
-                    previous_odds
-                )
 
                 if snapshot is None:
 
@@ -524,16 +592,12 @@ while True:
 
                         previous_odds[key] = american_odd
 
-                    print(
-                        f"GUARDAT -> {market['type']} | {designation} | {points}",
-                        flush=True
-                    )
+                        print(
+                            f"GUARDAT -> {market['type']} | {designation} | {points}",
+                            flush=True
+                        )
 
                     continue
-
-                signal = market_engine.analyze(
-                    snapshot
-                )
 
                 if signal is None:
                     print(
@@ -550,7 +614,6 @@ while True:
                     f"Conf={signal.confidence:.1f}",
                     flush=True
                 )
-
 
                 for price in prices:
                     designation = price.get("designation")
@@ -574,7 +637,6 @@ while True:
                         points
                     )
 
-
                     if key in previous_odds:
                         old_odd = previous_odds[key]
 
@@ -583,7 +645,8 @@ while True:
                             new_decimal = american_to_decimal(american_odd)
 
                             history = update_market_history(
-                                market_history,                              key,
+                                market_history,
+                                key,
                                 new_decimal
                             )
 
@@ -627,112 +690,111 @@ while True:
                                     american_odd,
                                     movement_pct
                                 ])
-                                
-                                steam_key = (
-                                    matchup_id,
-                                    market["type"],
-                                    designation,
-                                    points
+
+                            steam_key = (
+                                matchup_id,
+                                market["type"],
+                                designation,
+                                points
+                            )
+
+                            current_time = time.time()
+
+                            should_write_steam = True
+
+                            if steam_key in last_steam:
+                                seconds_since = (
+                                    current_time
+                                    - last_steam[steam_key]
                                 )
 
-                                current_time = time.time()
+                                if seconds_since < 1800:
+                                    should_write_steam = False
 
-                                should_write_steam = True
+                            if should_write_steam:
 
-                                if steam_key in last_steam:
-                                    seconds_since = (
-                                        current_time
-                                        - last_steam[steam_key]
+                                with open(
+                                    STEAM_FILE,
+                                    "a",
+                                    newline="",
+                                    encoding="utf-8"
+                                ) as file:
+
+                                    writer = csv.writer(
+                                        file,
+                                        delimiter=";"
                                     )
 
-                                    if seconds_since < 1800:
-                                        should_write_steam = False
+                                    writer.writerow([
+                                        datetime.now(timezone.utc).isoformat(),
+                                        data["match_name"],
+                                        market["type"],
+                                        designation,
+                                        points,
+                                        old_odd,
+                                        american_odd,
+                                        movement_pct,
+                                        strength
+                                    ])
 
-                                if should_write_steam:
-                                    
-                                    with open(
-                                        STEAM_FILE,
-                                        "a",
-                                        newline="",
-                                        encoding="utf-8"
-                                    ) as file:
+                                last_steam[steam_key] = current_time
 
-                                        writer = csv.writer(
-                                            file,
-                                            delimiter=";"
-                                        )
+                                open_steams[steam_key] = {
+                                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                                    "match": data["match_name"],
+                                    "market": market["type"],
+                                    "designation": designation,
+                                    "points": points,
+                                    "steam_level": signal.strength,
+                                    "steam_odd": american_odd
+                                }
 
-                                        writer.writerow([
-                                            datetime.now(timezone.utc).isoformat(),
-                                            data["match_name"],
-                                            market["type"],
-                                            designation,
-                                            points,
-                                            old_odd,
-                                            american_odd,
-                                            movement_pct,
-                                            strength
-                                        ])
+                                value_limit = calculate_value_limit(
+                                    american_to_decimal(old_odd),
+                                    american_to_decimal(american_odd),
+                                    movement_pct
+                                )
 
-                                    last_steam[steam_key] = current_time
+                                message = (
+                                    f"⚾ STEAM DETECTAT ⚾\n\n"
+                                    f"🏟️ {data['match_name']}\n"
+                                    f"📈 {market['type']}\n"
+                                    f"🎯 {designation} {points}\n\n"
+                                    f"💰 {american_to_decimal(old_odd):.3f} → {american_to_decimal(american_odd):.3f}\n\n"
+                                    f"✅ VALUE FINS:\n"
+                                    f"{value_limit:.3f}\n\n"
+                                    f"📊 Moviment: {movement_pct:.2f}%\n"
+                                    f"⭐ Score: {steam_score:.1f}/100\n"
+                                    f"🔥 Strength: {strength}\n"
+                                    f"🕒 Kickoff: {hours_until_match:.1f}h"
+                                )
 
-                                    open_steams[steam_key] = {
-                                        "timestamp": datetime.now(timezone.utc).isoformat(),
-                                        "match": data["match_name"],
-                                        "market": market["type"],
-                                        "designation": designation,
-                                        "points": points,
-                                        "steam_level": signal.strength,
-                                        "steam_odd": american_odd
-                                    }
+                                save_to_sheets({
+                                    "league": data["league"],
+                                    "match": data["match_name"],
+                                    "market": market["type"],
+                                    "selection": f"{designation} {points}",
+                                    "entry_odds": american_odd,
+                                    "steam_percent": movement_pct,
+                                    "steam_score": steam_score,
+                                    "strength": strength
+                                })
+                                send_telegram(message)
 
-                                    value_limit = calculate_value_limit(
-                                        american_to_decimal(old_odd),
-                                        american_to_decimal(american_odd),
-                                        movement_pct
-                                    )
-                                    
-                                    message = (
-                                        f"⚾ STEAM DETECTAT ⚾\n\n"
-                                        f"🏟️ {data['match_name']}\n"
-                                        f"📈 {market['type']}\n"
-                                        f"🎯 {designation} {points}\n\n"
-                                        f"💰 {american_to_decimal(old_odd):.3f} → {american_to_decimal(american_odd):.3f}\n\n"
-                                        f"✅ VALUE FINS:\n"
-                                        f"{value_limit:.3f}\n\n"
-                                        f"📊 Moviment: {movement_pct:.2f}%\n"
-                                        f"⭐ Score: {steam_score:.1f}/100\n"
-                                        f"🔥 Strength: {strength}\n"
-                                        f"🕒 Kickoff: {hours_until_match:.1f}h"
-                                    )
-
-                                    save_to_sheets({
-                                        "league": data["league"],
-                                        "match": data["match_name"],
-                                        "market": market["type"],
-                                        "selection": f"{designation} {points}",
-                                        "entry_odds": american_odd,
-                                        "steam_percent": movement_pct,
-                                        "steam_score": steam_score,
-                                        "strength": strength
-                                    })
-                                    send_telegram(message)
-
-                                    print("SHEETS ENVIAT", flush=True)
-
-                                    print("TELEGRAM ENVIAT", flush=True)
-
-                                    print(
-                                        f"STEAM DETECTAT | Actius: {len(open_steams)}",
-                                        flush=True
-                                    )
-                                    print(f"GUARDANT: {repr(key)}", flush=True)
-                                    previous_odds[key] = american_odd
+                                print("SHEETS ENVIAT", flush=True)
+                                print("TELEGRAM ENVIAT", flush=True)
+                                print(
+                                    f"STEAM DETECTAT | Actius: {len(open_steams)}",
+                                    flush=True
+                                )
+                                print(f"GUARDANT: {repr(key)}", flush=True)
+                                previous_odds[key] = american_odd
 
                             print(
                                 f"GUARDANT {repr(key)}  TOTAL={len(previous_odds)}",
                                 flush=True
                             )
+
             print(
                 f"{data['match_name']} -> {valids}",
                 flush=True

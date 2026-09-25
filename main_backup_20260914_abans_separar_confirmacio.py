@@ -663,11 +663,6 @@ while True:
                                 "points"
                             )
 
-                            period = market.get(
-                                "period",
-                                0
-                            )
-
                             if (
                                 market_type
                                 == "spread"
@@ -699,7 +694,6 @@ while True:
                             key = (
                                 f"{match_name}-"
                                 f"{market_type}-"
-                                f"{period}-"
                                 f"{side}-"
                                 f"{points}"
                             )
@@ -718,8 +712,6 @@ while True:
                                         - decimal_odd
                                     ) / old_odd
                                 ) * 100
-
-                                previous_odds[key] = decimal_odd
 
                                 min_required = (
                                     MIN_TOTAL_STEAM
@@ -772,210 +764,210 @@ while True:
 
                                         last_logged_movements[key] = movement_signature
 
-                                if (
-                                    key in confirmed_steams
-                                    and confirmed_steams[key] == decimal_odd
-                                ):
-                                    continue
-
-                                if key not in pending_steam:
-
-                                    pending_steam[key] = {
-                                        "timestamp": current_time,
-                                        "old_odd": old_odd,
-                                        "new_odd": decimal_odd,
-                                        "league_name": league_name,
-                                        "match_name": match_name,
-                                        "market_type": market_type,
-                                        "side": side,
-                                        "points": points,
-                                        "movement": movement,
-                                        "hours_until_match": hours_until_match,
-                                        "matchup_id": matchup_id
-                                    }
-
-                                else:
-
-                                    steam_data = (
-                                        pending_steam[key]
-                                    )
-
-                                    elapsed = (
-                                        current_time
-                                        - steam_data["timestamp"]
-                                    )
-
                                     if (
-                                        elapsed >=
-                                        STEAM_CONFIRMATION_SECONDS
+                                        key in confirmed_steams
+                                        and confirmed_steams[key] == decimal_odd
                                     ):
+                                        continue
 
-                                        confirmation_attempts += 1
+                                    if key not in pending_steam:
+
+                                        pending_steam[key] = {
+                                            "timestamp": current_time,
+                                            "old_odd": old_odd,
+                                            "new_odd": decimal_odd,
+                                            "league_name": league_name,
+                                            "match_name": match_name,
+                                            "market_type": market_type,
+                                            "side": side,
+                                            "points": points,
+                                            "movement": movement,
+                                            "hours_until_match": hours_until_match,
+                                            "matchup_id": matchup_id
+                                        }
+
+                                    else:
+
+                                        steam_data = (
+                                            pending_steam[key]
+                                        )
+
+                                        elapsed = (
+                                            current_time
+                                            - steam_data["timestamp"]
+                                        )
 
                                         if (
-                                            decimal_odd
-                                            <= steam_data["new_odd"]
+                                            elapsed >=
+                                            STEAM_CONFIRMATION_SECONDS
                                         ):
 
-                                            steam_score = (
-                                                calculate_steam_score(
-                                                    steam_data["movement"],
-                                                    market_type,
-                                                    league_name,
-                                                    hours_until_match
-                                                )
-                                            )
+                                            confirmation_attempts += 1
 
-                                            strength = (
-                                                get_strength_label(
-                                                    steam_score
-                                                )
-                                            )
+                                            if (
+                                                decimal_odd
+                                                <= steam_data["new_odd"]
+                                            ):
 
-                                            if DEBUG:
-
-                                                print(
-                                                    f"DEBUG STEAM | "
-                                                    f"{match_name} | "
-                                                    f"{market_type} | "
-                                                    f"Mov={steam_data['movement']:.2f}% | "
-                                                    f"Score={steam_score} | "
-                                                    f"{league_name}",
-                                                    flush=True
-                                                )
-
-                                                print(
-                                                    f"SCORE | "
-                                                    f"{match_name} | "
-                                                    f"{steam_score} | "
-                                                    f"{strength}",
-                                                    flush=True
-                                                )
-
-                                            if steam_score < 60:
-                                                score_rejected += 1
-                                                del pending_steam[key]
-                                                continue
-
-                                            if strength == "LOW":
-                                                strength_rejected += 1
-                                                del pending_steam[key]
-                                                continue
-
-                                            value_limit = (
-                                                calculate_value_limit(
-                                                    steam_data["old_odd"],
-                                                    decimal_odd,
-                                                    steam_data["movement"]
-                                                )
-                                            )
-
-                                            market_text = (
-                                                f"{side} "
-                                                f"{points}"
-                                            )
-
-                                            print(
-                                                f"\n🔥 "
-                                                f"STEAM "
-                                                f"CONFIRMAT "
-                                                f"🔥\n"
-                                                f"🏆 {league_name}\n"
-                                                f"{match_name}\n"
-                                                f"{market_type}\n"
-                                                f"{market_text}\n"
-                                                f"{steam_data['old_odd']} "
-                                                f"-> "
-                                                f"{decimal_odd}\n",
-                                                flush=True
-                                            )
-
-                                            confirmed_count += 1
-
-                                            message = (
-                                                f"🔥 STEAM CONFIRMAT 🔥\n\n"
-                                                f"🏆 {league_name}\n"
-                                                f"⚽ {match_name}\n"
-                                                f"📈 {market_type}\n"
-                                                f"🎯 {market_text}\n\n"
-                                                f"💰 Steam:\n"
-                                                f"{steam_data['old_odd']} "
-                                                f"-> "
-                                                f"{decimal_odd}\n\n"
-                                                f"✅ VALUE FINS:\n"
-                                                f"{value_limit}\n\n"
-                                                f"📊 "
-                                                f"{steam_data['movement']:.2f}%\n"
-                                                f"⭐ Score: "
-                                                f"{steam_score}/100\n"
-                                                f"🔥 Strength: "
-                                                f"{strength}\n"
-                                                f"🕒 Kickoff: "
-                                                f"{hours_until_match:.1f}h"
-                                            )
-                                            print(
-                                                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-                                                flush=True
-                                            )
-
-                                            print(
-                                                f"SAVE SHEET -> score={steam_score} strength={strength}",
-                                                flush=True
-                                            )
-
-                                            print(
-                                                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-                                                flush=True
-                                            )
-
-                                            alert_key = (
-f"{matchup_id}-"
-f"{market_type}-"
-f"{side}-"
-f"{points}"
-)
-
-                                            last_alert = last_alerts.get(
-                                                alert_key,
-                                                0
-                                            )
-
-                                            if current_time - last_alert >= 900:
-
-                                                save_to_sheets({
-                                                    "league": league_name,
-                                                    "match": match_name,
-                                                    "market": market_type,
-                                                    "selection": market_text,
-                                                    "entry_odds": decimal_odd,
-                                                    "value_limit": value_limit,
-                                                    "steam_percent": round(
+                                                steam_score = (
+                                                    calculate_steam_score(
                                                         steam_data["movement"],
-                                                        2
-                                                    ),
-                                                    "steam_score": steam_score,
-                                                    "strength": strength,
-                                                    "kickoff_hours": round(
-                                                        hours_until_match,
-                                                        1
-                                                    ),
-                                                    "matchup_id": matchup_id,
-                                                    "market_type": market_type,
-                                                    "points": points,
-                                                    "side": side
-                                                })
+                                                        market_type,
+                                                        league_name,
+                                                        hours_until_match
+                                                    )
+                                                )
 
-                                                send_telegram(message)
-                                                telegram_count += 1
-                                                confirmed_steams[key] = decimal_odd
-                                                last_alerts[alert_key] = current_time
+                                                strength = (
+                                                    get_strength_label(
+                                                        steam_score
+                                                    )
+                                                )
 
-                                            del pending_steam[key]
-                                        else:
+                                                if DEBUG:
 
-                                            confirmation_failed += 1
-                                            del pending_steam[key]
-                                            continue
+                                                    print(
+                                                        f"DEBUG STEAM | "
+                                                        f"{match_name} | "
+                                                        f"{market_type} | "
+                                                        f"Mov={steam_data['movement']:.2f}% | "
+                                                        f"Score={steam_score} | "
+                                                        f"{league_name}",
+                                                        flush=True
+                                                    )
+
+                                                    print(
+                                                        f"SCORE | "
+                                                        f"{match_name} | "
+                                                        f"{steam_score} | "
+                                                        f"{strength}",
+                                                        flush=True
+                                                    )
+
+                                                if steam_score < 60:
+                                                    score_rejected += 1
+                                                    del pending_steam[key]
+                                                    continue
+
+                                                if strength == "LOW":
+                                                    strength_rejected += 1
+                                                    del pending_steam[key]
+                                                    continue
+
+                                                value_limit = (
+                                                    calculate_value_limit(
+                                                        steam_data["old_odd"],
+                                                        decimal_odd,
+                                                        steam_data["movement"]
+                                                    )
+                                                )
+
+                                                market_text = (
+                                                    f"{side} "
+                                                    f"{points}"
+                                                )
+
+                                                print(
+                                                    f"\n🔥 "
+                                                    f"STEAM "
+                                                    f"CONFIRMAT "
+                                                    f"🔥\n"
+                                                    f"🏆 {league_name}\n"
+                                                    f"{match_name}\n"
+                                                    f"{market_type}\n"
+                                                    f"{market_text}\n"
+                                                    f"{steam_data['old_odd']} "
+                                                    f"-> "
+                                                    f"{decimal_odd}\n",
+                                                    flush=True
+                                                )
+
+                                                confirmed_count += 1
+
+                                                message = (
+                                                    f"🔥 STEAM CONFIRMAT 🔥\n\n"
+                                                    f"🏆 {league_name}\n"
+                                                    f"⚽ {match_name}\n"
+                                                    f"📈 {market_type}\n"
+                                                    f"🎯 {market_text}\n\n"
+                                                    f"💰 Steam:\n"
+                                                    f"{steam_data['old_odd']} "
+                                                    f"-> "
+                                                    f"{decimal_odd}\n\n"
+                                                    f"✅ VALUE FINS:\n"
+                                                    f"{value_limit}\n\n"
+                                                    f"📊 "
+                                                    f"{steam_data['movement']:.2f}%\n"
+                                                    f"⭐ Score: "
+                                                    f"{steam_score}/100\n"
+                                                    f"🔥 Strength: "
+                                                    f"{strength}\n"
+                                                    f"🕒 Kickoff: "
+                                                    f"{hours_until_match:.1f}h"
+                                                )
+                                                print(
+                                                    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                                    flush=True
+                                                )
+
+                                                print(
+                                                    f"SAVE SHEET -> score={steam_score} strength={strength}",
+                                                    flush=True
+                                                )
+
+                                                print(
+                                                    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                                    flush=True
+                                                )
+
+                                                alert_key = (
+    f"{matchup_id}-"
+    f"{market_type}-"
+    f"{side}-"
+    f"{points}"
+    )
+
+                                                last_alert = last_alerts.get(
+                                                    alert_key,
+                                                    0
+                                                )
+
+                                                if current_time - last_alert >= 900:
+
+                                                    save_to_sheets({
+                                                        "league": league_name,
+                                                        "match": match_name,
+                                                        "market": market_type,
+                                                        "selection": market_text,
+                                                        "entry_odds": decimal_odd,
+                                                        "value_limit": value_limit,
+                                                        "steam_percent": round(
+                                                            steam_data["movement"],
+                                                            2
+                                                        ),
+                                                        "steam_score": steam_score,
+                                                        "strength": strength,
+                                                        "kickoff_hours": round(
+                                                            hours_until_match,
+                                                            1
+                                                        ),
+                                                        "matchup_id": matchup_id,
+                                                        "market_type": market_type,
+                                                        "points": points,
+                                                        "side": side
+                                                    })
+
+                                                    send_telegram(message)
+                                                    telegram_count += 1
+                                                    confirmed_steams[key] = decimal_odd
+                                                    last_alerts[alert_key] = current_time
+
+                                                del pending_steam[key]
+                                            else:
+
+                                                confirmation_failed += 1
+                                                del pending_steam[key]
+                                                continue
 
                             previous_odds[key] = decimal_odd
 

@@ -3,6 +3,12 @@ import csv
 import os
 import requests
 import time
+import re
+
+try:
+    from playwright.sync_api import sync_playwright
+except ImportError:
+    sync_playwright = None
 from datetime import datetime, timezone
 
 from pathlib import Path
@@ -46,7 +52,6 @@ ALLOWED_LEAGUES = {
     6227: "KBO",
     187703: "NPB",
     208753: "Chinese Taipei Professional League",
-    294861: "Asian Games",
 }
 
 # PERFILS HISTÒRICS ACTUALS (MLB) — no són garantia de rendiment.
@@ -77,8 +82,280 @@ VALID_TOTALS = [
 ]
 
 # TELEGRAM — mateixes variables que les versions anteriors
-BOT_TOKEN = os.getenv("BOT_TOKEN", "")
-CHAT_ID = os.getenv("CHAT_ID", "")
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
+
+# BET365 — verificació de quota real després d'un STEAM confirmat.
+BET365_URL = "https://www.bet365.es"
+BET365_HEADLESS = os.getenv("BET365_HEADLESS", "1") != "0"
+BET365_TIMEOUT_MS = 120000
+BET365_WAIT_MS = 7000
+BET365_LOOKUP_ENABLED = os.getenv("BET365_LOOKUP_ENABLED", "1") != "0"
+
+BET365_ALIASES = {
+    "Seattle Mariners": ["SEA Mariners", "Seattle Mariners"],
+    "Colorado Rockies": ["COL Rockies", "Colorado Rockies"],
+    "San Diego Padres": ["SD Padres", "San Diego Padres"],
+    "Miami Marlins": ["MIA Marlins", "Miami Marlins"],
+    "Los Angeles Dodgers": ["LA Dodgers", "Los Angeles Dodgers"],
+    "San Francisco Giants": ["SF Giants", "San Francisco Giants"],
+    "Texas Rangers": ["TEX Rangers", "Texas Rangers"],
+    "Toronto Blue Jays": ["TOR Blue Jays", "Toronto Blue Jays"],
+    "Atlanta Braves": ["ATL Braves", "Atlanta Braves"],
+    "Houston Astros": ["HOU Astros", "Houston Astros"],
+    "Washington Nationals": ["WAS Nationals", "Washington Nationals"],
+    "St. Louis Cardinals": ["STL Cardinals", "St. Louis Cardinals"],
+    "Minnesota Twins": ["MIN Twins", "Minnesota Twins"],
+    "Los Angeles Angels": ["LA Angels", "Los Angeles Angels"],
+    "New York Yankees": ["NY Yankees", "New York Yankees"],
+    "Arizona Diamondbacks": ["ARI Diamondbacks", "Arizona Diamondbacks"],
+    "Chicago Cubs": ["CHI Cubs", "Chicago Cubs"],
+    "Cincinnati Reds": ["CIN Reds", "Cincinnati Reds"],
+    "Kansas City Royals": ["KC Royals", "Kansas City Royals"],
+    "Pittsburgh Pirates": ["PIT Pirates", "Pittsburgh Pirates"],
+    "Milwaukee Brewers": ["MIL Brewers", "Milwaukee Brewers"],
+    "Baltimore Orioles": ["BAL Orioles", "Baltimore Orioles"],
+    "Cleveland Guardians": ["CLE Guardians", "Cleveland Guardians"],
+    "Athletics": ["Athletics"],
+    "Boston Red Sox": ["BOS Red Sox", "Boston Red Sox"],
+    "Tampa Bay Rays": ["TB Rays", "Tampa Bay Rays"],
+    "Philadelphia Phillies": ["PHI Phillies", "Philadelphia Phillies"],
+    "New York Mets": ["NY Mets", "New York Mets"],
+    "Detroit Tigers": ["DET Tigers", "Detroit Tigers"],
+    "Chicago White Sox": ["CHI White Sox", "Chicago White Sox"],
+}
+
+_bet365_pw = None
+_bet365_browser = None
+_bet365_context = None
+_bet365_page = None
+
+def _bet365_aliases(team):
+    return BET365_ALIASES.get(team, [team])
+
+def _bet365_accept_cookies(page):
+    try:
+        buttons = page.locator("button")
+        for i in range(min(buttons.count(), 100)):
+            try:
+                t = buttons.nth(i).inner_text().strip().lower()
+                if any(k in t for k in ["aceptar", "accept", "agree"]):
+                    buttons.nth(i).click(timeout=2000)
+                    break
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+def _bet365_get_page():
+    global _bet365_pw, _bet365_browser, _bet365_context, _bet365_page
+
+    if not BET365_LOOKUP_ENABLED or sync_playwright is None:
+        return None
+
+    if _bet365_page is not None:
+        try:
+            if not _bet365_page.is_closed():
+                return _bet365_page
+        except Exception:
+            pass
+
+    _bet365_pw = sync_playwright().start()
+    _bet365_browser = _bet365_pw.chromium.launch(headless=BET365_HEADLESS)
+    _bet365_context = _bet365_browser.new_context(
+        viewport={"width": 1400, "height": 900},
+        locale="es-ES",
+    )
+    _bet365_page = _bet365_context.new_page()
+    _bet365_page.goto(
+        BET365_URL,
+        wait_until="domcontentloaded",
+        timeout=BET365_TIMEOUT_MS,
+    )
+    _bet365_page.wait_for_timeout(BET365_WAIT_MS)
+    _bet365_accept_cookies(_bet365_page)
+    _bet365_page.wait_for_timeout(3000)
+    return _bet365_page
+
+def _bet365_find_market_container(page, home, away):
+    home_aliases = _bet365_aliases(home)
+    away_aliases = _bet365_aliases(away)
+
+    home_el = None
+    away_el = None
+
+    for name in home_aliases:
+        loc = page.get_by_text(name, exact=True)
+        if loc.count():
+            home_el = loc.first
+            break
+
+    for name in away_aliases:
+        loc = page.get_by_text(name, exact=True)
+        if loc.count():
+            away_el = loc.first
+            break
+
+    if home_el is None or away_el is None:
+        return None
+
+    # El debug V2/V5 ha validat que cpr-77 és el contenidor que
+    # engloba partit + mercats principals.
+    for cls in ["cpr-77", "cpr-07", "cpr-f4c", "cpr-a6"]:
+        try:
+            node = home_el.locator(
+                f"xpath=ancestor::div[contains(concat(' ',normalize-space(@class),' '),' {cls} ')][1]"
+            )
+            if node.count():
+                txt = node.first.inner_text()
+                if (
+                    any(a.lower() in txt.lower() for a in away_aliases)
+                    and "Hándicap" in txt
+                    and "Total" in txt
+                    and "Línea de dinero" in txt
+                ):
+                    return node.first
+        except Exception:
+            pass
+
+    # Fallback: pujar per la jerarquia fins a trobar el bloc amb mercats.
+    node = home_el
+    for _ in range(10):
+        try:
+            node = node.locator("xpath=..")
+            if not node.count():
+                break
+            txt = node.first.inner_text()
+            if (
+                any(a.lower() in txt.lower() for a in away_aliases)
+                and "Hándicap" in txt
+                and "Total" in txt
+                and "Línea de dinero" in txt
+                and len(txt) < 10000
+            ):
+                return node.first
+        except Exception:
+            break
+
+    return None
+
+def _bet365_extract_total(text, side, points):
+    lines = [x.strip() for x in text.splitlines() if x.strip()]
+    low = [x.lower() for x in lines]
+    try:
+        i = next(i for i, x in enumerate(low) if x == "total")
+    except StopIteration:
+        return None
+
+    wanted = "o" if side.lower() == "over" else "u"
+    for j, line in enumerate(lines[i:i + 25]):
+        m = re.fullmatch(rf"{wanted}\s+(-?\d+(?:\.\d+)?)", line, re.I)
+        if not m:
+            continue
+        p = float(m.group(1))
+        if points is not None and abs(p - float(points)) > 0.001:
+            continue
+        for y in lines[i + j + 1:i + j + 4]:
+            if re.fullmatch(r"\d+\.\d+", y):
+                return float(y)
+    return None
+
+def _bet365_extract_spread(text, side, points):
+    lines = [x.strip() for x in text.splitlines() if x.strip()]
+    low = [x.lower() for x in lines]
+    try:
+        i = next(i for i, x in enumerate(low) if x == "hándicap")
+    except StopIteration:
+        return None
+
+    target = float(points)
+    for j, line in enumerate(lines[i:i + 20]):
+        if not re.fullmatch(r"[+-]?\d+(?:\.\d+)?", line):
+            continue
+        p = float(line)
+        if abs(p - target) > 0.001:
+            continue
+        for y in lines[i + j + 1:i + j + 4]:
+            if re.fullmatch(r"\d+\.\d+", y):
+                return float(y)
+    return None
+
+def _bet365_extract_moneyline(text, side):
+    lines = [x.strip() for x in text.splitlines() if x.strip()]
+    low = [x.lower() for x in lines]
+    try:
+        i = next(i for i, x in enumerate(low) if x == "línea de dinero")
+    except StopIteration:
+        return None
+
+    odds = []
+    for x in lines[i + 1:i + 7]:
+        if re.fullmatch(r"\d+\.\d+", x):
+            odds.append(float(x))
+    if len(odds) >= 2:
+        # Bet365 manté aquí l'ordre home / away.
+        return odds[0] if side.lower() == "home" else odds[1]
+    return None
+
+def get_bet365_odds(snapshot):
+    """
+    Consulta Bet365 només després d'un STEAM confirmat.
+    Retorna la quota real o None.
+    """
+    if not BET365_LOOKUP_ENABLED or sync_playwright is None:
+        return None
+
+    page = _bet365_get_page()
+    if page is None:
+        return None
+
+    home = snapshot["match"].split(" @ ")[-1].strip()
+    away = snapshot["match"].split(" @ ")[0].strip()
+
+    try:
+        # Refresquem la pàgina per obtenir l'estat actual de Bet365.
+        page.reload(wait_until="domcontentloaded", timeout=BET365_TIMEOUT_MS)
+        page.wait_for_timeout(BET365_WAIT_MS)
+        _bet365_accept_cookies(page)
+        page.wait_for_timeout(1500)
+
+        game = _bet365_find_market_container(page, home, away)
+        if not game:
+            return None
+
+        text = game.inner_text()
+        market = snapshot["market"]
+        side = snapshot["side"]
+        points = snapshot.get("points")
+
+        if market == "total":
+            return _bet365_extract_total(text, side, points)
+        if market == "spread":
+            return _bet365_extract_spread(text, side, points)
+        if market == "moneyline":
+            return _bet365_extract_moneyline(text, side)
+    except Exception as e:
+        print(f"BET365 ERROR: {type(e).__name__}: {e}", flush=True)
+        return None
+
+    return None
+
+def close_bet365():
+    global _bet365_pw, _bet365_browser, _bet365_context, _bet365_page
+    try:
+        if _bet365_browser:
+            _bet365_browser.close()
+    except Exception:
+        pass
+    try:
+        if _bet365_pw:
+            _bet365_pw.stop()
+    except Exception:
+        pass
+    _bet365_pw = None
+    _bet365_browser = None
+    _bet365_context = None
+    _bet365_page = None
 
 def send_telegram(message):
     if not BOT_TOKEN or not CHAT_ID:
@@ -128,6 +405,16 @@ session.headers.update(HEADERS)
 previous_odds = {}
 previous_lines = {}
 pending_steam = {}
+
+# --- DIAGNOSTIC V22 ---
+DIAG_CYCLES = 0
+DIAG_SNAPSHOTS = 0
+DIAG_INITIALIZED = 0
+DIAG_CHANGES = 0
+DIAG_SHORTENINGS = 0
+DIAG_CANDIDATES = 0
+DIAG_LAST_PRINT = 0
+DIAG_SAMPLES = []
 
 
 def american_to_decimal(price):
@@ -392,6 +679,11 @@ def log_steam_signal(snapshot, old_odd, new_odd, score, strength, profiles):
 
 
 def process_snapshot(snapshot):
+    global DIAG_SNAPSHOTS, DIAG_INITIALIZED, DIAG_CHANGES
+    global DIAG_SHORTENINGS, DIAG_CANDIDATES, DIAG_SAMPLES
+
+    DIAG_SNAPSHOTS += 1
+
     key = (
         snapshot["league_id"], snapshot["matchup_id"], snapshot["market"],
         snapshot["side"], snapshot["points"],
@@ -400,23 +692,36 @@ def process_snapshot(snapshot):
     if new_odd is None:
         return
 
-    now = time.time()
     if key not in previous_odds:
         previous_odds[key] = new_odd
+        DIAG_INITIALIZED += 1
         return
 
     old_odd = previous_odds[key]
     if old_odd == new_odd:
         return
 
-    # Steam = escurçament de quota decimal.
+    DIAG_CHANGES += 1
+
+    # Moviment decimal real, en percentatge.
     movement = ((old_odd - new_odd) / old_odd) * 100.0
+
+    if movement > 0:
+        DIAG_SHORTENINGS += 1
+    if len(DIAG_SAMPLES) < 12:
+        DIAG_SAMPLES.append(
+            f"{snapshot.get('market')} {snapshot.get('side')} "
+            f"{old_odd:.4f}->{new_odd:.4f} ({movement:.3f}%)"
+        )
+
     previous_odds[key] = new_odd
 
-    # No mostrem tots els micro-moviments; només candidats dins la finestra.
+    # Diagnòstic: comptem també els moviments petits que V22 descarta.
     if movement < STEAM_SCORE_MIN or movement >= STEAM_SCORE_MAX:
         pending_steam.pop(key, None)
         return
+
+    DIAG_CANDIDATES += 1
 
     score = steam_score(movement)
     strength = strength_from_steam(score)
@@ -426,7 +731,7 @@ def process_snapshot(snapshot):
         return
 
     pending_steam[key] = {
-        "timestamp": now,
+        "timestamp": time.time(),
         "old_odd": old_odd,
         "new_odd": new_odd,
         "score": score,
@@ -436,8 +741,50 @@ def process_snapshot(snapshot):
     }
 
 
+def diagnostic_heartbeat(cycle):
+    global DIAG_LAST_PRINT
+    now = time.time()
+    if now - DIAG_LAST_PRINT < 60:
+        return
+    DIAG_LAST_PRINT = now
+
+    print(
+        f"🔎 DIAG | cycle={cycle} | snapshots={DIAG_SNAPSHOTS} | "
+        f"initial={DIAG_INITIALIZED} | changes={DIAG_CHANGES} | "
+        f"shortenings={DIAG_SHORTENINGS} | candidates={DIAG_CANDIDATES} | "
+        f"pending={len(pending_steam)}",
+        flush=True
+    )
+
+    if DIAG_SAMPLES:
+        for sample in DIAG_SAMPLES[-4:]:
+            print(f"   ↳ {sample}", flush=True)
+
+def _daily_value_bet_count():
+    today = datetime.now().date().isoformat()
+    p = Path(BANKROLL_FILE)
+    if not p.exists():
+        return 0
+    count = 0
+    with p.open("r", newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("timestamp", "")[:10] == today and row.get("result") in {"PENDING", "WIN", "LOSS", "PUSH"}:
+                count += 1
+    return count
+
+def _already_bet_match(matchup_id):
+    p = Path(BANKROLL_FILE)
+    if not p.exists():
+        return False
+    with p.open("r", newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if str(row.get("matchup_id")) == str(matchup_id):
+                return True
+    return False
+
 def check_confirmations():
     now = time.time()
+
     for key in list(pending_steam.keys()):
         data = pending_steam[key]
         if now - data["timestamp"] < STEAM_CONFIRMATION_SECONDS:
@@ -449,12 +796,14 @@ def check_confirmations():
             del pending_steam[key]
             continue
 
-        # Si ha rebotat per sobre de la quota posterior al moviment, cancel·lem.
+        # Si el preu torna a pujar respecte del nou preu, la confirmació cau.
         if current > data["new_odd"]:
             del pending_steam[key]
             continue
 
-        edge = value_edge(current)
+        score = data["score"]
+        strength = data["strength"]
+        profiles = data["profiles"]
         selection = _selection_label(snapshot)
         market_label = {
             "moneyline": "MONEYLINE",
@@ -462,31 +811,102 @@ def check_confirmations():
             "total": "TOTAL",
         }.get(snapshot["market"], snapshot["market"].upper())
 
-        # STEAM confirmat: sempre s'envia a Telegram. No depèn de VALUE Bet365.
+        # 1) STEAM sempre: primer el registrem i l'enviem.
+        steam_log_snapshot = dict(snapshot)
+        log_steam_signal(
+            steam_log_snapshot,
+            data["old_odd"],
+            current,
+            score,
+            strength,
+            profiles,
+        )
+
+        # 2) Bet365: només ara, amb el partit i mercat exactes.
+        bet365_odds = get_bet365_odds(snapshot)
+
+        # 3) VALUE real segons la quota Bet365 observada.
+        value_status = "NO VALUE"
+        edge = None
+        if bet365_odds is not None:
+            edge = value_edge(bet365_odds)
+            if bet365_odds >= MIN_VALUE_ODDS:
+                value_status = "VALUE"
+            else:
+                value_status = "NO VALUE — quota inferior al llindar"
+
+        # Actualitzem la fila STEAM amb el resultat Bet365.
+        try:
+            p = Path(STEAM_LOG_FILE)
+            if p.exists():
+                rows = []
+                with p.open("r", newline="", encoding="utf-8") as f:
+                    rows = list(csv.DictReader(f))
+                for row in reversed(rows):
+                    if (
+                        row.get("matchup_id") == str(snapshot.get("matchup_id"))
+                        and row.get("market") == str(snapshot.get("market"))
+                        and row.get("side") == str(snapshot.get("side"))
+                        and row.get("points") == str(snapshot.get("points"))
+                        and row.get("bet365_odds", "") == ""
+                    ):
+                        row["bet365_odds"] = "" if bet365_odds is None else bet365_odds
+                        row["value_status"] = value_status
+                        break
+                with p.open("w", newline="", encoding="utf-8") as f:
+                    writer = csv.DictWriter(f, fieldnames=STEAM_LOG_FIELDS)
+                    writer.writeheader()
+                    writer.writerows(rows)
+        except Exception as e:
+            print(f"ERROR UPDATE STEAM LOG: {type(e).__name__}: {e}", flush=True)
+
+        # 4) Només VALUE entra al bankroll.
+        bankroll_created = False
+        if value_status == "VALUE":
+            if _daily_value_bet_count() >= 10:
+                value_status = "VALUE — NO BET (límit 10/dia)"
+            elif _already_bet_match(snapshot["matchup_id"]):
+                value_status = "VALUE — NO BET (1 aposta per partit)"
+            else:
+                value_snapshot = dict(snapshot)
+                value_snapshot["steam_score"] = score
+                value_snapshot["strength"] = strength
+                value_snapshot["probability"] = MODEL_PROBABILITY
+                value_snapshot["fair_odds"] = 1.0 / MODEL_PROBABILITY
+                value_snapshot["min_value_odds"] = MIN_VALUE_ODDS
+                settle_simulated_bet(value_snapshot, float(bet365_odds), "PENDING")
+                bankroll_created = True
+
         steam_msg = (
             "⚾ 🎯 STEAM CONFIRMAT\n"
             f"🏆 {snapshot['league']}\n"
             f"⚾ {snapshot['match']}\n"
             f"📊 {market_label}: {selection}\n"
-            f"📉 Quota Pinnacle: {data['old_odd']} → {current}\n"
-            f"🔥 Steam Score: {data['score']:.2f} | Strength: {data['strength']:.1f}\n"
-            f"🎯 Perfil: {', '.join(data['profiles'])}\n"
-            f"📈 Model P provisional: {MODEL_PROBABILITY:.2%}\n"
-            f"⚖️ Fair odds provisional: {1.0 / MODEL_PROBABILITY:.3f}\n"
-            f"💰 Llindar provisional: {MIN_VALUE_ODDS}\n"
-            f"📌 Edge sobre Pinnacle: {edge:.2%}\n"
-            "🔎 Bet365: pendent de verificació\n"
-            "📝 PAPER TEST — cap aposta simulada creada"
+            f"📉 Pinnacle: {data['old_odd']} → {current}\n"
+            f"🔥 Steam Score: {score:.2f} | Strength: {strength:.1f}\n"
+            f"🎯 Perfil: {', '.join(profiles)}\n"
+            f"📈 Model P: {MODEL_PROBABILITY:.2%}\n"
+            f"⚖️ Fair odds: {1.0 / MODEL_PROBABILITY:.3f}\n"
+            f"🎯 Quota mínima VALUE: {MIN_VALUE_ODDS:.3f}\n"
         )
+
+        if bet365_odds is None:
+            steam_msg += "💰 Bet365: NO DISPONIBLE / partit o mercat no trobat\n"
+            steam_msg += "🚫 VALUE: NO BET"
+        else:
+            steam_msg += f"💰 Bet365: {bet365_odds:.2f}\n"
+            if edge is not None:
+                steam_msg += f"📐 Edge: {edge:+.2%}\n"
+            if bankroll_created:
+                steam_msg += "🟢 VALUE CONFIRMAT — PENDENT DE RESULTAT\n"
+                steam_msg += f"💶 Stake paper: {BANKROLL_STATE['bank'] * STAKE_PCT:.2f} €"
+            else:
+                steam_msg += f"🔴 {value_status}"
+
+        steam_msg += "\n📝 PAPER TEST — sense aposta real"
+
         send_telegram(steam_msg)
 
-        # Persistim la senyal per estudiar-la després, independentment de VALUE.
-        log_steam_signal(
-            snapshot, data["old_odd"], current,
-            data["score"], data["strength"], data["profiles"]
-        )
-
-        # No creem cap aposta al bankroll: encara no tenim quota real Bet365.
         print("", flush=True)
         print("  " + "=" * 76, flush=True)
         print("  🎯 STEAM CONFIRMAT", flush=True)
@@ -494,11 +914,12 @@ def check_confirmations():
         print(f"  Match:       {snapshot['match']}", flush=True)
         print(f"  Market:      {market_label}", flush=True)
         print(f"  Selection:   {selection}", flush=True)
-        print(f"  Odds:        {data['old_odd']} → {current}", flush=True)
-        print(f"  Steam Score: {data['score']:.2f}", flush=True)
-        print(f"  Strength:    {data['strength']:.1f}", flush=True)
-        print(f"  Profile:     {' | '.join(data['profiles'])}", flush=True)
-        print("  Bet365:      PENDENT — no es crea aposta", flush=True)
+        print(f"  Pinnacle:    {data['old_odd']} → {current}", flush=True)
+        print(f"  Steam Score: {score:.2f}", flush=True)
+        print(f"  Strength:    {strength:.1f}", flush=True)
+        print(f"  Profile:     {' | '.join(profiles)}", flush=True)
+        print(f"  Bet365:      {'NO DISPONIBLE' if bet365_odds is None else f'{bet365_odds:.2f}'}", flush=True)
+        print(f"  VALUE:       {value_status}", flush=True)
         print("  " + "=" * 76, flush=True)
 
         del pending_steam[key]
@@ -548,7 +969,7 @@ def resolve_finished_bets():
     Intenta resoldre automàticament les apostes pendents.
 
     IMPORTANT:
-    - Només resol mercats TOTAL/OVER/UNDER que el scanner ha registrat.
+    - Resol TOTAL, RUN LINE i MONEYLINE que el scanner ha registrat.
     - No inventa cap resultat si la font no retorna un marcador fiable.
     - En cas de dubte, deixa l'aposta pendent.
     """
@@ -600,24 +1021,39 @@ def resolve_finished_bets():
             continue
 
         side = str(bet.get("side", "")).upper()
-        points = float(bet.get("points"))
+        market = str(bet.get("market", "")).lower()
 
-        total = home_score + away_score
+        if market == "total":
+            points = float(bet.get("points"))
+            total = home_score + away_score
+            if side == "OVER":
+                result = "WIN" if total > points else "LOSS" if total < points else "PUSH"
+            elif side == "UNDER":
+                result = "WIN" if total < points else "LOSS" if total > points else "PUSH"
+            else:
+                continue
 
-        if side == "OVER":
-            if total > points:
+        elif market == "spread":
+            points = float(bet.get("points"))
+            # El punt del spread s'aplica al costat seleccionat.
+            selected_score = home_score if side == "HOME" else away_score
+            other_score = away_score if side == "HOME" else home_score
+            adjusted = selected_score + points
+            if adjusted > other_score:
                 result = "WIN"
-            elif total < points:
+            elif adjusted < other_score:
                 result = "LOSS"
             else:
                 result = "PUSH"
-        elif side == "UNDER":
-            if total < points:
-                result = "WIN"
-            elif total > points:
-                result = "LOSS"
+
+        elif market == "moneyline":
+            if side == "HOME":
+                result = "WIN" if home_score > away_score else "LOSS" if home_score < away_score else "PUSH"
+            elif side == "AWAY":
+                result = "WIN" if away_score > home_score else "LOSS" if away_score < home_score else "PUSH"
             else:
-                result = "PUSH"
+                continue
+
         else:
             continue
 
@@ -1005,7 +1441,7 @@ def weekly_roi_report(rows):
         "max_drawdown_pct": min(float(r["drawdown_pct"]) for r in rows),
     }
 
-print("⚾ BASEBALL STEAM V21 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾", flush=True)
+print("🔎 BASEBALL STEAM V22 DIAGNOSTIC - 5 LEAGUES | ML + RUN LINE + TOTAL ⚾", flush=True)
 print(
     "LEAGUES: " +
     " | ".join(f"{lid}={name}" for lid, name in ALLOWED_LEAGUES.items()),
@@ -1085,6 +1521,7 @@ while True:
 
         # Heartbeat molt discret: una línia cada 60 cicles.
         if cycle % 60 == 0:
+            diagnostic_heartbeat(cycle)
             print(
                 f"💓 HEARTBEAT | cycle={cycle} | "
                 f"matches={total_matchups} | "

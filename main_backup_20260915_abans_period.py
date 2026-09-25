@@ -663,11 +663,6 @@ while True:
                                 "points"
                             )
 
-                            period = market.get(
-                                "period",
-                                0
-                            )
-
                             if (
                                 market_type
                                 == "spread"
@@ -699,7 +694,6 @@ while True:
                             key = (
                                 f"{match_name}-"
                                 f"{market_type}-"
-                                f"{period}-"
                                 f"{side}-"
                                 f"{points}"
                             )

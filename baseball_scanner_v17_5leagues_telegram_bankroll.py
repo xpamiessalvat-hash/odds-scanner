@@ -46,22 +46,15 @@ ALLOWED_LEAGUES = {
     6227: "KBO",
     187703: "NPB",
     208753: "Chinese Taipei Professional League",
-    294861: "Asian Games",
 }
 
-# PERFILS HISTÒRICS ACTUALS (MLB) — no són garantia de rendiment.
-# Són els perfils que hem estudiat en les dades històriques disponibles.
-# El scanner els manté separats per mercat.
-MARKET_PROFILES = {
-    "moneyline": [(5.0, 6.0, 70.0, 80.0)],
-    "spread": [(3.0, 4.0, 60.0, 70.0)],
-    "total": [(4.0, 5.0, 70.0, 80.0)],
-}
+ACTIVE_MARKET = "total"
+ACTIVE_SELECTION = "over"
 
-# STEAM raw que volem estudiar: la senyal només entra en confirmació si
-# compleix almenys un dels perfils del seu mercat.
-STEAM_SCORE_MIN = 3.0
-STEAM_SCORE_MAX = 6.0
+STEAM_SCORE_MIN = 4.0
+STEAM_SCORE_MAX = 5.0
+STRENGTH_MIN = 70.0
+STRENGTH_MAX = 80.0
 
 MODEL_PROBABILITY = 0.55
 MIN_VALUE_EDGE = 0.05
@@ -77,8 +70,8 @@ VALID_TOTALS = [
 ]
 
 # TELEGRAM — mateixes variables que les versions anteriors
-BOT_TOKEN = os.getenv("BOT_TOKEN", "")
-CHAT_ID = os.getenv("CHAT_ID", "")
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 
 def send_telegram(message):
     if not BOT_TOKEN or not CHAT_ID:
@@ -177,7 +170,7 @@ def get_open_league_matchups(league_id, league_name):
         periods = m.get("periods", [])
         p0 = next((p for p in periods if p.get("period") == 0), None)
 
-        if not p0 or p0.get("status") != "open":
+        if not p0 or not p0.get("hasTotal") or p0.get("status") != "open":
             continue
 
         start_time = m.get("startTime")
@@ -215,214 +208,107 @@ def get_open_league_matchups(league_id, league_name):
     return result
 
 
-def american_to_decimal(american):
-    if american is None:
-        return None
-    try:
-        american = float(american)
-    except (TypeError, ValueError):
-        return None
-    if american > 0:
-        return round(1 + american / 100.0, 4)
-    if american < 0:
-        return round(1 + 100.0 / abs(american), 4)
-    return None
-
-
-def get_league_main_markets(matchups, league_id):
-    """
-    Obté els mercats straight agregats de tota la lliga en una sola petició.
-    Retorna Moneyline, Run Line/Spread i Total principal (P0, no alternate).
-    """
+def get_main_total(matchup):
+    matchup_id = matchup["id"]
     url = (
-        "https://guest.api.arcadia.pinnacle.com/0.1"
-        f"/leagues/{league_id}/markets/straight"
+        "https://guest.api.arcadia.pinnacle.com"
+        f"/0.1/matchups/{matchup_id}/markets/related/straight"
     )
 
     response = session.get(url, headers=HEADERS, timeout=30)
-
-    # Lligues sense feed / fora de temporada: SKIP silenciós.
-    if response.status_code in (401, 403, 404):
-        return []
-
     response.raise_for_status()
 
-    matchup_by_id = {str(m["id"]): m for m in matchups if m.get("id") is not None}
-    result = []
-
-    payload = response.json()
-    if not isinstance(payload, list):
-        return result
-
-    for market in payload:
+    # Only the primary Total: period 0, non-alternate.
+    for market in response.json():
+        if market.get("type") != "total":
+            continue
         if market.get("period") != 0:
             continue
         if market.get("isAlternate") is True:
             continue
 
-        market_type = (market.get("type") or "").lower()
-
-        # Normalitzem els noms que podem trobar al feed.
-        if market_type in ("moneyline", "money_line", "money line"):
-            normalized = "moneyline"
-        elif market_type in ("spread", "runline", "run_line", "run line"):
-            normalized = "spread"
-        elif market_type == "total":
-            normalized = "total"
-        else:
-            continue
-
-        matchup_id = market.get("matchupId", market.get("matchup_id"))
-        if matchup_id is None:
-            continue
-
-        matchup = matchup_by_id.get(str(matchup_id))
-        if not matchup:
-            continue
-
-        for p in market.get("prices", []):
-            designation = (p.get("designation") or "").lower()
-            american = p.get("price")
-            decimal = american_to_decimal(american)
-            if decimal is None:
+        prices = market.get("prices", [])
+        for p in prices:
+            side = (p.get("designation") or "").lower()
+            if side not in ("over", "under"):
                 continue
 
-            # Moneyline: home/away.
-            if normalized == "moneyline":
-                if designation not in ("home", "away"):
-                    continue
-                points = 0.0
+            points = p.get("points")
+            if points not in VALID_TOTALS:
+                continue
 
-            # Spread / Run Line: conservar totes les línies ofertes.
-            elif normalized == "spread":
-                if designation not in ("home", "away"):
-                    continue
-                points = p.get("points")
-                if points is None:
-                    continue
-                try:
-                    points = float(points)
-                except (TypeError, ValueError):
-                    continue
+            american = p.get("price")
+            decimal = american_to_decimal(american)
 
-            # Total: Over/Under.
-            else:
-                if designation not in ("over", "under"):
-                    continue
-                points = p.get("points")
-                if points is None:
-                    continue
-                try:
-                    points = float(points)
-                except (TypeError, ValueError):
-                    continue
-
-            result.append({
-                "matchup_id": matchup["id"],
+            yield {
+                "matchup_id": matchup_id,
                 "league_id": matchup["league_id"],
                 "league": matchup["league"],
                 "match": matchup["match"],
                 "start": matchup["start"],
                 "hours": matchup["hours"],
-                "market": normalized,
-                "side": designation,
+                "market": "total",
+                "side": side,
                 "points": points,
                 "american": american,
                 "decimal": decimal,
-            })
-
-    return result
-
-STEAM_LOG_FILE = "steam_signals.csv"
-STEAM_LOG_FIELDS = [
-    "timestamp", "matchup_id", "league_id", "league", "match", "start",
-    "market", "side", "points", "old_odds", "new_odds", "movement_pct",
-    "steam_score", "strength", "profile_match", "bet365_odds", "value_status"
-]
-
-
-def _ensure_steam_log():
-    p = Path(STEAM_LOG_FILE)
-    if not p.exists():
-        with p.open("w", newline="", encoding="utf-8") as f:
-            csv.DictWriter(f, fieldnames=STEAM_LOG_FIELDS).writeheader()
-
-
-def _matching_profiles(market, score, strength):
-    matches = []
-    for smin, smax, stmin, stmax in MARKET_PROFILES.get(market, []):
-        if smin <= score < smax and stmin <= strength < stmax:
-            matches.append(f"S{smin:g}-{smax:g}/STR{stmin:g}-{stmax:g}")
-    return matches
-
-
-def _selection_label(snapshot):
-    market = snapshot["market"]
-    side = snapshot["side"].upper()
-    points = snapshot.get("points")
-    if market == "moneyline":
-        return side
-    if market == "spread":
-        return f"{side} {points:g}" if isinstance(points, float) else f"{side} {points}"
-    return f"{side} {points:g}" if isinstance(points, float) else f"{side} {points}"
-
-
-def log_steam_signal(snapshot, old_odd, new_odd, score, strength, profiles):
-    _ensure_steam_log()
-    with Path(STEAM_LOG_FILE).open("a", newline="", encoding="utf-8") as f:
-        csv.DictWriter(f, fieldnames=STEAM_LOG_FIELDS).writerow({
-            "timestamp": datetime.now().isoformat(),
-            "matchup_id": snapshot.get("matchup_id", ""),
-            "league_id": snapshot.get("league_id", ""),
-            "league": snapshot.get("league", ""),
-            "match": snapshot.get("match", ""),
-            "start": snapshot.get("start", ""),
-            "market": snapshot.get("market", ""),
-            "side": snapshot.get("side", ""),
-            "points": snapshot.get("points", ""),
-            "old_odds": old_odd,
-            "new_odds": new_odd,
-            "movement_pct": score,
-            "steam_score": score,
-            "strength": strength,
-            "profile_match": " | ".join(profiles),
-            "bet365_odds": "",
-            "value_status": "PENDING_BET365",
-        })
+            }
 
 
 def process_snapshot(snapshot):
     key = (
-        snapshot["league_id"], snapshot["matchup_id"], snapshot["market"],
-        snapshot["side"], snapshot["points"],
+        snapshot["league_id"],
+        snapshot["matchup_id"],
+        snapshot["market"],
+        snapshot["side"],
+        snapshot["points"],
     )
-    new_odd = snapshot.get("decimal")
+
+    new_odd = snapshot["decimal"]
     if new_odd is None:
         return
 
     now = time.time()
+
     if key not in previous_odds:
         previous_odds[key] = new_odd
+        # Inicialització silenciosa: la quota queda guardada internament.
         return
 
     old_odd = previous_odds[key]
+
     if old_odd == new_odd:
         return
 
-    # Steam = escurçament de quota decimal.
+    # In this scanner, shortening odds means steam:
+    # OLD decimal > NEW decimal.
     movement = ((old_odd - new_odd) / old_odd) * 100.0
+
+    print(
+        f"  MOVE | [{snapshot['league']}] {snapshot['match']} | "
+        f"{snapshot['side'].upper()} {snapshot['points']} | "
+        f"{old_odd} -> {new_odd} | "
+        f"movement={movement:.2f}%",
+        flush=True
+    )
+
+    # Always update the current market snapshot.
     previous_odds[key] = new_odd
 
-    # No mostrem tots els micro-moviments; només candidats dins la finestra.
-    if movement < STEAM_SCORE_MIN or movement >= STEAM_SCORE_MAX:
+    if movement < STEAM_SCORE_MIN or movement > 25:
         pending_steam.pop(key, None)
+        return
+
+    if snapshot["side"] != ACTIVE_SELECTION:
         return
 
     score = steam_score(movement)
     strength = strength_from_steam(score)
-    profiles = _matching_profiles(snapshot["market"], score, strength)
-    if not profiles:
-        pending_steam.pop(key, None)
+
+    if not (STEAM_SCORE_MIN <= score < STEAM_SCORE_MAX):
+        return
+
+    if not (STRENGTH_MIN <= strength < STRENGTH_MAX):
         return
 
     pending_steam[key] = {
@@ -431,77 +317,115 @@ def process_snapshot(snapshot):
         "new_odd": new_odd,
         "score": score,
         "strength": strength,
-        "snapshot": dict(snapshot),
-        "profiles": profiles,
+        "snapshot": snapshot,
     }
+
+    print(
+        f"  ⏳ CANDIDAT STEAM | [{snapshot['league']}] {snapshot['match']} | "
+        f"OVER {snapshot['points']} | "
+        f"Steam={score:.2f}% | Strength={strength:.1f} | "
+        f"confirmació={STEAM_CONFIRMATION_SECONDS}s",
+        flush=True
+    )
 
 
 def check_confirmations():
     now = time.time()
+
     for key in list(pending_steam.keys()):
         data = pending_steam[key]
-        if now - data["timestamp"] < STEAM_CONFIRMATION_SECONDS:
+        elapsed = now - data["timestamp"]
+        snapshot = data["snapshot"]
+
+        if elapsed < STEAM_CONFIRMATION_SECONDS:
             continue
 
-        snapshot = data["snapshot"]
         current = previous_odds.get(key)
         if current is None:
             del pending_steam[key]
             continue
 
-        # Si ha rebotat per sobre de la quota posterior al moviment, cancel·lem.
+        # Confirmation requires the current price not to have drifted
+        # back above the post-move price.
         if current > data["new_odd"]:
+            print(
+                f"  ❌ CANCEL·LAT | [{snapshot['league']}] {snapshot['match']} | "
+                f"OVER {snapshot['points']} | quota ha rebotat",
+                flush=True
+            )
             del pending_steam[key]
             continue
 
         edge = value_edge(current)
-        selection = _selection_label(snapshot)
-        market_label = {
-            "moneyline": "MONEYLINE",
-            "spread": "RUN LINE",
-            "total": "TOTAL",
-        }.get(snapshot["market"], snapshot["market"].upper())
+        value_status = edge >= MIN_VALUE_EDGE
 
-        # STEAM confirmat: sempre s'envia a Telegram. No depèn de VALUE Bet365.
-        steam_msg = (
-            "⚾ 🎯 STEAM CONFIRMAT\n"
-            f"🏆 {snapshot['league']}\n"
-            f"⚾ {snapshot['match']}\n"
-            f"📊 {market_label}: {selection}\n"
-            f"📉 Quota Pinnacle: {data['old_odd']} → {current}\n"
-            f"🔥 Steam Score: {data['score']:.2f} | Strength: {data['strength']:.1f}\n"
-            f"🎯 Perfil: {', '.join(data['profiles'])}\n"
-            f"📈 Model P provisional: {MODEL_PROBABILITY:.2%}\n"
-            f"⚖️ Fair odds provisional: {1.0 / MODEL_PROBABILITY:.3f}\n"
-            f"💰 Llindar provisional: {MIN_VALUE_ODDS}\n"
-            f"📌 Edge sobre Pinnacle: {edge:.2%}\n"
-            "🔎 Bet365: pendent de verificació\n"
-            "📝 PAPER TEST — cap aposta simulada creada"
-        )
-        send_telegram(steam_msg)
-
-        # Persistim la senyal per estudiar-la després, independentment de VALUE.
-        log_steam_signal(
-            snapshot, data["old_odd"], current,
-            data["score"], data["strength"], data["profiles"]
-        )
-
-        # No creem cap aposta al bankroll: encara no tenim quota real Bet365.
         print("", flush=True)
         print("  " + "=" * 76, flush=True)
         print("  🎯 STEAM CONFIRMAT", flush=True)
         print(f"  League:      {snapshot['league']}", flush=True)
         print(f"  Match:       {snapshot['match']}", flush=True)
-        print(f"  Market:      {market_label}", flush=True)
-        print(f"  Selection:   {selection}", flush=True)
-        print(f"  Odds:        {data['old_odd']} → {current}", flush=True)
+        print(f"  Market:      TOTAL", flush=True)
+        print(f"  Selection:   OVER {snapshot['points']}", flush=True)
+        print(f"  Old odds:    {data['old_odd']}", flush=True)
+        print(f"  New odds:    {current}", flush=True)
+        print(f"  Steam %:     {data['score']:.2f}%", flush=True)
         print(f"  Steam Score: {data['score']:.2f}", flush=True)
         print(f"  Strength:    {data['strength']:.1f}", flush=True)
-        print(f"  Profile:     {' | '.join(data['profiles'])}", flush=True)
-        print("  Bet365:      PENDENT — no es crea aposta", flush=True)
+        print(f"  Model P:     {MODEL_PROBABILITY:.2%}", flush=True)
+        print(f"  Fair odds:   {1.0 / MODEL_PROBABILITY:.3f}", flush=True)
+        print(f"  Min VALUE:   {MIN_VALUE_ODDS}", flush=True)
+        print(f"  Current:     {current}", flush=True)
+        print(f"  VALUE edge:  {edge:.2%}", flush=True)
+        print(
+            "  RESULT:      "
+            + ("VALUE CANDIDAT (Pinnacle)" if value_status else "NO BET")
+            + " | Bet365 pendent",
+            flush=True,
+        )
         print("  " + "=" * 76, flush=True)
 
+        # Telegram: cada STEAM confirmat s'envia.
+        steam_msg = (
+            "⚾ 🎯 STEAM CONFIRMAT\n"
+            f"🏆 {snapshot['league']}\n"
+            f"⚾ {snapshot['match']}\n"
+            f"📊 TOTAL OVER {snapshot['points']}\n"
+            f"📉 Quota: {data['old_odd']} → {current}\n"
+            f"🔥 Steam: {data['score']:.2f}% | Strength: {data['strength']:.1f}\n"
+            f"📈 Model P: {MODEL_PROBABILITY:.2%}\n"
+            f"⚖️ Fair odds: {1.0 / MODEL_PROBABILITY:.3f}\n"
+            f"💰 Min VALUE: {MIN_VALUE_ODDS}\n"
+            f"📌 Edge observat: {edge:.2%}\n"
+            "🔎 Bet365: pendent de verificació"
+        )
+        send_telegram(steam_msg)
+
+        # No etiquetem com a VALUE Bet365 fins que tinguem el preu de Bet365.
+        if value_status:
+            send_telegram(
+                "💰 VALUE CANDIDAT — ESPERANT BET365\n"
+                f"{snapshot['league']} | {snapshot['match']}\n"
+                f"TOTAL OVER {snapshot['points']} @ {current}\n"
+                f"Fair: {1.0 / MODEL_PROBABILITY:.3f} | "
+                f"Mínim: {MIN_VALUE_ODDS}\n"
+                f"Edge observat: {edge:.2%}\n"
+                "⚠️ NO ÉS VALUE BET365 CONFIRMAT."
+            )
+
+        # Registrem la candidata com PENDING per poder resoldre-la després.
+        if value_status:
+            value_snapshot = dict(snapshot)
+            value_snapshot["steam_score"] = data["score"]
+            value_snapshot["strength"] = data["strength"]
+            value_snapshot["probability"] = MODEL_PROBABILITY
+            value_snapshot["fair_odds"] = 1.0 / MODEL_PROBABILITY
+            value_snapshot["min_value_odds"] = MIN_VALUE_ODDS
+            settle_simulated_bet(value_snapshot, float(current), "PENDING")
+
+        print("", flush=True)
         del pending_steam[key]
+
+
 
 
 # ---------------------------------------------------------------------------
@@ -1005,13 +929,17 @@ def weekly_roi_report(rows):
         "max_drawdown_pct": min(float(r["drawdown_pct"]) for r in rows),
     }
 
-print("⚾ BASEBALL STEAM V21 - 5 LEAGUES | ML + RUN LINE + TOTAL | PAPER TEST ⚾", flush=True)
+print("⚾ BASEBALL STEAM V17 - 5 LEAGUES | STEAM + VALUE | PAPER TEST ⚾", flush=True)
 print(
     "LEAGUES: " +
     " | ".join(f"{lid}={name}" for lid, name in ALLOWED_LEAGUES.items()),
     flush=True
 )
-print("PROFILES: ML S5-6/STR70-80 | RUN LINE S3-4/STR60-70 | TOTAL S4-5/STR70-80", flush=True)
+print(
+    f"PROFILE: TOTAL / OVER / STEAM {STEAM_SCORE_MIN}-{STEAM_SCORE_MAX} / "
+    f"STRENGTH {STRENGTH_MIN}-{STRENGTH_MAX}",
+    flush=True
+)
 print(
     f"VALUE: P={MODEL_PROBABILITY:.2%} | "
     f"MIN EDGE={MIN_VALUE_EDGE:.2%} | MIN ODDS={MIN_VALUE_ODDS}",
@@ -1051,11 +979,22 @@ while True:
                 matchups = get_open_league_matchups(league_id, league_name)
                 total_matchups += len(matchups)
 
-                # Una sola consulta de mercats per lliga i cicle.
-                snapshots = get_league_main_markets(matchups, league_id)
+                for matchup in matchups:
+                    try:
+                        snapshots = list(get_main_total(matchup))
 
-                for snapshot in snapshots:
-                    process_snapshot(snapshot)
+                        # No printem partits ni quotes cada cicle.
+                        # Només process events / steam / errors.
+                        for snapshot in snapshots:
+                            process_snapshot(snapshot)
+
+                    except Exception as e:
+                        print(
+                            f"ERROR MARKET [{league_name}] "
+                            f"{matchup.get('id')}: "
+                            f"{type(e).__name__}: {e}",
+                            flush=True
+                        )
 
             except Exception as e:
                 print(

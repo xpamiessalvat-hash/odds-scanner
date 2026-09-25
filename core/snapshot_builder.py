@@ -1,4 +1,4 @@
-from core.models import (
+﻿from core.models import (
     MarketSnapshot,
     MarketSide
 )
@@ -101,7 +101,61 @@ def build_snapshot(
             )
 
         )
+        print(
+            f"SNAPSHOT SIDE | "
+            f"{data['match_name']} | "
+            f"{market['type']} | "
+            f"{designation} {points} | "
+            f"OLD={old_american} -> NEW={new_american} | "
+            f"DECIMAL={side.old_decimal:.4f} -> {side.new_decimal:.4f} | "
+            f"MOVE={round((side.old_decimal - side.new_decimal) / side.old_decimal * 100, 2)}%",
+            flush=True
+        )
+        move = round(
+            (side.old_decimal - side.new_decimal)
+            / side.old_decimal
+            * 100,
+            2
+        )
 
+        if abs(move) >= 1.0:
+            print(
+                f"ðŸš¨ MOVIMENT > 1% | "
+                f"{data['match_name']} | "
+                f"{market['type']} | "
+                f"{designation} {points} | "
+                f"OLD={old_american} -> NEW={new_american} | "
+                f"MOVE={move}%",
+                flush=True
+            )
+
+        if abs(move) >= 3.0:
+            print(
+                f"ðŸ”¥ MOVIMENT > 3% | "
+                f"{data['match_name']} | "
+                f"{market['type']} | "
+                f"{designation} {points} | "
+                f"OLD={old_american} -> NEW={new_american} | "
+                f"MOVE={move}%",
+                flush=True
+            )
+        move = round(
+            (side.old_decimal - side.new_decimal)
+            / side.old_decimal
+            * 100,
+            2
+        )
+
+        if move != 0:
+            print(
+                f"ðŸš¨ MOVIMENT DETECTAT | "
+                f"{data['match_name']} | "
+                f"{market['type']} | "
+                f"{designation} {points} | "
+                f"OLD={old_american} -> NEW={new_american} | "
+                f"MOVE={move}%",
+                flush=True
+            )
         sides.append(side)
 
     if len(sides) != 2:
