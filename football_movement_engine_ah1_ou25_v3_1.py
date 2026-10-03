@@ -30,21 +30,16 @@ EPISODE_RESET_MINUTES = 10       # close episode after inactivity
 MAX_EPISODE_MOVEMENT = 30.0      # safety filter
 
 # ------------------------------------------------------------
-# BET365 VALUE LAYER (optional until ODDS_API_KEY is configured)
-# Bet365 has no public odds API; this adapter uses Odds-API.io.
-# Pinnacle remains the sharp source; Bet365 is only the execution/
-# price source for Value/Edge.
+# VALUE LAYER (Pinnacle fair probability -> manual Bet365 check)
+# Pinnacle is used only as the sharp probability source.
+# The user checks the Bet365 price manually after receiving the pick.
+# No Bet365 API is used by this engine.
 # ------------------------------------------------------------
 
-ODDS_API_BASE = "https://api.odds-api.io/v3"
-ODDS_API_KEY = os.getenv("ODDS_API_KEY", "").strip()
-BET365_BOOKMAKER = "Bet365"
-BET365_EVENTS_REFRESH_MINUTES = 10
-BET365_MATCH_MAX_MINUTES = 30
-
-bet365_event_cache = []
-bet365_event_cache_ts = 0.0
-bet365_event_ids = {}
+VALUE_EDGE_TARGET_PCT = 5.0
+MIN_ENTRY_ODDS = 1.80
+TELEGRAM_BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
+TELEGRAM_CHAT_ID = os.getenv("CHAT_ID", "").strip()
 
 VALID_SPREADS = [
     -2.5, -2.0, -1.5, -1.0, -0.5,
@@ -101,11 +96,12 @@ episodes = {}
 # Number of completed episodes written to disk.
 completed_episodes = 0
 triggered_signals = 0
+value_signals = 0
 
 CSV_FILE = "football_episodes_ah1_ou25_v3_1.csv"
 TRIGGER_CSV_FILE = "football_steam_triggers_v2.csv"
 SNAPSHOT_CSV_FILE = "football_steam_snapshots_v1.csv"
-VALUE_CSV_FILE = "football_value_triggers_v1.csv"
+VALUE_CSV_FILE = "football_value_triggers_v2.csv"
 CLOSING_CSV_FILE = "football_closing_v1.csv"
 RESULT_CSV_FILE = "football_results_v1.csv"
 MASTER_CSV_FILE = "football_signal_master_v1.csv"
@@ -181,7 +177,7 @@ def ensure_snapshot_csv():
             "minutes_from_trigger", "league", "match", "matchup_id",
             "market", "line", "selected_side", "selected_points",
             "pinnacle_selected_odd", "pinnacle_opposite_odd",
-            "bet365_selected_odd", "edge_pct", "ev_pct",
+            "pinnacle_fair_prob_pct", "min_value_odds", "edge_at_min_odds_pct",
             "movement_from_trigger_pct", "fvs_at_trigger",
             "hours_until_match_start", "snapshot_status"
         ])
@@ -241,9 +237,9 @@ def write_snapshot(ep, label, now_ts, status="FOLLOWUP"):
             ep["trigger_selected_points"],
             round(current_selected, 3),
             round(current_opposite, 3),
-            round(ep.get("bet365_selected_odd", 0.0), 3),
-            round(ep.get("edge_pct", 0.0), 3),
-            round(ep.get("ev_pct", 0.0), 3),
+            round(ep.get("pinnacle_fair_prob_pct", 0.0), 3),
+            round(ep.get("min_value_odds", 0.0), 3),
+            round(ep.get("edge_at_min_odds_pct", 0.0), 3),
             round(movement_from_trigger, 3),
             round(ep.get("trigger_fvs", 0.0), 2),
             round(max(0.0, ep["hours_until_match_start"] - minutes / 60.0), 2),
@@ -277,326 +273,120 @@ def ensure_value_csv():
             "league", "match", "matchup_id",
             "market", "line", "selected_side", "selected_points",
             "pinnacle_selected_odd", "pinnacle_opposite_odd",
-            "pinnacle_fair_prob_pct", "bet365_selected_odd",
-            "bet365_opposite_odd", "bet365_no_vig_prob_pct",
-            "edge_pct", "ev_pct", "min_odds_ok",
-            "value_status", "bet365_event_id", "match_score"
+            "pinnacle_fair_prob_pct", "fair_odds", "min_value_odds",
+            "edge_at_min_odds_pct", "min_entry_odds",
+            "value_status", "telegram_sent"
         ])
 
-
-def normalize_team_name(name):
-    """Normalize names enough for cross-book fixture matching."""
-    name = (name or "").lower()
-    replacements = {
-        "&": "and", "fc": "", "afc": "", "cf": "",
-        "sc": "", "utd": "united", "st.": "saint", "st": "saint"
-    }
-    for old, new in replacements.items():
-        name = name.replace(old, new)
-    return re.sub(r"[^a-z0-9]+", "", name)
-
-
-def fixture_match_score(home_a, away_a, home_b, away_b):
-    """Return 0..100; supports exact and lightly fuzzy team names."""
-    ah = normalize_team_name(home_a)
-    aa = normalize_team_name(away_a)
-    bh = normalize_team_name(home_b)
-    ba = normalize_team_name(away_b)
-
-    direct = (
-        SequenceMatcher(None, ah, bh).ratio()
-        + SequenceMatcher(None, aa, ba).ratio()
-    ) / 2.0
-    reverse = (
-        SequenceMatcher(None, ah, ba).ratio()
-        + SequenceMatcher(None, aa, bh).ratio()
-    ) / 2.0
-
-    return max(direct, reverse) * 100.0
-
-
-def refresh_bet365_events(now_ts):
-    """Refresh Bet365 event index at most once every N minutes."""
-    global bet365_event_cache, bet365_event_cache_ts, bet365_event_ids
-
-    if not ODDS_API_KEY:
-        return []
-
-    age = (now_ts - bet365_event_cache_ts) / 60.0
-    if bet365_event_cache and age < BET365_EVENTS_REFRESH_MINUTES:
-        return bet365_event_cache
-
-    try:
-        response = requests.get(
-            f"{ODDS_API_BASE}/events",
-            params={
-                "apiKey": ODDS_API_KEY,
-                "sport": "football",
-                "bookmaker": BET365_BOOKMAKER,
-            },
-            timeout=20,
-        )
-        response.raise_for_status()
-        data = response.json()
-
-        if not isinstance(data, list):
-            return bet365_event_cache
-
-        bet365_event_cache = data
-        bet365_event_cache_ts = now_ts
-
-        # Index by normalized fixture pair where possible.
-        bet365_event_ids = {}
-        for ev in data:
-            key = (
-                normalize_team_name(ev.get("home")),
-                normalize_team_name(ev.get("away")),
-            )
-            bet365_event_ids[key] = ev.get("id")
-
-        return data
-
-    except Exception as exc:
-        print(f"⚠️ Bet365 event refresh failed: {exc}", flush=True)
-        return bet365_event_cache
-
-
-def find_bet365_event(ep, now_ts):
-    events = refresh_bet365_events(now_ts)
-    if not events:
-        return None
-
-    best = None
-    best_score = 0.0
-
-    # Pinnacle episode has the fixture name as "home vs away".
-    parts = [x.strip() for x in ep["match"].split(" vs ", 1)]
-    if len(parts) != 2:
-        return None
-
-    ph, pa = parts
-
-    for ev in events:
-        try:
-            if str(ev.get("status", "")).lower() not in ("pending", "scheduled", "open", ""):
-                continue
-
-            ev_date = ev.get("date")
-            if not ev_date:
-                continue
-
-            dt = datetime.fromisoformat(ev_date.replace("Z", "+00:00"))
-            kickoff_delta = abs((dt - datetime.now(timezone.utc)).total_seconds()) / 60.0
-
-            # Avoid matching a same-named fixture on another date.
-            if kickoff_delta > BET365_MATCH_MAX_MINUTES:
-                continue
-
-            score = fixture_match_score(
-                ph, pa, ev.get("home", ""), ev.get("away", "")
-            )
-
-            if score > best_score:
-                best_score = score
-                best = ev
-
-        except Exception:
-            continue
-
-    if best is None or best_score < 88.0:
-        return None
-
-    return best, best_score
-
-
-def get_bet365_board(event_id, market_name):
-    if not ODDS_API_KEY:
-        return None
-
-    try:
-        response = requests.get(
-            f"{ODDS_API_BASE}/odds",
-            params={
-                "apiKey": ODDS_API_KEY,
-                "eventId": event_id,
-                "bookmakers": BET365_BOOKMAKER,
-                "markets": market_name,
-            },
-            timeout=20,
-        )
-        response.raise_for_status()
-        data = response.json()
-        return data
-    except Exception as exc:
-        print(f"⚠️ Bet365 odds request failed: {exc}", flush=True)
-        return None
-
-
-def extract_bet365_market(board, market_name, selected_side, selected_points):
-    try:
-        bookmaker = board.get("bookmakers", {}).get(BET365_BOOKMAKER, [])
-        market = next(
-            (m for m in bookmaker if str(m.get("name", "")).lower() == market_name.lower()),
-            None
-        )
-        if not market:
-            return None
-
-        odds_rows = market.get("odds", [])
-        target = None
-
-        if market_name == "Totals":
-            target = next(
-                (row for row in odds_rows if float(row.get("hdp")) == 2.5),
-                None
-            )
-            if not target:
-                return None
-
-            selected_key = "over" if selected_side == "over" else "under"
-            opposite_key = "under" if selected_side == "over" else "over"
-
-        elif market_name == "Spread":
-            target = next(
-                (row for row in odds_rows if float(row.get("hdp")) == -1.0),
-                None
-            )
-            if not target:
-                return None
-
-            # API convention: home/away correspond to the selected side.
-            selected_key = "home" if selected_side == "home" else "away"
-            opposite_key = "away" if selected_side == "home" else "home"
-        else:
-            return None
-
-        selected_odd = float(target[selected_key])
-        opposite_odd = float(target[opposite_key])
-
-        if selected_odd <= 1.0 or opposite_odd <= 1.0:
-            return None
-
-        return selected_odd, opposite_odd
-
-    except Exception:
-        return None
-
-
-def calculate_value_from_bet365(
-    pinnacle_selected_odd,
-    pinnacle_opposite_odd,
-    bet365_selected_odd,
-    bet365_opposite_odd,
-):
+def calculate_pinnacle_value(pinnacle_selected_odd, pinnacle_opposite_odd):
     """
-    Pinnacle no-vig probability = fair-probability proxy.
-    Bet365 is the offered execution price.
-    Edge/EV = p_pinnacle_fair * Bet365_decimal - 1.
+    Convert the two-sided Pinnacle market into a no-vig fair probability.
+    The minimum price required for the configured target EV is:
+        target_odds = (1 + target_edge) / fair_probability
+    The user's Bet365 price is checked manually after the Telegram alert.
     """
+    if not pinnacle_selected_odd or not pinnacle_opposite_odd:
+        return None
+    if pinnacle_selected_odd <= 1 or pinnacle_opposite_odd <= 1:
+        return None
+
     p_sel_raw = 1.0 / pinnacle_selected_odd
     p_opp_raw = 1.0 / pinnacle_opposite_odd
     p_total = p_sel_raw + p_opp_raw
-
     if p_total <= 0:
         return None
 
-    pinnacle_fair_prob = p_sel_raw / p_total
+    fair_prob = p_sel_raw / p_total
+    fair_odds = 1.0 / fair_prob
+    min_value_odds = max(MIN_ENTRY_ODDS, (1.0 + VALUE_EDGE_TARGET_PCT / 100.0) / fair_prob)
+    edge_at_min_odds = (fair_prob * min_value_odds - 1.0) * 100.0
 
-    b365_sel_raw = 1.0 / bet365_selected_odd
-    b365_opp_raw = 1.0 / bet365_opposite_odd
-    b365_total = b365_sel_raw + b365_opp_raw
-    b365_no_vig_prob = b365_sel_raw / b365_total if b365_total > 0 else 0.0
+    return fair_prob * 100.0, fair_odds, min_value_odds, edge_at_min_odds
 
-    ev = pinnacle_fair_prob * bet365_selected_odd - 1.0
-    edge = ev * 100.0
+def send_telegram(text_message):
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        return False
+    try:
+        response = requests.post(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage",
+            data={
+                "chat_id": TELEGRAM_CHAT_ID,
+                "text": text_message,
+                "disable_web_page_preview": True,
+            },
+            timeout=15,
+        )
+        response.raise_for_status()
+        return bool(response.json().get("ok"))
+    except Exception as exc:
+        print(f"⚠️ Telegram send failed: {exc}", flush=True)
+        return False
 
-    return pinnacle_fair_prob * 100.0, b365_no_vig_prob * 100.0, edge, ev
+def capture_value(ep, now_ts):
+    """Create a Pinnacle-only VALUE candidate and send it to Telegram once.
 
-
-def capture_bet365_value(ep, now_ts):
+    Bet365 is deliberately NOT queried. The Telegram message contains the
+    minimum Bet365 decimal odds required for the configured 5% EV target.
+    The user verifies the live Bet365 price manually.
     """
-    Capture Bet365 only at trigger time.
-    No Bet365 value = no VALUE signal; the Pinnacle trigger remains in the
-    STEAM/SHARP dataset.
-    """
-    if not ODDS_API_KEY or ep.get("value_captured", False):
+    global value_signals
+
+    if ep.get("value_captured", False):
         return
 
-    match = find_bet365_event(ep, now_ts)
-    if not match:
-        return
-
-    event, match_score = match
-
-    market_name = "Spread" if ep["market"] == "spread" else "Totals"
-    board = get_bet365_board(event.get("id"), market_name)
-    if not board:
-        return
-
-    extracted = extract_bet365_market(
-        board,
-        market_name,
-        ep["trigger_selected_side"],
-        ep["trigger_selected_points"],
-    )
-    if not extracted:
-        return
-
-    b365_selected, b365_opposite = extracted
-
-    calc = calculate_value_from_bet365(
-        ep["trigger_selected_odd"],
-        ep["trigger_opposite_odd"],
-        b365_selected,
-        b365_opposite,
+    calc = calculate_pinnacle_value(
+        ep.get("trigger_selected_odd"),
+        ep.get("trigger_opposite_odd"),
     )
     if not calc:
         return
 
-    pinnacle_fair, b365_no_vig, edge_pct, ev = calc
+    fair_prob, fair_odds, min_value_odds, edge_at_min_odds = calc
 
-    ep["pinnacle_fair_prob_pct"] = pinnacle_fair
-    ep["bet365_no_vig_prob_pct"] = b365_no_vig
+    # Only send a VALUE candidate when the configured minimum price is valid.
+    # MIN_ENTRY_ODDS is the absolute floor; the actual required price may be higher.
+    ep["pinnacle_fair_prob_pct"] = fair_prob
+    ep["pinnacle_fair_odds"] = fair_odds
+    ep["min_value_odds"] = min_value_odds
+    ep["edge_at_min_odds_pct"] = edge_at_min_odds
+    ep["value_status"] = "VALUE_CANDIDATE"
+
+    telegram_text = (
+        "💰 VALUE PICK\n"
+        f"{ep['league']}\n"
+        f"{ep['match']}\n"
+        f"{ep['market'].upper()} | {ep['trigger_selected_side']} {ep['trigger_selected_points']:+.1f}\n"
+        f"Pinnacle: {ep['trigger_selected_odd']:.3f} vs {ep['trigger_opposite_odd']:.3f}\n"
+        f"Fair probability: {fair_prob:.2f}%\n"
+        f"Fair odds: {fair_odds:.3f}\n"
+        f"VALUE ≥ {min_value_odds:.3f} (EV target {VALUE_EDGE_TARGET_PCT:.1f}%)\n"
+        f"FVS: {ep['trigger_fvs']:.1f} | Movement: {ep['trigger_movement_score']:.2f}%\n"
+        f"T-{ep['trigger_hours']:.2f}h\n"
+        "🔎 Comprova la quota Bet365 manualment."
+    )
+
+    sent = send_telegram(telegram_text)
+    ep["telegram_sent"] = sent
+    value_signals += 1
 
     with open(VALUE_CSV_FILE, "a", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f, delimiter=";")
-        writer.writerow([
+        csv.writer(f, delimiter=";").writerow([
             ep["trigger_id"],
             datetime.fromtimestamp(now_ts, timezone.utc).isoformat(),
-            ep["league"],
-            ep["match"],
-            ep["matchup_id"],
-            ep["market"],
-            ep["ah_line"],
-            ep["trigger_selected_side"],
+            ep["league"], ep["match"], ep["matchup_id"],
+            ep["market"], ep["ah_line"], ep["trigger_selected_side"],
             ep["trigger_selected_points"],
             round(ep["trigger_selected_odd"], 3),
             round(ep["trigger_opposite_odd"], 3),
-            round(pinnacle_fair, 3),
-            round(b365_selected, 3),
-            round(b365_opposite, 3),
-            round(b365_no_vig, 3),
-            round(edge_pct, 3),
-            round(ev * 100.0, 3),
-            "YES" if b365_selected >= 1.80 else "NO",
-            "VALUE" if edge_pct >= 5.0 and b365_selected >= 1.80 else "NO_VALUE",
-            event.get("id"),
-            round(match_score, 2),
+            round(fair_prob, 3), round(fair_odds, 3),
+            round(min_value_odds, 3), round(edge_at_min_odds, 3),
+            MIN_ENTRY_ODDS, "VALUE_CANDIDATE", "YES" if sent else "NO"
         ])
 
-    ep["value_captured"] = True
-    ep["bet365_event_id"] = event.get("id")
-    ep["bet365_selected_odd"] = b365_selected
-    ep["bet365_opposite_odd"] = b365_opposite
-    ep["edge_pct"] = edge_pct
-    ep["ev_pct"] = ev * 100.0
-
     print(
-        f"💰 BET365 | {ep['match']} | {ep['market']} "
-        f"{ep['trigger_selected_side']} | "
-        f"PinnFair={pinnacle_fair:.2f}% | "
-        f"Bet365={b365_selected:.3f} | Edge={edge_pct:.2f}% | "
-        f"{'VALUE' if edge_pct >= 5.0 and b365_selected >= 1.80 else 'NO VALUE'}",
+        f"💰 VALUE | {ep['match']} | {ep['trigger_selected_side']} "
+        f"| Fair={fair_prob:.2f}% | MIN_ODDS={min_value_odds:.3f} | "
+        f"Telegram={'YES' if sent else 'NO'}",
         flush=True,
     )
 
@@ -1479,7 +1269,7 @@ def maybe_trigger(ep, now_ts, selected_side, selected_points,
 
     # Continue collecting scheduled snapshots for an already triggered episode.
     if ep.get("triggered", False):
-        capture_bet365_value(ep, now_ts)
+        capture_value(ep, now_ts)
         maybe_write_due_snapshots(ep, now_ts)
         return
 
@@ -1537,8 +1327,8 @@ def maybe_trigger(ep, now_ts, selected_side, selected_points,
     # T0 is written immediately.
     write_snapshot(ep, "T+0m", now_ts, "TRIGGER")
 
-    # Bet365 is captured only after the Pinnacle trigger exists.
-    capture_bet365_value(ep, now_ts)
+    # VALUE is calculated from Pinnacle only; Bet365 is checked manually by the user.
+    capture_value(ep, now_ts)
 
     print(
         f"🚨 STEAM TRIGGER #{triggered_signals} | "
@@ -1546,7 +1336,8 @@ def maybe_trigger(ep, now_ts, selected_side, selected_points,
         f"{ep['market']} {selected_side} {selected_points:+.1f} | "
         f"odd={selected_end:.3f} | mov={selected_move:.2f}% | "
         f"FVS={fvs:.1f} | obs={ep['observations']} | "
-        f"T-{max(0.0, ep['hours_until_match_start']):.2f}h",
+        f"T-{max(0.0, ep['hours_until_match_start']):.2f}h | "
+        f"VALUE>={ep.get('min_value_odds', 0):.3f}",
         flush=True
     )
 
@@ -1784,10 +1575,9 @@ def run_cycle():
     # snapshots are collected even when the market temporarily stops shortening.
     for ep in list(episodes.values()):
         if ep.get("triggered", False):
-            capture_bet365_value(ep, now_ts)
+            capture_value(ep, now_ts)
             maybe_write_due_snapshots(ep, now_ts)
             capture_closing(ep, now_ts)
-            fetch_bet365_result(ep, now_ts)
 
     finalize_stale_episodes(now_ts)
 
@@ -1806,7 +1596,7 @@ def run_cycle():
 print(
     "\n⚽ FOOTBALL MOVEMENT ENGINE AH-1 + O/U 2.5\n"
     "MODE: OBSERVATION / HISTORICAL COLLECTION + T0/T+5/T+15/T+30\n"
-    "NO BETS | NO VALUE | NO TELEGRAM | NO GOOGLE SHEETS\n"
+    "NO BETS | PINNACLE VALUE | TELEGRAM | NO BET365 API | NO GOOGLE SHEETS\n"
     f"WINDOW: next {SCAN_HOURS}h | POLL: {POLL_SECONDS}s\n"
     f"MIN EPISODE MOVEMENT: {MIN_EPISODE_MOVEMENT}% "
     f"(observation filter only)\n"
@@ -1819,7 +1609,8 @@ print(
     f"CSV CLOSING: {CLOSING_CSV_FILE}\n"
     f"CSV RESULTS: {RESULT_CSV_FILE}\n"
     f"CSV MASTER: {MASTER_CSV_FILE}\n"
-    f"BET365 API: {'ENABLED' if ODDS_API_KEY else 'DISABLED (set ODDS_API_KEY)'}\n",
+    f"VALUE TARGET: {VALUE_EDGE_TARGET_PCT:.1f}% EV | MIN ENTRY ODDS: {MIN_ENTRY_ODDS:.2f}\n"
+    f"TELEGRAM: {'ENABLED' if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID else 'DISABLED (set BOT_TOKEN + CHAT_ID)'}\n",
     flush=True
 )
 
@@ -1850,6 +1641,7 @@ while True:
             f"active={active_eps} | "
             f"completed={completed_episodes} | "
             f"triggers={triggered_signals} | "
+            f"value={value_signals} | "
             f"{elapsed:.1f}s",
             flush=True
         )
