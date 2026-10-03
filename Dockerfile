@@ -10,4 +10,4 @@ RUN python -m playwright install chromium
 
 COPY . .
 
-CMD ["python", "baseball_scanner_v21_5leagues_all_markets_telegram_bankroll.py"]
+CMD ["python", "football_movement_engine_ah1_ou25_v3_1.py"]
