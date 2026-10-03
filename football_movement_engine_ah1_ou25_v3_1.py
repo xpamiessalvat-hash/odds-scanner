@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 # ============================================================
 # FOOTBALL MOVEMENT ENGINE V3.1
 # Mode: SHARP COLLECTION + REAL-TIME STEAM TRIGGERS + POST-TRIGGER SNAPSHOTS
-# Pinnacle is the sharp source. No Telegram, no Google Sheets, no betting.
+# Pinnacle is the sharp source. Telegram sends VALUE candidates for manual Bet365 checks.
 # ============================================================
 
 BASE_URL = "https://guest.api.arcadia.pinnacle.com"
@@ -37,14 +37,10 @@ MAX_EPISODE_MOVEMENT = 30.0      # safety filter
 # ------------------------------------------------------------
 
 VALUE_EDGE_TARGET_PCT = 5.0
+VALUE_AUDIT_TARGETS_PCT = (0.0, 2.0, 3.0, 5.0)
 MIN_ENTRY_ODDS = 1.80
 TELEGRAM_BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.getenv("CHAT_ID", "").strip()
-
-# Optional Bet365 result fetch. The engine is intentionally Pinnacle-only, so
-# these stay empty unless the environment explicitly provides a Bet365 API key.
-ODDS_API_KEY = os.getenv("ODDS_API_KEY", "").strip()
-ODDS_API_BASE = os.getenv("ODDS_API_BASE", "").strip()
 
 VALID_SPREADS = [
     -2.5, -2.0, -1.5, -1.0, -0.5,
@@ -193,24 +189,6 @@ def ensure_snapshot_csv():
 snapshot_schedule = [0, 5, 15, 30]
 
 
-def get_bet365_board(event_id, market_name):
-    """Return a Bet365 board payload when available.
-
-    This engine intentionally does not use the Bet365 API by default, so the
-    helper is intentionally defensive and returns None unless a caller supplies
-    an implementation elsewhere.
-    """
-    return None
-
-
-def extract_bet365_market(board, market_name, side, points):
-    """Extract a market line from a Bet365 board payload.
-
-    The production scanner may replace this with a concrete parser later, but a
-    safe no-op keeps the closing capture path working without crashing.
-    """
-    return None
-
 
 def write_snapshot(ep, label, now_ts, status="FOLLOWUP"):
     trigger_time = ep.get("trigger_time")
@@ -299,6 +277,7 @@ def ensure_value_csv():
             "pinnacle_selected_odd", "pinnacle_opposite_odd",
             "pinnacle_fair_prob_pct", "fair_odds", "min_value_odds",
             "edge_at_min_odds_pct", "min_entry_odds",
+            "min_odds_ev0", "min_odds_ev2", "min_odds_ev3", "min_odds_ev5",
             "value_status", "telegram_sent"
         ])
 
@@ -322,10 +301,14 @@ def calculate_pinnacle_value(pinnacle_selected_odd, pinnacle_opposite_odd):
 
     fair_prob = p_sel_raw / p_total
     fair_odds = 1.0 / fair_prob
-    min_value_odds = max(MIN_ENTRY_ODDS, (1.0 + VALUE_EDGE_TARGET_PCT / 100.0) / fair_prob)
+    audit_odds = {
+        pct: max(MIN_ENTRY_ODDS, (1.0 + pct / 100.0) / fair_prob)
+        for pct in VALUE_AUDIT_TARGETS_PCT
+    }
+    min_value_odds = audit_odds[VALUE_EDGE_TARGET_PCT]
     edge_at_min_odds = (fair_prob * min_value_odds - 1.0) * 100.0
 
-    return fair_prob * 100.0, fair_odds, min_value_odds, edge_at_min_odds
+    return fair_prob * 100.0, fair_odds, min_value_odds, edge_at_min_odds, audit_odds
 
 def send_telegram(text_message):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
@@ -376,7 +359,7 @@ def capture_value(ep, now_ts):
     )
     if not calc:
         return
-    fair_prob, fair_odds, min_value_odds, edge_at_min_odds = calc
+    fair_prob, fair_odds, min_value_odds, edge_at_min_odds, audit_odds = calc
 
     # Only send a VALUE candidate when the configured minimum price is valid.
     # MIN_ENTRY_ODDS is the absolute floor; the actual required price may be higher.
@@ -394,7 +377,8 @@ def capture_value(ep, now_ts):
         f"Pinnacle: {ep['trigger_selected_odd']:.3f} vs {ep['trigger_opposite_odd']:.3f}\n"
         f"Fair probability: {fair_prob:.2f}%\n"
         f"Fair odds: {fair_odds:.3f}\n"
-        f"VALUE ≥ {min_value_odds:.3f} (EV target {VALUE_EDGE_TARGET_PCT:.1f}%)\n"
+        f"Bet365 min odds — EV 0%: {audit_odds[0.0]:.3f} | EV 2%: {audit_odds[2.0]:.3f} | EV 3%: {audit_odds[3.0]:.3f} | EV 5%: {audit_odds[5.0]:.3f}\n"
+        f"VALUE ≥ {min_value_odds:.3f} (EV benchmark {VALUE_EDGE_TARGET_PCT:.1f}%)\n"
         f"FVS: {ep['trigger_fvs']:.1f} | Movement: {ep['trigger_movement_score']:.2f}%\n"
         f"T-{ep['trigger_hours']:.2f}h\n"
         "🔎 Comprova la quota Bet365 manualment."
@@ -419,12 +403,16 @@ def capture_value(ep, now_ts):
             round(ep["trigger_opposite_odd"], 3),
             round(fair_prob, 3), round(fair_odds, 3),
             round(min_value_odds, 3), round(edge_at_min_odds, 3),
-            MIN_ENTRY_ODDS, "VALUE_CANDIDATE", "YES" if sent else "NO"
+            MIN_ENTRY_ODDS,
+            round(audit_odds[0.0], 3), round(audit_odds[2.0], 3),
+            round(audit_odds[3.0], 3), round(audit_odds[5.0], 3),
+            "VALUE_CANDIDATE", "YES" if sent else "NO"
         ])
 
     print(
         f"💰 VALUE | {ep['match']} | {ep['trigger_selected_side']} "
-        f"| Fair={fair_prob:.2f}% | MIN_ODDS={min_value_odds:.3f} | "
+        f"| Fair={fair_prob:.2f}% | EV0={audit_odds[0.0]:.3f} "
+        f"EV2={audit_odds[2.0]:.3f} EV3={audit_odds[3.0]:.3f} EV5={audit_odds[5.0]:.3f} | "
         f"Telegram={'YES' if sent else 'NO'}",
         flush=True,
     )
@@ -615,29 +603,6 @@ def clamp_score(value, low=0, high=20):
     return max(low, min(high, int(value)))
 
 
-def parse_score_from_event(event):
-    """
-    Defensive parser for common score payload shapes.
-    Returns (home, away) or None.
-    """
-    candidates = [
-        event.get("scores"),
-        event.get("score"),
-        event.get("result"),
-    ]
-
-    for data in candidates:
-        if isinstance(data, dict):
-            home = data.get("home")
-            away = data.get("away")
-            if home is not None and away is not None:
-                try:
-                    return int(home), int(away)
-                except (TypeError, ValueError):
-                    pass
-
-    return None
-
 
 def ensure_closing_csv():
     if os.path.exists(CLOSING_CSV_FILE):
@@ -665,21 +630,21 @@ def calculate_clv(entry_odd, closing_odd):
     return ((1.0 / closing_odd) - (1.0 / entry_odd)) * 100.0
 
 
-def capture_closing(ep, now_ts):
-    """
-    Capture the final Bet365/Pinnacle price once the match is about to start.
-    This is deliberately separate from T+30.
+def capture_pinnacle_closing(ep, now_ts):
+    """Capture the Pinnacle price close near kickoff.
+
+    Bet365 is deliberately not queried. Bet365 entry/closing prices remain
+    manual fields for the later Paper Test / CLV analysis.
     """
     if ep.get("closing_captured", False):
         return
 
-    # Only close near kickoff; don't label an arbitrary late snapshot as close.
     hours_left = max(
         0.0,
         ep["hours_until_match_start"]
         - max(0.0, (now_ts - ep["start_time"]) / 3600.0)
     )
-    if hours_left > 0.10:  # > 6 minutes from kickoff
+    if hours_left > 0.10:
         return
 
     selected_side = ep.get("trigger_selected_side")
@@ -692,19 +657,6 @@ def capture_closing(ep, now_ts):
     if not selected_odd:
         return
 
-    bet365_closing = None
-    if ep.get("bet365_event_id"):
-        market_name = "Spread" if ep["market"] == "spread" else "Totals"
-        board = get_bet365_board(ep["bet365_event_id"], market_name)
-        if board:
-            extracted = extract_bet365_market(
-                board, market_name, selected_side,
-                ep["trigger_selected_points"]
-            )
-            if extracted:
-                bet365_closing = extracted[0]
-
-    clv_b365 = calculate_clv(ep.get("bet365_selected_odd"), bet365_closing)
     clv_pinnacle = calculate_clv(ep.get("trigger_selected_odd"), selected_odd)
 
     with open(CLOSING_CSV_FILE, "a", newline="", encoding="utf-8") as f:
@@ -714,64 +666,24 @@ def capture_closing(ep, now_ts):
             ep["league"], ep["match"], ep["matchup_id"],
             ep["market"], ep["ah_line"], selected_side,
             ep["trigger_selected_points"],
-            round(ep.get("bet365_selected_odd", 0.0), 3),
-            round(bet365_closing, 3) if bet365_closing else "",
+            "",
+            "",
             round(ep["trigger_selected_odd"], 3),
             round(selected_odd, 3),
-            round(clv_b365, 3) if clv_b365 is not None else "",
+            "",
             round(clv_pinnacle, 3) if clv_pinnacle is not None else "",
-            "CLOSING_CAPTURED"
+            "PINNACLE_CLOSE_CAPTURED"
         ])
 
     ep["closing_captured"] = True
-    ep["bet365_closing_odd"] = bet365_closing
     ep["pinnacle_closing_odd"] = selected_odd
-    ep["clv_bet365_pct"] = clv_b365
     ep["clv_pinnacle_pct"] = clv_pinnacle
 
     print(
         f"🔒 CLOSE | {ep['match']} | {selected_side} | "
-        f"Bet365 {ep.get('bet365_selected_odd', 0):.3f} → "
-        f"{bet365_closing:.3f}" if bet365_closing else
-        f"🔒 CLOSE | {ep['match']} | {selected_side} | "
         f"Pinnacle {ep['trigger_selected_odd']:.3f} → {selected_odd:.3f}",
         flush=True
     )
-
-
-def fetch_bet365_result(ep, now_ts):
-    """
-    Retrieve final event score from the same Bet365 event provider.
-    No result is inferred from the market price.
-    """
-    if ep.get("result_captured", False):
-        return
-
-    event_id = ep.get("bet365_event_id")
-    if not ODDS_API_KEY or not event_id:
-        return
-
-    try:
-        response = requests.get(
-            f"{ODDS_API_BASE}/events/{event_id}",
-            params={"apiKey": ODDS_API_KEY},
-            timeout=20,
-        )
-        response.raise_for_status()
-        event = response.json()
-
-        status = str(event.get("status", "")).lower()
-        if status not in ("finished", "complete", "completed", "settled"):
-            return
-
-        score = parse_score_from_event(event)
-        if not score:
-            return
-
-        settle_result(ep, now_ts, score[0], score[1])
-
-    except Exception as exc:
-        print(f"⚠️ Result request failed: {exc}", flush=True)
 
 
 def clamp(value, low=0.0, high=100.0):
@@ -805,7 +717,7 @@ def persistence_score(observations, duration_minutes):
 def calculate_fvs(dominance_pct, movement_pct, observations, duration_minutes, hours):
     """
     FVS V3.1 does not use an independent probability from Pinnacle.
-    Value/Edge will be calculated later from Bet365, separately.
+    Value is derived from Pinnacle fair probability; Bet365 is checked manually by the user.
 
     The original non-base weights are renormalized:
       dominance   35.71%
@@ -1616,7 +1528,7 @@ def run_cycle():
         if ep.get("triggered", False):
             capture_value(ep, now_ts)
             maybe_write_due_snapshots(ep, now_ts)
-            capture_closing(ep, now_ts)
+            capture_pinnacle_closing(ep, now_ts)
 
     finalize_stale_episodes(now_ts)
 
@@ -1635,7 +1547,7 @@ def run_cycle():
 print(
     "\n⚽ FOOTBALL MOVEMENT ENGINE AH-1 + O/U 2.5\n"
     "MODE: OBSERVATION / HISTORICAL COLLECTION + T0/T+5/T+15/T+30\n"
-    "NO BETS | PINNACLE VALUE | TELEGRAM | NO BET365 API | NO GOOGLE SHEETS\n"
+    "NO BETS | PINNACLE STEAM/FVS/VALUE | TELEGRAM | MANUAL BET365 CHECK | NO GOOGLE SHEETS\n"
     f"WINDOW: next {SCAN_HOURS}h | POLL: {POLL_SECONDS}s\n"
     f"MIN EPISODE MOVEMENT: {MIN_EPISODE_MOVEMENT}% "
     f"(observation filter only)\n"
@@ -1648,7 +1560,7 @@ print(
     f"CSV CLOSING: {CLOSING_CSV_FILE}\n"
     f"CSV RESULTS: {RESULT_CSV_FILE}\n"
     f"CSV MASTER: {MASTER_CSV_FILE}\n"
-    f"VALUE TARGET: {VALUE_EDGE_TARGET_PCT:.1f}% EV | MIN ENTRY ODDS: {MIN_ENTRY_ODDS:.2f}\n"
+    f"VALUE BENCHMARK: {VALUE_EDGE_TARGET_PCT:.1f}% EV | AUDIT: EV0/2/3/5 | MIN ENTRY ODDS: {MIN_ENTRY_ODDS:.2f}\n"
     f"TELEGRAM: {'ENABLED' if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID else 'DISABLED (set BOT_TOKEN + CHAT_ID)'}\n",
     flush=True
 )
