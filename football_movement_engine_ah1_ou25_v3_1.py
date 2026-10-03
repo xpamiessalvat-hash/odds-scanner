@@ -41,6 +41,11 @@ MIN_ENTRY_ODDS = 1.80
 TELEGRAM_BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.getenv("CHAT_ID", "").strip()
 
+# Optional Bet365 result fetch. The engine is intentionally Pinnacle-only, so
+# these stay empty unless the environment explicitly provides a Bet365 API key.
+ODDS_API_KEY = os.getenv("ODDS_API_KEY", "").strip()
+ODDS_API_BASE = os.getenv("ODDS_API_BASE", "").strip()
+
 VALID_SPREADS = [
     -2.5, -2.0, -1.5, -1.0, -0.5,
      0.0,  0.5,  1.0,  1.5,  2.0, 2.5
@@ -186,6 +191,25 @@ def ensure_snapshot_csv():
 # trigger snapshots are collected at T0, +5, +15 and +30 minutes.
 # The trigger itself stores the selected Pinnacle side and its opposite.
 snapshot_schedule = [0, 5, 15, 30]
+
+
+def get_bet365_board(event_id, market_name):
+    """Return a Bet365 board payload when available.
+
+    This engine intentionally does not use the Bet365 API by default, so the
+    helper is intentionally defensive and returns None unless a caller supplies
+    an implementation elsewhere.
+    """
+    return None
+
+
+def extract_bet365_market(board, market_name, side, points):
+    """Extract a market line from a Bet365 board payload.
+
+    The production scanner may replace this with a concrete parser later, but a
+    safe no-op keeps the closing capture path working without crashing.
+    """
+    return None
 
 
 def write_snapshot(ep, label, now_ts, status="FOLLOWUP"):
@@ -334,13 +358,24 @@ def capture_value(ep, now_ts):
     if ep.get("value_captured", False):
         return
 
+    trigger_id = ep.get("trigger_id")
+    if trigger_id and os.path.exists(VALUE_CSV_FILE):
+        try:
+            with open(VALUE_CSV_FILE, "r", newline="", encoding="utf-8") as f:
+                reader = csv.DictReader(f, delimiter=";")
+                for row in reader:
+                    if row.get("trigger_id") == trigger_id:
+                        ep["value_captured"] = True
+                        return
+        except Exception as exc:
+            print(f"⚠️ VALUE dedupe read failed: {exc}", flush=True)
+
     calc = calculate_pinnacle_value(
         ep.get("trigger_selected_odd"),
         ep.get("trigger_opposite_odd"),
     )
     if not calc:
         return
-
     fair_prob, fair_odds, min_value_odds, edge_at_min_odds = calc
 
     # Only send a VALUE candidate when the configured minimum price is valid.
@@ -366,6 +401,10 @@ def capture_value(ep, now_ts):
     )
 
     sent = send_telegram(telegram_text)
+
+    if sent:
+        ep["value_captured"] = True
+
     ep["telegram_sent"] = sent
     value_signals += 1
 
