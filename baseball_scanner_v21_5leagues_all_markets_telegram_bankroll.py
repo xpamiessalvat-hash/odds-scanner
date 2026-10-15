@@ -42,6 +42,7 @@ RESULT_LOOKBACK_DAYS = 3
 
 ALLOWED_LEAGUES = {
     244: "Mexican League",
+    245: "Mexican Pacific League",
     246: "MLB",
     6227: "KBO",
     187703: "NPB",
