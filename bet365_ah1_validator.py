@@ -37,8 +37,8 @@ def team_matches(line: str, team: str) -> bool:
     return bool(wanted and (wanted in actual or actual in wanted))
 
 
-def parse_explicit_selection(lines: list[str], team: str) -> Optional[float]:
-    """Accept only a line explicitly naming the team and -1 / -1.0."""
+def parse_explicit_selection(lines: list[str], team: str, handicap: int) -> Optional[float]:
+    """Accept only a line explicitly naming the team and its exact handicap."""
     candidates: list[float] = []
     for i, line in enumerate(lines):
         if not team_matches(line, team):
@@ -72,8 +72,8 @@ def extract_ah1_quotes(
     if not any(HANDICAP_RE.search(x) for x in region):
         return {"ok": False, "reason": "handicap_market_heading_not_found"}
 
-    home_odd = parse_explicit_selection(region, home_team)
-    away_odd = parse_explicit_selection(region, away_team)
+    home_odd = parse_explicit_selection(region, home_team, -1)
+    away_odd = parse_explicit_selection(region, away_team, +1)
     if home_odd is None or away_odd is None:
         return {
             "ok": False,
