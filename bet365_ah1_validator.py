@@ -45,7 +45,8 @@ def parse_explicit_selection(lines: list[str], team: str, handicap: int) -> Opti
             continue
         # The handicap and team must be on the same line; price may be
         # immediately after it on this line or within the next two lines.
-        if not re.search(r"(?<![\d.])-1(?:\.0)?(?!\d)", line):
+        target = r"(?<![\d.])-1(?:\.0)?(?!\d)" if handicap < 0 else r"(?<![\d.])\+?1(?:\.0)?(?!\d)"
+        if not re.search(target, line):
             continue
         for nearby in lines[i : min(i + 3, len(lines))]:
             candidates.extend(float(x) for x in ODD_RE.findall(nearby))
