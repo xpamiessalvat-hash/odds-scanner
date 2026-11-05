@@ -129,6 +129,10 @@ def main() -> int:
     parser.add_argument("--url", default="https://www.bet365.es")
     parser.add_argument("--db", default="data/bet365_validation.sqlite3")
     parser.add_argument("--headed", action="store_true")
+    parser.add_argument(
+        "--pause", action="store_true",
+        help="Keep the headed browser open for manual navigation before capturing the page text.",
+    )
     args = parser.parse_args()
 
     page_text = ""
@@ -139,6 +143,10 @@ def main() -> int:
         try:
             page.goto(args.url, wait_until="domcontentloaded", timeout=90000)
             page.wait_for_timeout(12000)
+            if args.pause:
+                print("\nChromium continua obert. Navega manualment fins al partit i obre el mercat AH -1.")
+                input("Quan el mercat sigui visible, torna aquí i prem ENTER per capturar-lo... ")
+                page.wait_for_timeout(1500)
             page_text = page.locator("body").inner_text(timeout=30000)
         finally:
             context.close()
