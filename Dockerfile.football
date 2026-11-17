@@ -1,0 +1,12 @@
+﻿FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.football.txt .
+RUN pip install --no-cache-dir -r requirements.football.txt
+
+COPY football_movement_engine_ah1_v3_4_4.py .
+
+RUN mkdir -p /data
+
+CMD ["sh", "-c", "cd /data && exec python /app/football_movement_engine_ah1_v3_4_4.py"]
